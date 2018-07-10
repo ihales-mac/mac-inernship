@@ -1,0 +1,6 @@
+C:\Users\Intern\source\repos\ClientServerApp\Server\obj\Release\Server.csproj.CoreCompileInputs.cache
+C:\Users\Intern\source\repos\ClientServerApp\Server\bin\Release\Server.exe.config
+C:\Users\Intern\source\repos\ClientServerApp\Server\bin\Release\Server.exe
+C:\Users\Intern\source\repos\ClientServerApp\Server\bin\Release\Server.pdb
+C:\Users\Intern\source\repos\ClientServerApp\Server\obj\Release\Server.exe
+C:\Users\Intern\source\repos\ClientServerApp\Server\obj\Release\Server.pdb
