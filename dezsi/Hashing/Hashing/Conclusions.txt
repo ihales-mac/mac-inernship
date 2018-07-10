@@ -1,0 +1,17 @@
+﻿
+1. Insertions:
+	5 characters password (11881376 entries):
+		all rows one by one: 40+ minutes (not measured exactly)
+		multiple rows insert (200 in one batch): 11 minutes
+		bulk insert (bulk of 100-200): 14 minutes
+		bulk insert (bulk of 1000): ~18 minutes
+
+	3 characters password (17576 entries): 
+		all rows one by one: 00:02:35 (significanly more)
+		bulk insert (100-200): 00:00:47
+		multiple rows: 00:00:25
+
+2. Seach for password based on hash code (on 1918898 entries):
+		no index: 16-20 seconds
+		non-clustered index on hash codes: 08-09 seconds
+		search on id - last id (clustered index): 07 seconds
