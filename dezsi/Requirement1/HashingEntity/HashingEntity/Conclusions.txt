@@ -1,0 +1,4 @@
+﻿passwords of length 3:
+	insert each, then commit: 1 min 30 sec
+	insert and commit each: 5 min
+	insert all with AddRange: 11 sec
