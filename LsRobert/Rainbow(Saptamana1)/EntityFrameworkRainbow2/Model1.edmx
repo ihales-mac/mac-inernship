@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RainbowModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Rainbow.dbo.Bulks' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Bulks">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pass" Type="nvarchar" MaxLength="30" />
+          <Property Name="MD5" Type="char" MaxLength="32" />
+          <Property Name="SHA1" Type="char" MaxLength="64" />
+          <Property Name="SHA2" Type="char" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="BulksPassword">
+          <Key>
+            <PropertyRef Name="Pass" />
+          </Key>
+          <Property Name="Pass" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Rainbow.dbo.Pass' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Pass">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pass" Type="nvarchar" MaxLength="30" />
+          <Property Name="MD5" Type="char" MaxLength="32" />
+          <Property Name="SHA1" Type="char" MaxLength="64" />
+          <Property Name="SHA2" Type="char" MaxLength="64" />
+        </EntityType>
+        <EntityContainer Name="RainbowModelStoreContainer">
+          <EntitySet Name="BulksPassword" EntityType="Self.BulksPassword" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bulks" EntityType="Self.Bulks" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Bulks].[ID] AS [ID], 
+    [Bulks].[Pass] AS [Pass], 
+    [Bulks].[MD5] AS [MD5], 
+    [Bulks].[SHA1] AS [SHA1], 
+    [Bulks].[SHA2] AS [SHA2]
+    FROM [dbo].[Bulks] AS [Bulks]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Pass" EntityType="Self.Pass" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Pass].[ID] AS [ID], 
+    [Pass].[Pass] AS [Pass], 
+    [Pass].[MD5] AS [MD5], 
+    [Pass].[SHA1] AS [SHA1], 
+    [Pass].[SHA2] AS [SHA2]
+    FROM [dbo].[Pass] AS [Pass]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RainbowModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bulk">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pass" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MD5" Type="String" MaxLength="32" FixedLength="true" Unicode="false" />
+          <Property Name="SHA1" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+          <Property Name="SHA2" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Pass">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pass1" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MD5" Type="String" MaxLength="32" FixedLength="true" Unicode="false" />
+          <Property Name="SHA1" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+          <Property Name="SHA2" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="RainbowEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bulks" EntityType="Self.Bulk" />
+          <EntitySet Name="Passes" EntityType="Self.Pass" />
+          <EntitySet Name="BulksPasswords" EntityType="RainbowModel.BulksPassword" />
+        </EntityContainer>
+        <EntityType Name="BulksPassword">
+          <Key>
+            <PropertyRef Name="Pass" />
+          </Key>
+          <Property Name="Pass" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RainbowModelStoreContainer" CdmEntityContainer="RainbowEntities">
+          <EntitySetMapping Name="Bulks">
+            <EntityTypeMapping TypeName="RainbowModel.Bulk">
+              <MappingFragment StoreEntitySet="Bulks">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="MD5" ColumnName="MD5" />
+                <ScalarProperty Name="SHA1" ColumnName="SHA1" />
+                <ScalarProperty Name="SHA2" ColumnName="SHA2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Passes">
+            <EntityTypeMapping TypeName="RainbowModel.Pass">
+              <MappingFragment StoreEntitySet="Pass">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Pass1" ColumnName="Pass" />
+                <ScalarProperty Name="MD5" ColumnName="MD5" />
+                <ScalarProperty Name="SHA1" ColumnName="SHA1" />
+                <ScalarProperty Name="SHA2" ColumnName="SHA2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BulksPasswords">
+            <EntityTypeMapping TypeName="RainbowModel.BulksPassword">
+              <MappingFragment StoreEntitySet="BulksPassword">
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
