@@ -11,6 +11,8 @@ namespace Server
 {
     class Program
     {
+        static private List<User> AllUsers;
+
         static private bool IsRunning = true;
         static private Thread listeningThread;
         static private string IP;
@@ -25,6 +27,7 @@ namespace Server
         static void Main(string[] args)
         {
             Console.WriteLine("Starting");
+            PopulateUsers();
             InterpretArgs(args);
             Console.WriteLine("IP: " + IP);
             Console.WriteLine("Port: " + Port);
@@ -95,6 +98,19 @@ namespace Server
             }
 
             return;
+        }
+
+        public static User GetUser(string username, string password)
+        {
+            foreach(User usr in AllUsers)
+            {
+                if(usr.Equals(username, password))
+                {
+                    return usr;
+                }
+            }
+
+            return null;
         }
 
         private static void PrintHelp()
@@ -200,5 +216,17 @@ namespace Server
                 }
             }
         }
+
+        private static void PopulateUsers()
+        {
+            AllUsers = new List<User>();
+            AllUsers.Add(new User("user1", "user"));
+            AllUsers.Add(new User("user2", "user"));
+            AllUsers.Add(new User("user3", "user"));
+            AllUsers.Add(new User("user4", "user"));
+            AllUsers.Add(new User("user5", "user"));
+            AllUsers.Add(new User("user6", "user"));
+        }
+
     }
 }

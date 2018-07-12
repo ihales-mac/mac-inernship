@@ -11,7 +11,6 @@ namespace Server
 {
     public class ClientHandler
     {
-        private static List<Tuple<string, string>> Users = new List<Tuple<string,string>>();
 
 
         private Thread thread { get; set; }
@@ -21,13 +20,12 @@ namespace Server
         private StreamReader reader;
 
         public int ID { get; set; }
+        private User CurrentUser;
         public bool SymmetricEncryption { get; set; }
         public bool AsymmetricEncryption { get; set; }
 
         public ClientHandler(object client)
         {
-            PopulateUsers();
-
             SymmetricEncryption = false;
             AsymmetricEncryption = false;
             this.client = (TcpClient)client;
@@ -40,9 +38,37 @@ namespace Server
             while (IsRunning)
             {
                 string Incoming = reader.ReadLine();
-                if(Incoming != null)
+                if (Incoming != null)
                 {
-                    this.SendMessage("ECHO " + Incoming);
+                    //this.SendMessage("ECHO " + Incoming);
+                    Console.WriteLine("Client " + this.ID + ":" + Incoming);
+
+                    //incomming: 
+                    //$$LOGIN$$UN=username$$PW=password
+                    //$$IC=identification_code$$LOGOUT
+                    //$$IC=identification_code&&CHAT=to_whom&&MSG=message
+
+                    string[] IncomingSplit = Incoming.Split(new string[] { "$$" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (IncomingSplit[0] == "LOGIN")
+                    {
+                        //$$REJECTED$$REASON=why_rejected
+                        //$$ACCEPTED$$IC=identification_code
+
+                        string username = IncomingSplit[1].Split('=')[1];
+                        string password = IncomingSplit[2].Split('=')[1];
+
+                        CurrentUser = Program.GetUser(username, password);
+
+                        if(CurrentUser == null)
+                        {
+                            this.SendMessage("$$REJECTED$$REASON=Incorrect username or password");
+                        }
+                        else
+                        {
+                            CurrentUser.IC = Guid.NewGuid().ToString();
+                            this.SendMessage("$$ACCEPTED$$IC=" + CurrentUser.IC);
+                        }
+                    }
                 }
             }
         }
@@ -61,14 +87,8 @@ namespace Server
 
         public void SendMessage(string message)
         {
-            //tbi
+            Console.WriteLine(message);
+            writer.WriteLine(message);
         }
-
-        private static void PopulateUsers()
-        {
-            Users.Add(new Tuple<string, string>("user1", "user"));
-            Users.Add(new Tuple<string, string>("user2", "user"));
-        }
-
     }
 }
