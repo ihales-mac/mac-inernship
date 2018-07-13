@@ -1,0 +1,26 @@
+﻿<Window x:Class="Client.Chat"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="Chat" Height="450" Width="800">
+    <Grid RenderTransformOrigin="0.499,0.511" Margin="0,0,0,-1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="71*"/>
+            <ColumnDefinition Width="17*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="txtMessageBox" Height="99" Margin="0,31,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" KeyDown="OnKeyDownHandler"/>
+        <Button x:Name="btnLogout" Content="Logout" Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Height="20" Click="btnLogout_Click"/>
+        <Button x:Name="btnSendMessage" Content="Send" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Height="20" Margin="0,67,33,0" Click="btnSendMessage_Click"/>
+        <ListBox x:Name="lstContacts" Grid.Column="1" HorizontalAlignment="Left" Height="259" Grid.Row="1" VerticalAlignment="Top" Width="153" SelectionMode="Single"/>
+
+        <TextBlock x:Name="txtChatBox" HorizontalAlignment="Left" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="259" Width="639"/>
+    </Grid>
+</Window>
