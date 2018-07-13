@@ -57,6 +57,7 @@
     <Compile Include="ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Encryption.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="tcp\TCPClient.cs" />
     <Page Include="ChatWindow.xaml">

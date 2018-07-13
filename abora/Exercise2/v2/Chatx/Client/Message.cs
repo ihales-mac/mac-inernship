@@ -18,7 +18,10 @@ namespace Client
         public void WriteTo(NetworkStream stream)
         {
             string msg = Header + LINE_SEPARATOR + Body + LINE_SEPARATOR;
+           
             byte[] data = Encoding.ASCII.GetBytes(msg);
+            //encrypt data using public key
+
             int count = Encoding.ASCII.GetByteCount(msg);
             stream.Write(data, 0, count);
         }
@@ -27,11 +30,8 @@ namespace Client
         {
             byte[] bytes = new byte[1024];
             string msg = null;
-            stream.Read(bytes, 0, 1024);
-            msg = Encoding.ASCII.GetString(bytes);
-
-            int size = msg.IndexOf('\0');
-            msg = msg.Substring(0, size);
+            int count = stream.Read(bytes, 0, 1024);
+            msg = Encoding.ASCII.GetString(bytes,0,count);
 
             this.Header = msg.Split('\n')[0];
             this.Body = msg.Split('\n')[1];

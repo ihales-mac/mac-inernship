@@ -26,11 +26,10 @@ namespace Server
         {
             byte[] bytes = new byte[1024];
             string msg = null;
-            stream.Read(bytes, 0, 1024);
-            msg = Encoding.ASCII.GetString(bytes);
+            int count = stream.Read(bytes, 0, 1024);
 
-            int size = msg.IndexOf('\0');
-            msg = msg.Substring(0, size);
+
+            msg = Encoding.ASCII.GetString(bytes,0,count);
 
             this.Header = msg.Split('\n')[0];
             this.Body = msg.Split('\n')[1];

@@ -13,33 +13,11 @@ namespace Server
         {
             const string HOST = "localhost";
             const int PORT = 8080;
-            TCPServer tCPServer = new TCPServer(HOST, PORT);
+            
             LoginServiceServer loginService = new LoginServiceServer();
+            TCPServer tCPServer = new TCPServer(HOST, PORT, loginService);
             MessageServiceServer messageService = new MessageServiceServer();
 
-            tCPServer.addHandler("CHECK_LOGIN", delegate(Message request){
-                Console.WriteLine("Handler called");
-                Message response = new Message();
-                string username = request.Body.Split(';')[0];
-                Console.WriteLine("username : " + username);
-               
-                string password = request.Body.Split(';')[1];
-                Console.WriteLine("password : " + password);
-
-                if (loginService.CheckLogin(username, password))
-                {
-                    response.Header = "OK";
-                    response.Body = username;
-                }
-                else
-                {
-                    response.Header = "404";
-                    response.Body = "Username of password do not match";
-                }
-
-                return response;
-
-            });
 
             tCPServer.addHandler("CHAT", delegate (Message request)
              {
@@ -53,6 +31,24 @@ namespace Server
                  message.Body = request.Body;
                  return message;
              });
+
+            tCPServer.addHandler("IS_AUTHENTICATED", delegate (Message response)
+             {
+                 TcpClient client = tCPServer.GetTCPClient(response.Body); 
+                 response.Header = "OK";
+                 response.WriteTo(client.GetStream());
+
+                 return response;
+             });
+
+
+            tCPServer.addHandler("AUTHENTICATION_FAILED", delegate (Message response)
+            {
+                TcpClient client = tCPServer.GetTCPClient(response.Body);
+                response.WriteTo(client.GetStream());
+
+                return response;
+            });
 
             tCPServer.Start();
         }

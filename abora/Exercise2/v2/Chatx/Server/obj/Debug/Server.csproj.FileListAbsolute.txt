@@ -19,3 +19,10 @@ D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.csprojAssemb
 D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
 D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.exe
 D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.pdb
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\bin\Debug\Server.exe.config
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\bin\Debug\Server.exe
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\bin\Debug\Server.pdb
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.csprojAssemblyReference.cache
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.exe
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.pdb
