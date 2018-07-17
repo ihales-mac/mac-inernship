@@ -10,10 +10,10 @@ namespace Client.Logic.Contracts
     public interface IChatService
     {
         event MessageToViewEventHandler MessageToView;
-        event CommandToViewEventHandler CommandToView;
+        event CommandAddToViewEventHandler CommandAddToView;
+        event CommandRemoveToViewEventHandler CommandRemoveToView;
         void SendMessage(string message, string user);
         List<Tuple<string, string>> GetMessages(string user);
-        List<string> GetOnlineUsers();
         void Logout();
     }
 }

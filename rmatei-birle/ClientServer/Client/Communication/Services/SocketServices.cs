@@ -14,7 +14,7 @@ namespace Client.Communication.Services
 {
     public class SocketServices : ICommunication
     {
-        private static SocketServices instance;
+        private static SocketServices _instance;
 
         private SocketServices() { }
 
@@ -22,36 +22,37 @@ namespace Client.Communication.Services
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new SocketServices();
+                    _instance = new SocketServices();
                 }
-                return instance;
+                return _instance;
             }
         }
 
         public event IncomingMessageEventHandler IncomingMessage;
 
-        private TcpClient client;
-        private StreamReader Reader;
-        private StreamWriter Writer;
-        private Thread ListeningThread;
-        private string IdentificationCode;
+        private TcpClient _client;
+        private StreamReader _reader;
+        private StreamWriter _writer;
+        private Thread _listeningThread;
+        private string _identificationCode;
 
-        private bool IsConnected = false;
-        private bool IsListening = false;
+        private bool _isConnected = false;
+        private bool _isListening = false;
 
-        public string Connect(string IP, string Port)
+        public string Connect(string ip, string port)
         {
-            int port;
-            if (!Int32.TryParse(Port, out port))
+            int portInt;
+
+            if (!Int32.TryParse(port, out portInt))
             {
                 return "Error: Invalid port";
             }
 
             try
             {
-                IPAddress.Parse(IP);
+                IPAddress.Parse(ip);
             }
             catch (FormatException)
             {
@@ -59,13 +60,14 @@ namespace Client.Communication.Services
             }
 
 
-            if (!IsConnected)
+            if (!_isConnected)
             {
-                client = new TcpClient();
-                client.Connect(IP, port);
-                Reader = new StreamReader(client.GetStream(), Encoding.ASCII);
-                Writer = new StreamWriter(client.GetStream(), Encoding.ASCII);
-                IsConnected = true;
+                _client = new TcpClient();
+                _client.Connect(ip, portInt);
+                _reader = new StreamReader(_client.GetStream(), Encoding.ASCII);
+                _writer = new StreamWriter(_client.GetStream(), Encoding.ASCII);
+                _writer.AutoFlush = true;
+                _isConnected = true;
 
                 //get and send keys;
             }
@@ -75,73 +77,86 @@ namespace Client.Communication.Services
 
         public void Disconnect()
         {
-            if (IsConnected)
+            if (_isConnected)
             {
-                Reader.Close();
-                Reader.Dispose();
-                Writer.Close();
-                Writer.Dispose();
-                client.GetStream().Close();
-                client.Close();
-                client.Dispose();
-                IsConnected = false;
+                _reader.Close();
+                _reader.Dispose();
+                _writer.Close();
+                _writer.Dispose();
+                _client.Close();
+                _client.Dispose();
+                _isConnected = false;
             }
         }
 
         public void ListenContinuously()
         {
-            if (!IsListening)
+            if (!_isListening)
             {
-                IsListening = true;
+                _isListening = true;
                 //do thread here
-                ListeningThread = new Thread(() =>
+                _listeningThread = new Thread(() =>
                 {
-                    while (IsListening && IsConnected)
+                    while (_isListening && _isConnected)
                     {
-                        string FromServer = Reader.ReadLine();
+                        string fromServer =_reader.ReadLine();
                         //to event stuff here;
-                        if(FromServer != null)
+                        if (fromServer != null)
                         {
                             //raise event
-                            OnIncomingMessage(new IncomingMessageEventArgs(FromServer));
+                            OnIncomingMessage(new IncomingMessageEventArgs(fromServer));
                         }
                     }
                 });
 
-                ListeningThread.Start();
+                _listeningThread.SetApartmentState(ApartmentState.STA);
+                _listeningThread.Start();
             }
         }
-        
+
         protected void OnIncomingMessage(IncomingMessageEventArgs e)
         {
-            if (IncomingMessage != null)
-                IncomingMessage(this, e);
+            new Thread(() =>
+                {
+                    IncomingMessage?.Invoke(this, e);
+                }
+            ).Start();
         }
 
         public string ListenOnce()
         {
-            if (IsListening)
+            bool wasListening = false;
+            if (_isListening)
             {
-                IsListening = false;
-                if(ListeningThread != null)
-                {
-                    ListeningThread.Abort();
-                    ListeningThread = null;
-                }
+                this.StopListeningContinuously();
+                wasListening = true;
             }
-            
-            return Reader.ReadLine();
+
+            string read = _reader.ReadLine();
+
+            while (read == null)
+            {
+                read = _reader.ReadLine();
+            }
+
+
+            if (wasListening)
+            {
+                ListenContinuously();
+            }
+
+            return read;
         }
 
         public void StopListeningContinuously()
         {
-            if (IsListening)
+            if (_isListening)
             {
-                IsListening = false;
-                if (ListeningThread != null)
+                _isListening = false;
+                if (_listeningThread != null)
                 {
-                    ListeningThread.Abort();
-                    ListeningThread = null;
+                    _listeningThread.Abort();
+                    _listeningThread = null;
                 }
             }
         }
@@ -150,17 +165,31 @@ namespace Client.Communication.Services
         {
             //encrypt message
             //add identification code
-            if(this.IdentificationCode != null)
+            //bool wasListening = false;
+            //if (_isListening)
+            //{
+            //    this.StopListeningContinuously();
+            //    wasListening = true;
+            //}
+
+            if (this._identificationCode != null)
             {
-                Writer.WriteLine("$$IC=" + IdentificationCode + "" + message);
+                _writer.WriteLine("$$IC=" + _identificationCode + "" + message);
             }
-            Writer.WriteLine(message);
-            Writer.Flush();
+            else
+            {
+                _writer.WriteLine(message);
+            }
+
+            //if (wasListening)
+            //{
+            //    ListenContinuously();
+            //}
         }
 
-        public void SetIC(string IC)
+        public void SetIc(string ic)
         {
-            this.IdentificationCode = IC;
+            this._identificationCode = ic;
         }
     }
 }

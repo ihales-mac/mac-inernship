@@ -6,58 +6,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client.EventArguments;
 
 namespace Client.Logic.Services
 {
     class LoginService : ILoginService
     {
-        ICommunication Communication;
-        //public LoginService(ICommunication comm)
-        //{
-        //    this.Communication = comm;
-        //}
-
+        private readonly ICommunication _communication;
         public LoginService()
         {
-            this.Communication = SocketServices.Instance;
+            _communication = SocketServices.Instance;
+            string response = _communication.Connect("127.0.0.1", "8000");
+            _communication.ListenContinuously();
         }
 
-        public string Login(string Username, string Password, string IP, string Port)
+        public void Login(string username, string password, string ip, string port)
         {
-            string response = Communication.Connect(IP, Port);
-
-            if (response != "connected")
-            {
-                return response;
-            }
-
             StringBuilder sb = new StringBuilder();
             sb.Append("$$LOGIN$$UN=");
-            sb.Append(Username);
+            sb.Append(username);
             sb.Append("$$PW=");
-            sb.Append(Password);
+            sb.Append(password);
 
-            Communication.SendMessage(sb.ToString());
-
-            response = Communication.ListenOnce();
-            //$$REJECTED$$REASON=why_rejected
-            //$$ACCEPTED$$IC=identification_code
-
-            string[] SplitResponse = response.Split(new string[] { "$$" }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (SplitResponse[0] == "REJECTED")
-            {
-                return SplitResponse[1].Split('=')[1];
-            }
-
-            if(SplitResponse[0] == "ACCEPTED")
-            {
-                string IC = SplitResponse[1].Split('=')[1];
-                Communication.SetIC(IC);
-                return "success";
-            }
-
-            return null;
+            _communication.SendMessage(sb.ToString());
         }
     }
 }

@@ -11,17 +11,18 @@ namespace Server
 {
     class Program
     {
-        static private List<User> AllUsers;
+        private static List<User> AllUsers;
 
-        static private bool IsRunning = true;
-        static private Thread listeningThread;
-        static private string IP;
-        static private int Port;
-        static private TcpListener listener;
-        static private List<ClientHandler> Handlers = new List<ClientHandler>();
+        private static bool IsRunning = true;
+        private static Thread listeningThread;
+        private static string IP;
+        private static int Port;
+        private static TcpListener listener;
+        public static List<ClientHandler> Handlers = new List<ClientHandler>();
+        private static int count = 0;
 
-        static private bool SymmetricEncryption { get; set; }
-        static private bool AsymmetricEncryption { get; set; }
+        private static bool SymmetricEncryption { get; set; }
+        private static bool AsymmetricEncryption { get; set; }
 
 
         static void Main(string[] args)
@@ -61,31 +62,6 @@ namespace Server
                             Console.WriteLine("Port: " + Port);
                             Console.WriteLine("");
                             break;
-                        case "getencryption":
-                            Console.WriteLine("Symmetric encryption: " + SymmetricEncryption);
-                            Console.WriteLine("Asymmetric encryption: " + AsymmetricEncryption);
-                            Console.WriteLine("");
-                            break;
-                        case "setsymmetric":
-                            ModifyEncryption(true, true);
-                            break;
-                        case "clrsymmetric":
-                            ModifyEncryption(true, false);
-                            break;
-                        case "setasymmetric":
-                            ModifyEncryption(false, true);
-                            break;
-                        case "clrasymmetric":
-                            ModifyEncryption(false, false);
-                            break;
-                        case "echo":
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 1; i < SplitCommand.Length; i++)
-                            {
-                                sb.Append(SplitCommand[i]);
-                            }
-                            SendAll(sb.ToString());
-                            break;
                         default:
                             PrintHelp();
                             break;
@@ -102,9 +78,9 @@ namespace Server
 
         public static User GetUser(string username, string password)
         {
-            foreach(User usr in AllUsers)
+            foreach (User usr in AllUsers)
             {
-                if(usr.Equals(username, password))
+                if (usr.Equals(username, password))
                 {
                     return usr;
                 }
@@ -113,16 +89,23 @@ namespace Server
             return null;
         }
 
+        public static ClientHandler GetHandler(string username)
+        {
+            foreach (ClientHandler ch in Handlers)
+            {
+                if(ch.GetUsername() == username)
+                {
+                    return ch;
+                }
+            }
+            return null;
+        }
+
         private static void PrintHelp()
         {
             Console.WriteLine("");
             Console.WriteLine("quit - Quit server and disconnect clients");
             Console.WriteLine("getconn - Get connection details");
-            Console.WriteLine("getencryption - Get encryption settings");
-            Console.WriteLine("setsymmetric - Turn on symmetric encryption");
-            Console.WriteLine("clrsymmetric - Turn off symmetric encryption");
-            Console.WriteLine("setasymmetric - Turn on asymmetric encryption");
-            Console.WriteLine("clrasymmetric - Turn off asymmetric encryption");
             Console.WriteLine("");
         }
 
@@ -138,13 +121,15 @@ namespace Server
                 {
                     IncomingClient = listener.AcceptTcpClient();
                     ClientHandler handler = new ClientHandler(IncomingClient);
-                    handler.ID = Handlers.Count;
+                    handler.ClientHandlerStop += Handler_ClientHandlerStop;
+                    handler.ID = count;
+                    count++;
                     handler.Start();
                     Handlers.Add(handler);
                 }
                 catch (SocketException e)
                 {
-                    if(e.SocketErrorCode == SocketError.Interrupted)
+                    if (e.SocketErrorCode == SocketError.Interrupted)
                     {
                         Console.WriteLine("Quitting...");
                     }
@@ -159,6 +144,12 @@ namespace Server
             {
                 ch.Stop();
             }
+        }
+
+        private static void Handler_ClientHandlerStop(object sender, EventArgs e)
+        {
+            Handlers.Remove((ClientHandler)sender);
+            Broadcast("$$CMD$$ACTION=REMOVE$$VALUE=" + ((ClientHandler)sender).GetUsername());
         }
 
         private static void InterpretArgs(string[] args)
@@ -187,11 +178,22 @@ namespace Server
             }
         }
 
-        private static void SendAll(string message)
+        public static void Broadcast(string message)
         {
             foreach (ClientHandler ch in Handlers)
             {
-                ch.SendMessage("SERVER: " + message);
+                ch.SendMessage(message);
+            }
+        }
+
+        public static void Broadcast(string message, string ignore)
+        {
+            foreach (ClientHandler ch in Handlers)
+            {
+                if (ch.GetUsername() != ignore)
+                {
+                    ch.SendMessage(message);
+                }
             }
         }
 

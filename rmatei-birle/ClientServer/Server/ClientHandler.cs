@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+    public delegate void ClientHandlerStopEventHandler(object sender, EventArgs e);
     public class ClientHandler
     {
-
-
+        public event ClientHandlerStopEventHandler ClientHandlerStop;
         private Thread thread { get; set; }
         private bool IsRunning = true;
         private TcpClient client;
@@ -30,7 +30,13 @@ namespace Server
             AsymmetricEncryption = false;
             this.client = (TcpClient)client;
             writer = new StreamWriter(this.client.GetStream(), Encoding.ASCII);
+            writer.AutoFlush = true;
             reader = new StreamReader(this.client.GetStream(), Encoding.ASCII);
+        }
+
+        public string GetUsername()
+        {
+            return CurrentUser.GetUsername();
         }
 
         private void Communicating()
@@ -40,7 +46,6 @@ namespace Server
                 string Incoming = reader.ReadLine();
                 if (Incoming != null)
                 {
-                    //this.SendMessage("ECHO " + Incoming);
                     Console.WriteLine("Client " + this.ID + ":" + Incoming);
 
                     //incomming: 
@@ -59,7 +64,7 @@ namespace Server
 
                         CurrentUser = Program.GetUser(username, password);
 
-                        if(CurrentUser == null)
+                        if (CurrentUser == null)
                         {
                             this.SendMessage("$$REJECTED$$REASON=Incorrect username or password");
                         }
@@ -67,6 +72,41 @@ namespace Server
                         {
                             CurrentUser.IC = Guid.NewGuid().ToString();
                             this.SendMessage("$$ACCEPTED$$IC=" + CurrentUser.IC);
+                            Program.Broadcast("$$CMD$$ACTION=ADD$$VALUE=" + this.GetUsername(), this.GetUsername());
+                        }
+                    }
+
+                    if (IncomingSplit[0].Contains("IC"))
+                    {
+                        //$$IC=identification_code$$LOGOUT
+                        //$$IC=identification_code&&CHAT=to_whom&&MSG=message
+                        string ic = IncomingSplit[0].Split('=')[1];
+                        if (CurrentUser.IC == ic)
+                        {
+                            if (IncomingSplit[1] == "LOGOUT")
+                            {
+                                this.Stop();
+                            }
+                            if (IncomingSplit[1].Contains("CHAT"))
+                            {
+                                string chat = IncomingSplit[1].Split('=')[1];
+                                string message = IncomingSplit[2].Split('=')[1];
+                                try
+                                {
+                                    Program.GetHandler(chat).SendMessage("$$CHAT=" + this.CurrentUser.GetUsername() + "$$MSG=" + message);
+                                }
+                                catch (NullReferenceException) { }
+                                catch (ArgumentNullException) { }
+                            }
+
+                            if (IncomingSplit[1] == "GETUSERS")
+                            {
+                                foreach (ClientHandler ch in Program.Handlers)
+                                {
+                                    string msg = "$$CMD$$ACTION=ADD$$VALUE=" + ch.GetUsername();
+                                    SendMessage(msg);
+                                }
+                            }
                         }
                     }
                 }
@@ -83,11 +123,13 @@ namespace Server
         public void Stop()
         {
             this.IsRunning = false;
+            ClientHandlerStop?.Invoke(this, new EventArgs());
+            this.thread.Abort();
         }
 
         public void SendMessage(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine("To C" + this.ID + ": " + message);
             writer.WriteLine(message);
         }
     }

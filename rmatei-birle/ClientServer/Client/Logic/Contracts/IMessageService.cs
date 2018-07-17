@@ -7,8 +7,10 @@ using Client.EventArguments;
 
 namespace Client.Logic.Contracts
 {
-    public interface ILoginService
+    interface IMessageService
     {
-        void Login(string username, string password, string ip, string port);
+        event LoginEventHandler LoginEvent;
+        event OnlineUserEventHandler OnlineUserEvent;
+        event MessageEventHandler MessageEvent;
     }
 }

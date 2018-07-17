@@ -10,12 +10,12 @@ namespace Client.Communication.Contracts
     public interface ICommunication
     {
         event IncomingMessageEventHandler IncomingMessage;
-        string Connect(string IP, string Port);
+        string Connect(string ip, string port);
         string ListenOnce();
         void ListenContinuously();
         void StopListeningContinuously();
         void Disconnect();
         void SendMessage(string message);
-        void SetIC(string IC);
+        void SetIc(string ic);
     }
 }

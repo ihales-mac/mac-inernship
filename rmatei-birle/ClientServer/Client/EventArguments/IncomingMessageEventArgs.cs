@@ -19,6 +19,5 @@ namespace Client.EventArguments
         {
             this.Message = message;
         }
-
     }
 }

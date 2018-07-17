@@ -20,20 +20,16 @@ namespace Server
 
         public bool Equals(string username, string password)
         {
-            if(username == this.Username && password == this.Password)
+            if (username == this.Username && password == this.Password)
             {
                 return true;
             }
             return false;
         }
 
-        public string GetUsername(string IC)
+        public string GetUsername()
         {
-            if (this.IC == IC)
-            {
-                return this.Username;
-            }
-            return null;
+            return this.Username;
         }
 
     }

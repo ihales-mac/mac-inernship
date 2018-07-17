@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Client
+namespace Client.Views
 {
     /// <summary>
     /// Interaction logic for LoginView.xaml
@@ -28,22 +28,50 @@ namespace Client
     /// 
     public partial class LoginView : Window
     {
-        public ILoginService LoginService;
+        private readonly ILoginService _loginService;
+        private IMessageService _messageService = new MessageService();
 
-        public IChatService ChatService;
-
-        //public LoginView(ILoginService ls, IChatService cs)
-        //{
-        //    LoginService = ls;
-        //    ChatService = cs;
-        //    InitializeComponent();
-        //}
 
         public LoginView()
         {
-            LoginService = new LoginService();
-            ChatService = new ChatService();
-            InitializeComponent();
+            lock (this)
+            {
+                InitializeComponent();
+                _loginService = new LoginService();
+                _messageService.LoginEvent += _messageService_LoginEvent;
+            }
+        }
+
+        private void _messageService_LoginEvent(object sender, EventArguments.LoginEventArgs e)
+        {
+            string response = e.Response;
+            if (response != "success")
+            {
+                if (response == null)
+                {
+                    StatusText.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        StatusText.Text = "Unknown error!";
+                    }));
+                }
+                else
+                {
+                    StatusText.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        StatusText.Text = response;
+                    }));
+                }
+            }
+            else
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ChatView chat = new ChatView();
+                    this.Hide();
+                    chat.Closed += Chat_Closed;
+                    chat.ShowDialog();
+                });
+            }
         }
 
         private void LoginBtn_Click(object sender, RoutedEventArgs e)
@@ -53,26 +81,15 @@ namespace Client
             string username = UsernameText.Text;
             string password = PasswordText.Password;
 
-            string response = LoginService.Login(username, password, ip, port);
+            _loginService.Login(username, password, ip, port);
+        }
 
-            if(response != "success")
+        private void Chat_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke((Action)delegate
             {
-                if(response == null)
-                {
-                    StatusText.Text = "Unknown error!";
-                }
-                else
-                {
-                    StatusText.Text = response;
-                }
-            }
-            else
-            {
-                ChatView chat = new ChatView(ChatService);
-                chat.Owner = this;
-                this.Hide();
-                chat.ShowDialog();
-            }
+                this.Close();
+            });
         }
     }
 }

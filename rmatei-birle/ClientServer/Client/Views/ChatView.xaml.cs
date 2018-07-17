@@ -12,30 +12,53 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Client.Logic.Services;
 
-namespace Client
+namespace Client.Views
 {
     /// <summary>
     /// Interaction logic for ChatView.xaml
     /// </summary>
     public partial class ChatView : Window
     {
-        IChatService ChatService;
-        string CurrentUser;
+        private readonly IChatService _chatService = new ChatService();
+        private string _currentUser;
+        private List<string> _onlineUsers;
 
-        public ChatView(IChatService cs)
+        public ChatView()
         {
-            this.ChatService = cs;
-            this.ChatService.MessageToView += ChatService_MessageToView;
-            this.ChatService.CommandToView += ChatService_CommandToView;
-            InitializeComponent();
-            DataGridTextColumn col = new DataGridTextColumn();
-            col.Header = "Online Users";
+            lock (this)
+            {
+                InitializeComponent();
+                _onlineUsers = new List<string>();
+                this.Closing += ChatView_Closing;
+                this._chatService.MessageToView += ChatService_MessageToView;
+                this._chatService.CommandAddToView += _chatService_CommandAddToView;
+                this._chatService.CommandRemoveToView += _chatService_CommandRemoveToView;
+            }
         }
 
-        private void ChatService_CommandToView(object sender, EventArguments.CommandToViewEventArgs e)
+        private void _chatService_CommandRemoveToView(object sender, EventArguments.CommandRemoveToViewEventArgs e)
         {
-            PopulateOnlineUsers();
+            OnlineUsers.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                _onlineUsers.Remove(e.User);
+                OnlineUsers.ItemsSource = _onlineUsers;
+            }));
+        }
+
+        private void _chatService_CommandAddToView(object sender, EventArguments.CommandAddToViewEventArgs e)
+        {
+            OnlineUsers.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                _onlineUsers.Add(e.User);
+                OnlineUsers.ItemsSource = _onlineUsers;
+            }));
+        }
+
+        private void ChatView_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _chatService.Logout();
         }
 
         private void ChatService_MessageToView(object sender, EventArguments.MessageToViewEventArgs e)
@@ -43,46 +66,47 @@ namespace Client
             PopulateChat();
         }
 
-        private void PopulateOnlineUsers()
-        {
-            List<string> online = ChatService.GetOnlineUsers();
-
-            OnlineUsers.Items.Add(online.First());
-        }
-
         private void PopulateChat()
         {
-            List<Tuple<string, string>> messages = ChatService.GetMessages(this.CurrentUser);
-            StringBuilder sb = new StringBuilder();
+            ChatTextBox.Dispatcher.BeginInvoke((Action)(() =>
+                   {
+                       List<Tuple<string, string>> messages = _chatService.GetMessages(_currentUser);
+                       StringBuilder sb = new StringBuilder();
 
-            foreach (Tuple<string, string> msg in messages)
-            {
-                sb.Append(">>");
-                sb.Append(msg.Item1);
-                sb.Append(":");
-                sb.Append(msg.Item2);
-                sb.Append("\n");
-            }
-            ChatTextBox.Text = sb.ToString();
+                       foreach (Tuple<string, string> msg in messages)
+                       {
+                           sb.Append(">> ");
+                           sb.Append(msg.Item1);
+                           sb.Append(": ");
+                           sb.Append(msg.Item2);
+                           sb.Append("\n");
+                       }
+                       ChatTextBox.Text = sb.ToString();
+                   }
+                ));
         }
 
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return || e.Key == Key.Enter)
             {
-                ChatService.SendMessage(UserInputText.Text, this.CurrentUser);
+                if (UserInputText.Text != "")
+                {
+                    _chatService.SendMessage(UserInputText.Text, _currentUser);
+                    UserInputText.Text = "";
+                }
             }
         }
 
         private void OnlineUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentUser = OnlineUsers.SelectedValue.ToString();
+            _currentUser = OnlineUsers.SelectedValue.ToString();
             PopulateChat();
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            ChatService.Logout();
+            _chatService.Logout();
             this.Close();
         }
     }
