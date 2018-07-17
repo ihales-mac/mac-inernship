@@ -20,14 +20,12 @@ namespace Server
         private StreamReader reader;
 
         public int ID { get; set; }
+        public bool LoggedIn { get; set; }
         private User CurrentUser;
-        public bool SymmetricEncryption { get; set; }
-        public bool AsymmetricEncryption { get; set; }
 
         public ClientHandler(object client)
         {
-            SymmetricEncryption = false;
-            AsymmetricEncryption = false;
+            this.LoggedIn = false;
             this.client = (TcpClient)client;
             writer = new StreamWriter(this.client.GetStream(), Encoding.ASCII);
             writer.AutoFlush = true;
@@ -36,6 +34,7 @@ namespace Server
 
         public string GetUsername()
         {
+            if (CurrentUser == null) return "";
             return CurrentUser.GetUsername();
         }
 
@@ -43,72 +42,89 @@ namespace Server
         {
             while (IsRunning)
             {
-                string Incoming = reader.ReadLine();
-                if (Incoming != null)
+                try
                 {
-                    Console.WriteLine("Client " + this.ID + ":" + Incoming);
 
-                    //incomming: 
-                    //$$LOGIN$$UN=username$$PW=password
-                    //$$IC=identification_code$$LOGOUT
-                    //$$IC=identification_code&&CHAT=to_whom&&MSG=message
-
-                    string[] IncomingSplit = Incoming.Split(new string[] { "$$" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (IncomingSplit[0] == "LOGIN")
+                    string Incoming = Crypt.Crypt.Decrypt(reader.ReadLine());
+                    if (Incoming != null)
                     {
-                        //$$REJECTED$$REASON=why_rejected
-                        //$$ACCEPTED$$IC=identification_code
+                        Console.WriteLine("Client " + this.ID + ":" + Incoming);
 
-                        string username = IncomingSplit[1].Split('=')[1];
-                        string password = IncomingSplit[2].Split('=')[1];
-
-                        CurrentUser = Program.GetUser(username, password);
-
-                        if (CurrentUser == null)
-                        {
-                            this.SendMessage("$$REJECTED$$REASON=Incorrect username or password");
-                        }
-                        else
-                        {
-                            CurrentUser.IC = Guid.NewGuid().ToString();
-                            this.SendMessage("$$ACCEPTED$$IC=" + CurrentUser.IC);
-                            Program.Broadcast("$$CMD$$ACTION=ADD$$VALUE=" + this.GetUsername(), this.GetUsername());
-                        }
-                    }
-
-                    if (IncomingSplit[0].Contains("IC"))
-                    {
+                        //incomming: 
+                        //$$LOGIN$$UN=username$$PW=password
                         //$$IC=identification_code$$LOGOUT
                         //$$IC=identification_code&&CHAT=to_whom&&MSG=message
-                        string ic = IncomingSplit[0].Split('=')[1];
-                        if (CurrentUser.IC == ic)
-                        {
-                            if (IncomingSplit[1] == "LOGOUT")
-                            {
-                                this.Stop();
-                            }
-                            if (IncomingSplit[1].Contains("CHAT"))
-                            {
-                                string chat = IncomingSplit[1].Split('=')[1];
-                                string message = IncomingSplit[2].Split('=')[1];
-                                try
-                                {
-                                    Program.GetHandler(chat).SendMessage("$$CHAT=" + this.CurrentUser.GetUsername() + "$$MSG=" + message);
-                                }
-                                catch (NullReferenceException) { }
-                                catch (ArgumentNullException) { }
-                            }
 
-                            if (IncomingSplit[1] == "GETUSERS")
+                        string[] IncomingSplit =
+                            Incoming.Split(new string[] { "$$" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (IncomingSplit[0] == "LOGIN")
+                        {
+                            //$$REJECTED$$REASON=why_rejected
+                            //$$ACCEPTED$$IC=identification_code
+
+                            string username = IncomingSplit[1].Split('=')[1];
+                            string password = IncomingSplit[2].Split('=')[1];
+
+                            CurrentUser = Program.GetUser(username, password);
+
+                            if (CurrentUser == null)
                             {
-                                foreach (ClientHandler ch in Program.Handlers)
+                                this.SendMessage("$$REJECTED$$REASON=Incorrect username or password");
+                            }
+                            else
+                            {
+                                CurrentUser.IC = Guid.NewGuid().ToString();
+                                this.SendMessage("$$ACCEPTED$$IC=" + CurrentUser.IC);
+                                this.LoggedIn = true;
+                                Program.Broadcast("$$CMD$$ACTION=ADD$$VALUE=" + username, username);
+                            }
+                        }
+
+                        if (IncomingSplit[0].Contains("IC"))
+                        {
+                            //$$IC=identification_code$$LOGOUT
+                            //$$IC=identification_code&&CHAT=to_whom&&MSG=message
+                            string ic = IncomingSplit[0].Split('=')[1];
+                            if (CurrentUser.IC == ic)
+                            {
+                                if (IncomingSplit[1] == "LOGOUT")
                                 {
-                                    string msg = "$$CMD$$ACTION=ADD$$VALUE=" + ch.GetUsername();
-                                    SendMessage(msg);
+                                    this.Stop();
+                                }
+
+                                if (IncomingSplit[1].Contains("CHAT"))
+                                {
+                                    string chat = IncomingSplit[1].Split('=')[1];
+                                    string message = IncomingSplit[2].Split('=')[1];
+                                    try
+                                    {
+                                        Program.GetHandler(chat)
+                                            .SendMessage(
+                                                "$$CHAT=" + this.CurrentUser.GetUsername() + "$$MSG=" + message);
+                                    }
+                                    catch (NullReferenceException)
+                                    {
+                                    }
+                                    catch (ArgumentNullException)
+                                    {
+                                    }
+                                }
+
+                                if (IncomingSplit[1] == "GETUSERS")
+                                {
+                                    foreach (ClientHandler ch in Program.Handlers)
+                                    {
+                                        string msg = "$$CMD$$ACTION=ADD$$VALUE=" + ch.GetUsername();
+                                        SendMessage(msg);
+                                    }
                                 }
                             }
                         }
                     }
+                }
+                catch
+                {
+                    this.Stop();
                 }
             }
         }
@@ -130,7 +146,7 @@ namespace Server
         public void SendMessage(string message)
         {
             Console.WriteLine("To C" + this.ID + ": " + message);
-            writer.WriteLine(message);
+            writer.WriteLine(Crypt.Crypt.Encrypt(message));
         }
     }
 }

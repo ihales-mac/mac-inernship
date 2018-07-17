@@ -35,7 +35,7 @@ namespace Client.Logic.Services
         private void _messageService_MessageEvent(object sender, MessageEventArgs e)
         {
             _messages.Add(e.Message);
-            MessageToView?.Invoke(this, new MessageToViewEventArgs());
+            MessageToView?.Invoke(this, new MessageToViewEventArgs(e.Message.Item1));
         }
 
         private void _messageService_OnlineUserEvent(object sender, OnlineUserEventArgs e)

@@ -10,8 +10,11 @@ namespace Client.EventArguments
 
     public class MessageToViewEventArgs : EventArgs
     {
-        public MessageToViewEventArgs()
+        public string Username;
+
+        public MessageToViewEventArgs(string username)
         {
+            this.Username = username;
         }
     }
 }
