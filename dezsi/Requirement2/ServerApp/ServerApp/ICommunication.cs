@@ -10,11 +10,11 @@ namespace ServerApp
 {
     interface ICommunication<T>
     {
-        void SendMessage(T handler, String msg, Header type = Header.Unspecified);
+       // void SendMessage(T handler, String msg, Header type);
         string ResolveLogin(String username, String Password);
         void StartListening();
         //Generic send method to be used
-        void Send(T handler, string message);
+        void UnpackAndSend(T handler, string message, Header type);
        
        
       

@@ -11,6 +11,21 @@ namespace CommonApp
     public class RijndaelClass
     {
 
+        public static byte[] PadBytesArray(ref byte[] bytes) {
+            return bytes;
+
+        }
+        public static byte[] TruncateBytesArray(ref byte[] bytes) {
+
+            int i = bytes.Length - 1;
+            while (bytes[i] == 0)
+            {
+                i--;
+            }
+
+            Array.Resize(ref bytes, i + 1);
+            return bytes;
+        }
        
         public static byte[] EncryptStringToBytes(string plainText, byte[] key, byte[] IV)
         {
@@ -29,9 +44,9 @@ namespace CommonApp
             {
                 rijAlg.Key = key;
                 rijAlg.IV = IV;
-                rijAlg.Padding = PaddingMode.PKCS7;
-                Console.WriteLine(rijAlg.Key);
-                Console.WriteLine(rijAlg.IV);
+                rijAlg.Padding = PaddingMode.None;
+                Console.WriteLine("Encryption key {0}",Convert.ToBase64String(rijAlg.Key));
+                Console.WriteLine("Encryption vector {0}",Convert.ToBase64String(rijAlg.IV));
                 // Create an encryptor to perform the stream transform.
                 ICryptoTransform encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
 
@@ -47,7 +62,9 @@ namespace CommonApp
                             swEncrypt.Write(plainText);
                         }
                         encrypted = msEncrypt.ToArray();
+                       // csEncrypt.FlushFinalBlock();
                     }
+                    
                 }
             }
 
@@ -78,10 +95,10 @@ namespace CommonApp
             {
                 rijAlg.Key = key;
                 rijAlg.IV = IV;
-                rijAlg.Padding = PaddingMode.PKCS7;
+                rijAlg.Padding = PaddingMode.None;
+                Console.WriteLine("Decryption key {0}", Convert.ToBase64String(rijAlg.Key));
+                Console.WriteLine("Decryption vector {0}", Convert.ToBase64String(rijAlg.IV));
 
-                //Console.WriteLine(rijAlg.Key);
-                //Console.WriteLine(rijAlg.IV);
                 // Create a decryptor to perform the stream transform.
                 ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
 
@@ -96,7 +113,9 @@ namespace CommonApp
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.
                             plaintext = srDecrypt.ReadToEnd();
+
                         }
+                       // csDecrypt.FlushFinalBlock();
                     }
                 }
 

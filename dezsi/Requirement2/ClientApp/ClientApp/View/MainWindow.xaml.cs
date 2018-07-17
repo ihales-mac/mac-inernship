@@ -40,7 +40,8 @@ namespace ClientApp
         private void ButtonLogin_Click(object sender, RoutedEventArgs e)
         {
 
-            client = new SocketNp.SynchronousSocketClient("generic");
+            client = new SocketNp.SynchronousSocketClient2("generic");
+            client.NewKey();
             client.Login(this.TextBoxName.Text, this.TextBoxPassword.Text);
             
 

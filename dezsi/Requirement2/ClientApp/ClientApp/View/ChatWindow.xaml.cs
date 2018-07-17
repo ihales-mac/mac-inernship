@@ -38,7 +38,7 @@ namespace ClientApp.View
         }
 
         public void SetUpUser() {
-            client = new SocketNp.SynchronousSocketClient(user);
+            client = new SocketNp.SynchronousSocketClient2(user);
             GetUsers();
             GetMessages();
             this.messagesFrom.ItemsSource = users.Keys.ToDictionary(e => e);
@@ -50,6 +50,7 @@ namespace ClientApp.View
         public void SetUserName(string username) {
 
             user = username;
+            this.Title = username;
             SetUpUser();
         }
 
@@ -60,7 +61,7 @@ namespace ClientApp.View
             writeTo = getUser;
           
             this.ChatLabel.Content = " You can now text " + writeTo;
-
+            GetMessages();
             IList<Message> msg= filterMessages(messages, user, writeTo);
             this.ChatBox.ItemsSource = msg;
 

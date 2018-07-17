@@ -50,8 +50,10 @@
   <ItemGroup>
     <Compile Include="CommonEntities\Message.cs" />
     <Compile Include="CommonEntities\User.cs" />
+    <Compile Include="CommonEntities\UserWithPK.cs" />
     <Compile Include="Helpers\HashesClass.cs" />
     <Compile Include="Helpers\JMessage.cs" />
+    <Compile Include="Helpers\RSAClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\RijndaelClass.cs" />

@@ -17,17 +17,19 @@ using System.Threading.Tasks;
 
 namespace ServerApp.SocketNp
 {
-  
-    public class SynchronousSocketListener : ICommunication<Socket>
+
+    public class SynchronousSocketListener2 : ICommunication<Socket>
     {
         private static Messages messages = new Messages();
-        private RijndaelManaged rijndael;
+        private RSACryptoServiceProvider RSA;
 
-        public SynchronousSocketListener() {
+        public SynchronousSocketListener2()
+        {
 
-            GenerateKeyAndArray();
+            GenerateKeys();
         }
-        public string ResolveLogin(string username, string password) {
+        public string ResolveLogin(string username, string password)
+        {
             string response;
 
             try
@@ -40,7 +42,8 @@ namespace ServerApp.SocketNp
                 else
                     response = "wrong";
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 response = "wrong";
             }
             return response;
@@ -52,16 +55,36 @@ namespace ServerApp.SocketNp
         // Incoming data from the client.  
         public static string data = null;
 
-        public void Send(Socket handler, string data) {
-            while (data.Length % 16 != 0) {
-                data += '\0';
-            }
-            handler.Send(CommonApp.RijndaelClass.EncryptStringToBytes(data, rijndael.Key, rijndael.IV));
+        public void Send(Socket handler, string data, RSAParameters key)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(data);
+            byte[] encrypted = CommonApp.RSAClass.RSAEncrypt(bytes, key, false);
+            handler.Send(encrypted);
 
         }
 
+        public void UnpackAndSend(Socket handler, string message, Header type) {
+            JMessage jmess = JMessage.Deserialize(message);
+            KeyValuePair<string, string> keyValuePair = jmess.ToValue<KeyValuePair<string, string>>();
+            RSAParameters param = (RSAParameters)Users.GetUserKeys()[keyValuePair.Key];
+            SendMessage(handler, keyValuePair.Value, type, param);
+        }
 
-        public void UnpackAndSend(Socket handler, string rec, Header type) {
+
+        public void SendUnencrypted(Socket handler, string rec) {
+
+            JMessage des = JMessage.Deserialize(rec);
+            KeyValuePair<string, RSAParameters> kv2 = des.ToValue<KeyValuePair<string, RSAParameters>>();
+            Users.SetUserKey(kv2.Key, kv2.Value);
+            JMessage jmess;
+            jmess = JMessage.FromValue<RSAParameters>(RSA.ExportParameters(false), Header.ExchangePKs);
+            handler.Send(Encoding.ASCII.GetBytes(JMessage.Serialize(jmess)));
+        
+
+        }
+
+        public void SendMessage(Socket handler, string rec, Header type, RSAParameters key)
+        {
             switch (type)
             {
 
@@ -71,7 +94,7 @@ namespace ServerApp.SocketNp
 
                     string answ = ResolveLogin(kv.Key, kv.Value);
 
-                    Send(handler, answ);
+                    Send(handler, answ, key);
 
                     break;
 
@@ -80,40 +103,40 @@ namespace ServerApp.SocketNp
                     //Console.WriteLine(Convert.FromBase64String(rec));
                     Message message = jmess.ToValue<Message>();
                     Messages.AddMessage(message);
-                    Send(handler, JMessage.Serialize(JMessage.FromValue<IList<CommonApp.Model.Message>>(Messages.GetMessagesOfUser(message.UserNameFrom), Header.Message)));
+                    Send(handler, JMessage.Serialize(JMessage.FromValue<IList<CommonApp.Model.Message>>(Messages.GetMessagesOfUser(message.UserNameFrom), Header.Message)), key);
                     break;
 
                 case Header.Messages:
                     string user = JMessage.Deserialize(rec).ToValue<string>();
-                    Send(handler, JMessage.Serialize(JMessage.FromValue<IList<CommonApp.Model.Message>>(Messages.GetMessagesOfUser(user), Header.Messages)));
+                    Send(handler, JMessage.Serialize(JMessage.FromValue<IList<CommonApp.Model.Message>>(Messages.GetMessagesOfUser(user), Header.Messages)), key);
                     break;
 
                 case Header.Users:
                     jmess = JMessage.FromValue<Dictionary<string, string>>(Users.UsersDict, Header.Users);
-                    Send(handler, JMessage.Serialize(jmess));
+                    Send(handler, JMessage.Serialize(jmess), key);
                     break;
-                case Header.Handshake:
-                    SendKeyAndArray(handler);
-                    break;
+
+
 
 
             }
         }
-        public void GenerateKeyAndArray() {
-            rijndael = new RijndaelManaged();
-            rijndael.GenerateKey();
-            rijndael.GenerateIV();
+        public void GenerateKeys()
+        {
+            RSA = new RSACryptoServiceProvider(8192);
+           
 
         }
-        public void SendKeyAndArray(Socket handler) {
+        public void SendKey(Socket handler)
+        {
 
-           
-            Console.WriteLine("Key {0} ", Convert.ToBase64String(rijndael.Key));
-            Console.WriteLine("IV {0} ", Convert.ToBase64String(rijndael.IV));
-            KeyValuePair<byte[],byte[]> msg = new KeyValuePair<byte[],byte[]>( rijndael.Key,rijndael.IV);
-            string json = JMessage.Serialize(JMessage.FromValue<KeyValuePair<byte[], byte[]>>(msg, Header.Handshake));
+
+            //Console.WriteLine("Key {0} ", Convert.ToBase64String(rijndael.Key));
+         
+       
+            string json = JMessage.Serialize(JMessage.FromValue<RSAParameters>(RSA.ExportParameters(false), Header.ExchangePKs));
             Console.WriteLine(json);
-  
+
             handler.Send(Encoding.ASCII.GetBytes(json));
         }
 
@@ -121,18 +144,12 @@ namespace ServerApp.SocketNp
         public void StartListening()
         {
 
-            //Rijndael rijn = new RijndaelManaged();
-            //byte[] key = rijn.Key;
-            //byte[] arr = rijn.IV;
-            //byte[] encr = CommonApp.RijndaelClass.EncryptStringToBytes("hey", key, arr);
-            //string res = CommonApp.RijndaelClass.DecryptStringFromBytes(encr, key, arr);
-            //Console.WriteLine(res);
 
 
 
             // Data buffer for incoming data.  
-            byte[] bytes = new Byte[1024];
-          //  CommonApp.RijndaelClass.GenerateNewKey();
+            byte[] bytes = new Byte[2048];
+            //  CommonApp.RijndaelClass.GenerateNewKey();
             // Establish the local endpoint for the socket.  
             // Dns.GetHostName returns the name of the   
             // host running the application.  
@@ -161,7 +178,7 @@ namespace ServerApp.SocketNp
                     Console.WriteLine("Someone connected...");
                     // An incoming connection needs to be processed.  
                     int bytesRec;
-                   
+
                     bytesRec = handler.Receive(bytes);
                     byte[] bytesNew = new byte[bytesRec];
                     for (int i = 0; i < bytesRec; i++)
@@ -172,23 +189,28 @@ namespace ServerApp.SocketNp
                     {
                         //try to deserialize (in case it's not encrypted, it will do)
                         string msg = Encoding.ASCII.GetString(bytesNew);
-                        //try to deserialize (in case it's not encrypted, it will do)
+    
                         jmessage = CommonApp.JMessage.Deserialize(msg);
-                        UnpackAndSend(handler, msg, jmessage.Type);
+
+                        SendUnencrypted(handler, msg);
+                        //UnpackAndSend(handler, msg, jmessage.Type);
                         Console.WriteLine("Handshake done");
                     }
-                    catch (Exception ) {
+                    catch (Exception)
+                    {
                         //encrypted, so decrypt and deserialize
                         Console.WriteLine("Encrypted message receive");
-                        CommonApp.RijndaelClass.TruncateBytesArray(ref bytesNew);
-                        Console.WriteLine("Truncated array {0}", Convert.ToBase64String(bytesNew));
+                     //   CommonApp.RijndaelClass.TruncateBytesArray(ref bytesNew);
+                     //   Console.WriteLine("Truncated array {0}", Convert.ToBase64String(bytesNew));
 
-                        string decr = CommonApp.RijndaelClass.DecryptStringFromBytes(bytesNew, rijndael.Key, rijndael.IV);
+                        byte[] decrb=  CommonApp.RSAClass.RSADecrypt(bytesNew, RSA.ExportParameters(true), false);
+
+                        string decr = Encoding.Unicode.GetString(decrb);
                         Console.WriteLine("Decrypted message {0}", decr);
-                        
-                      //  byte[] res = Convert.FromBase64String(decr);
-                      //  CommonApp.RijndaelClass.TruncateBytesArray(ref res);
-                      //  Console.WriteLine("Truncated array {0}", Convert.ToBase64String(res));
+
+                        //  byte[] res = Convert.FromBase64String(decr);
+                        //  CommonApp.RijndaelClass.TruncateBytesArray(ref res);
+                        //  Console.WriteLine("Truncated array {0}", Convert.ToBase64String(res));
                         jmessage = CommonApp.JMessage.Deserialize(decr);
                         Console.WriteLine("Deserialized {0}", jmessage.Value.ToString());
                         UnpackAndSend(handler, decr, jmessage.Type);

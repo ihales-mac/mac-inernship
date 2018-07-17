@@ -1,65 +1,72 @@
-﻿using ClientApp.View;
-using CommonApp;
-using CommonApp.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using ClientApp.View;
+using CommonApp;
+using CommonApp.Model;
 
 namespace ClientApp.SocketNp
 {
-
-
-
-    public class SynchronousSocketClient : ICommunication<Socket>
+    class SynchronousSocketClient2 : ICommunication<Socket>
     {
-        
         private string Username;
-        private static byte[] Key, IV;
-        public void SetUserName(string user) {
+        private static RSACryptoServiceProvider RSA;
+        private static RSAParameters ServerPublicKey;
+        public void SetUserName(string user)
+        {
             Username = user;
         }
-        public string GetUserName() {
+        public string GetUserName()
+        {
             return Username;
         }
 
-        public SynchronousSocketClient(String client){
-            
+        public void NewKey() {
+            RSA = new RSACryptoServiceProvider(8192);
+        }
+
+        public SynchronousSocketClient2(String client)
+        {
+
             Username = client;
 
 
-         }
-        
-        public T GetMessage<T>(string message) {
+
+        }
+
+        public T GetMessage<T>(string message)
+        {
             JMessage mess = JMessage.Deserialize(message);
             return mess.ToValue<T>();
 
         }
 
-        public byte[] EncryptMessage(string msg) {
-            while (msg.Length % 16 != 0) {
-                msg += '\0';
+        public byte[] EncryptMessage(string msg, Header type)
+        {
+            KeyValuePair<string, string> messageAnduser = new KeyValuePair<string, string>(Username, msg);
 
-            }
-            Console.WriteLine("key {0}, array {1}", Convert.ToBase64String(SynchronousSocketClient.Key), Convert.ToBase64String(SynchronousSocketClient.IV));
-            //byte[] bytes = 
-            return CommonApp.RijndaelClass.EncryptStringToBytes(msg, Key, IV);
+            JMessage jmess = JMessage.FromValue<KeyValuePair<string, string>>(messageAnduser,type );
+            string serialize = JMessage.Serialize(jmess);
+            byte[] msgbytes = Encoding.Unicode.GetBytes(serialize);
+            return CommonApp.RSAClass.RSAEncrypt(msgbytes, ServerPublicKey, false);
         }
 
-        public string DecryptMessage(string msg) {
-            Console.WriteLine("key {0}, array {1}", Convert.ToBase64String(SynchronousSocketClient.Key), Convert.ToBase64String(SynchronousSocketClient.IV));
-
-           
-            return CommonApp.RijndaelClass.DecryptStringFromBytes(Convert.FromBase64String(msg), Key, IV);
-        }
-
-        public string SendAndReceiveMessage<T>(T obj, Header type = Header.Unspecified)
+        public string DecryptMessage(byte[] msg)
         {
 
-            byte[] bytes = new byte[1024];
+            return Encoding.Unicode.GetString(CommonApp.RSAClass.RSADecrypt(msg, RSA.ExportParameters(true), false));
+        }
+
+        public string SendAndReceiveMessage<T>(T obj, Header type)
+        {
+
+            byte[] bytes = new byte[2048];
             try
             {
                 // Establish the remote endpoint for the socket.  
@@ -85,11 +92,11 @@ namespace ClientApp.SocketNp
 
 
 
-                    //byte[] send = Encoding.ASCII.GetBytes(serialized);
+                    byte[] send = Encoding.ASCII.GetBytes(serialized);
                     // Send the data through the socket. 
                     int bytesSent, bytesRec;
                     string received;
-                    if (type == Header.Handshake)
+                    if (type == Header.ExchangePKs)
                     {
                         bytesSent = sender.Send(Encoding.ASCII.GetBytes(serialized));
                         bytesRec = sender.Receive(bytes);
@@ -97,24 +104,19 @@ namespace ClientApp.SocketNp
                         var cleaned = received.Replace("\0", string.Empty);
                         Console.WriteLine("Echoed = {0}", cleaned);
                         received = cleaned;
-
-
-
-
-
                     }
                     else
                     {
-                        Console.WriteLine("Going to send {0}", Convert.ToBase64String(EncryptMessage(serialized)));
-                        bytesSent = sender.Send(EncryptMessage(serialized));
+                        Console.WriteLine("Going to send {0}", Convert.ToBase64String(EncryptMessage(serialized, type)));
+                        bytesSent = sender.Send(EncryptMessage(serialized, type));
                         Console.WriteLine("Sent data");
                         bytesRec = sender.Receive(bytes);
                         Console.WriteLine("Received data");
-                        CommonApp.RijndaelClass.TruncateBytesArray(ref bytes);
-                        Console.WriteLine("Received, truncated and got {0}", Convert.ToBase64String(bytes));
-                        received = DecryptMessage(Convert.ToBase64String(bytes));
-                        Console.WriteLine("Decrypted message and got {0}", received);
-   
+                      //  CommonApp.RijndaelClass.TruncateBytesArray(ref bytes);
+                      //  Console.WriteLine("Received, truncated and got {0}", Convert.ToBase64String(bytes));
+                        received = DecryptMessage(bytes);
+                        //Console.WriteLine("Decrypted message and got {0}", received);
+
                         received = received.TrimEnd('\0');
                         Console.WriteLine("Trimmed {0}", received);
 
@@ -144,52 +146,50 @@ namespace ClientApp.SocketNp
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-            }          
-             return null;
+            }
+            return null;
         }
 
-        public void NewKey() {
-            string msg = this.SendAndReceiveMessage("", Header.Handshake);
-            KeyValuePair<byte[],byte[]> pair = JMessage.Deserialize(msg).ToValue<KeyValuePair<byte[], byte[]>>();
-            Key = pair.Key;
-            IV = pair.Value;
+        public void GetKey()
+        {
 
+            KeyValuePair<string, RSAParameters> toSend = new KeyValuePair<string, RSAParameters > (this.Username, RSA.ExportParameters(false));
 
-        }
-
-        public string GetKey() {
-
-            return Convert.ToBase64String(Key);
-        }
-
-        public string GetIV() {
-            return Convert.ToBase64String(IV);
-        }
-
-        public IList<Message> SendMessage(string UsernameTo, string message, DateTime time) {
-            Message m = new Message(this.Username,UsernameTo,message,time);
-            string messages= this.SendAndReceiveMessage(m, Header.Message);
-            return JMessage.Deserialize(messages).ToValue<IList<Message>>();
+            string msg = this.SendAndReceiveMessage < KeyValuePair<string, RSAParameters>>(toSend, Header.ExchangePKs);
+            RSAParameters ret = JMessage.Deserialize(msg).ToValue<RSAParameters>();
+            SynchronousSocketClient2.ServerPublicKey = ret;
             
 
+
         }
 
-        public IList<Message> GetMessages() {
+
+        public IList<Message> SendMessage(string UsernameTo, string message, DateTime time)
+        {
+            Message m = new Message(this.Username, UsernameTo, message, time);
+            string messages = this.SendAndReceiveMessage(m, Header.Message);
+            return JMessage.Deserialize(messages).ToValue<IList<Message>>();
+
+
+        }
+
+        public IList<Message> GetMessages()
+        {
             return JMessage.Deserialize(this.SendAndReceiveMessage<object>(this.Username, Header.Messages)).ToValue<IList<Message>>();
         }
-        public  Dictionary<string, string> GetUsers() {
-         
+        public Dictionary<string, string> GetUsers()
+        {
+
             string users = this.SendAndReceiveMessage<object>("users", Header.Users);
             return JMessage.Deserialize(users).ToValue<Dictionary<string, string>>();
         }
 
-       
+
         public void Login(string Username, string Password)
         {
-
-            NewKey();
-
             this.Username = Username;
+            GetKey();
+          
             KeyValuePair<string, string> keyValue = new KeyValuePair<string, string>(Username, HashesClass.computeHash(Password, "MD5"));
 
 
@@ -201,7 +201,8 @@ namespace ClientApp.SocketNp
                 chat.Show();
 
             }
-            else {
+            else
+            {
                 MessageBox.Show("Sorry, incorrect username or password. Try again.");
 
 
@@ -210,7 +211,8 @@ namespace ClientApp.SocketNp
 
 
         }
-
+       
+        
 
     }
 }

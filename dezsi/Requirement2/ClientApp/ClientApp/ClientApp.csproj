@@ -79,6 +79,7 @@
     <Compile Include="ICommunication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SocketNp\SynchronousSocketClient.cs" />
+    <Compile Include="SocketNp\SynchronousSocketClient2.cs" />
     <Compile Include="SocketNp\ThreadedClient.cs" />
     <Compile Include="View\ChatWindow.xaml.cs">
       <DependentUpon>ChatWindow.xaml</DependentUpon>

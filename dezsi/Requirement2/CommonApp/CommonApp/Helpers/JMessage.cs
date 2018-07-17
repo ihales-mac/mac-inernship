@@ -14,7 +14,9 @@ namespace CommonApp
         Users,
         Messages,
         Message,
-        Handshake
+        Handshake,
+        ExchangePKs,
+        MessagePKPack
 
 
     }

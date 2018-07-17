@@ -54,6 +54,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketNp\SynchronousSocketListener.cs" />
+    <Compile Include="SocketNp\SynchronousSocketListener2.cs" />
     <Compile Include="SocketNp\ThreadedSocket.cs" />
   </ItemGroup>
   <ItemGroup>
