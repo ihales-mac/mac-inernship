@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="ChatView" Height="450" Width="800">
     <Grid Margin="0,0,0,0.5">
-        <DataGrid x:Name="OnlineUsers" HorizontalAlignment="Left" Height="403" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" AutoGenerateColumns="True" SelectionChanged="OnlineUsers_SelectionChanged"/>
+        <DataGrid x:Name="OnlineUsers" HorizontalAlignment="Left" Height="403" Margin="10,10,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="OnlineUsers_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Online Users" IsReadOnly="True" Binding="{Binding Path=User}" Width="150"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <TextBox x:Name="UserInputText" HorizontalAlignment="Left" Height="23" Margin="187,351,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="598" KeyDown="OnKeyDownHandler">
         </TextBox>
         <Button x:Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" Margin="710,392,0,0" VerticalAlignment="Top" Width="75" Click="LogoutButton_Click"/>

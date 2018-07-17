@@ -99,7 +99,7 @@ namespace Client.Communication.Services
                 {
                     while (_isListening && _isConnected)
                     {
-                        string fromServer =_reader.ReadLine();
+                        string fromServer = Crypt.Crypt.Decrypt(_reader.ReadLine());
                         //to event stuff here;
                         if (fromServer != null)
                         {
@@ -163,28 +163,17 @@ namespace Client.Communication.Services
 
         public void SendMessage(string message)
         {
-            //encrypt message
-            //add identification code
-            //bool wasListening = false;
-            //if (_isListening)
-            //{
-            //    this.StopListeningContinuously();
-            //    wasListening = true;
-            //}
-
+            string msg;
             if (this._identificationCode != null)
             {
-                _writer.WriteLine("$$IC=" + _identificationCode + "" + message);
+                msg = "$$IC=" + _identificationCode + "" + message;
             }
             else
             {
-                _writer.WriteLine(message);
+                msg = message;
             }
 
-            //if (wasListening)
-            //{
-            //    ListenContinuously();
-            //}
+            _writer.WriteLine(Crypt.Crypt.Encrypt(msg));
         }
 
         public void SetIc(string ic)

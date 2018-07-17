@@ -30,6 +30,7 @@ namespace Client.Views
     {
         private readonly ILoginService _loginService;
         private IMessageService _messageService = new MessageService();
+        private string _me;
 
 
         public LoginView()
@@ -67,6 +68,8 @@ namespace Client.Views
                 Application.Current.Dispatcher.Invoke((Action)delegate
                 {
                     ChatView chat = new ChatView();
+                    chat.Me = _me;
+                    chat.Title = chat.Me + "'s Chat";
                     this.Hide();
                     chat.Closed += Chat_Closed;
                     chat.ShowDialog();
@@ -80,6 +83,7 @@ namespace Client.Views
             string port = PortText.Text;
             string username = UsernameText.Text;
             string password = PasswordText.Password;
+            _me = username;
 
             _loginService.Login(username, password, ip, port);
         }
