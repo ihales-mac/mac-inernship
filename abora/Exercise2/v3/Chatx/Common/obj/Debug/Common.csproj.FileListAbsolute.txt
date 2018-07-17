@@ -1,0 +1,12 @@
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Common\bin\Debug\Common.dll
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Common\bin\Debug\Common.pdb
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.dll
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.pdb
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Common\bin\Debug\Common.dll
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Common\bin\Debug\Common.pdb
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.csprojAssemblyReference.cache
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.dll
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Common\obj\Debug\Common.pdb
