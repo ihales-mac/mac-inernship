@@ -1,0 +1,48 @@
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\bin\Debug\Server.exe.config
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\bin\Debug\Server.exe
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\bin\Debug\Server.pdb
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\obj\Debug\Server.csprojAssemblyReference.cache
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\obj\Debug\Server.exe
+D:\Internship\CSharp\Last version server client\Chatx\Chatx\Server\obj\Debug\Server.pdb
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\bin\Debug\Server.exe.config
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\bin\Debug\Server.exe
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\bin\Debug\Server.pdb
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\obj\Debug\Server.exe
+D:\Informatica\AN2\Practica\Chatx\Chatx\Server\obj\Debug\Server.pdb
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\bin\Debug\Server.exe.config
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\bin\Debug\Server.exe
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\bin\Debug\Server.pdb
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.csprojAssemblyReference.cache
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.exe
+D:\Internship\Work\abora\Exercise2\v3\Chatx\Server\obj\Debug\Server.pdb
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\bin\Debug\Server.exe.config
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\bin\Debug\Server.exe
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\bin\Debug\Server.pdb
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.csprojAssemblyReference.cache
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.exe
+D:\Internship\Work\abora\Exercise2\v2\Chatx\Server\obj\Debug\Server.pdb
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Server.exe.config
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Server.exe
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Server.pdb
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.exe
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.pdb
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Common.dll
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Common.pdb
+D:\Informatica\AN2\Practica\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.csproj.CopyComplete
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Server.exe.config
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Server.exe
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Server.pdb
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Common.dll
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\bin\Debug\Common.pdb
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.csprojAssemblyReference.cache
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.csproj.CopyComplete
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.exe
+D:\Internship\CSharp\Chatxv5\Chatxv4\ChatxV4\Chatx\Server\obj\Debug\Server.pdb

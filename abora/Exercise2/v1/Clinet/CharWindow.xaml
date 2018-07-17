@@ -1,0 +1,17 @@
+﻿<Window x:Class="Clinet.CharWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Clinet"
+        mc:Ignorable="d"
+        Title="CharWindow" Height="450" Width="800">
+    <Grid>
+        <Label x:Name="lblGreeting" Content="Label" HorizontalAlignment="Left" Margin="72,26,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txbChat" HorizontalAlignment="Left" Height="136" Margin="72,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147"/>
+        <TextBox x:Name="txbMessage" HorizontalAlignment="Left" Height="22" Margin="72,255,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147"/>
+        <Button x:Name="btnSend" Content="Send" HorizontalAlignment="Left" Margin="144,293,0,0" VerticalAlignment="Top" Width="75" Click="btnSend_Click"/>
+        <Label Content="Type message" HorizontalAlignment="Left" Margin="74,226,0,0" VerticalAlignment="Top" Width="103"/>
+
+    </Grid>
+</Window>
