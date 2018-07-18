@@ -14,7 +14,7 @@ namespace ServerApp
         {
 
 
-            ICommunication<Socket> server = new SynchronousSocketListener2();
+            ICommunication<Socket> server = new SynchronousSocketListenerAsym();
           
             server.StartListening();
 

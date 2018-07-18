@@ -38,7 +38,7 @@ namespace ClientApp.View
         }
 
         public void SetUpUser() {
-            client = new SocketNp.SynchronousSocketClient2(user);
+            client = new SocketNp.SynchronousSocketClientAsym(user);
             GetUsers();
             GetMessages();
             this.messagesFrom.ItemsSource = users.Keys.ToDictionary(e => e);

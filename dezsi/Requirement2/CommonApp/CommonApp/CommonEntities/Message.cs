@@ -8,28 +8,23 @@ namespace CommonApp.Model
 {
     public class Message
     {
-        private string _UsernameFrom;
-        private string _UsernameTo;
-        private string _Text;
-        private DateTime _Date;
-
         public Message(string UsernameFrom, string UsernameTo, string Text, DateTime Date)
         {
-            _UsernameFrom = UsernameFrom;
-            _UsernameTo = UsernameTo;
-            _Text = Text;
-            _Date = Date;
+            UserNameFrom = UsernameFrom;
+            UserNameTo = UsernameTo;
+            this.Text = Text;
+            this.Date = Date;
         }
 
-        public String UserNameFrom { get { return _UsernameFrom; } }
-        public String UserNameTo { get { return _UsernameTo; } }
-        public String Text { get { return _Text; } }
-        public DateTime Date { get { return _Date; } }
-
-        
+        public String UserNameFrom { get; }
+        public String UserNameTo { get; }
+        public String Text { get; }
+        public DateTime Date { get; }
 
 
-   
+
+
+
     }
 
 }

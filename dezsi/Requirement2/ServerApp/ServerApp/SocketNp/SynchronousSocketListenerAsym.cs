@@ -18,12 +18,12 @@ using System.Threading.Tasks;
 namespace ServerApp.SocketNp
 {
 
-    public class SynchronousSocketListener2 : ICommunication<Socket>
+    public class SynchronousSocketListenerAsym : ICommunication<Socket>
     {
-        private static Messages messages = new Messages();
-        private RSACryptoServiceProvider RSA;
+        private static Messages _messages = new Messages();
+        private RSACryptoServiceProvider _RSA;
 
-        public SynchronousSocketListener2()
+        public SynchronousSocketListenerAsym()
         {
 
             GenerateKeys();
@@ -77,7 +77,7 @@ namespace ServerApp.SocketNp
             KeyValuePair<string, RSAParameters> kv2 = des.ToValue<KeyValuePair<string, RSAParameters>>();
             Users.SetUserKey(kv2.Key, kv2.Value);
             JMessage jmess;
-            jmess = JMessage.FromValue<RSAParameters>(RSA.ExportParameters(false), Header.ExchangePKs);
+            jmess = JMessage.FromValue<RSAParameters>(_RSA.ExportParameters(false), Header.ExchangePKs);
             handler.Send(Encoding.ASCII.GetBytes(JMessage.Serialize(jmess)));
         
 
@@ -123,7 +123,7 @@ namespace ServerApp.SocketNp
         }
         public void GenerateKeys()
         {
-            RSA = new RSACryptoServiceProvider(8192);
+            _RSA = new RSACryptoServiceProvider(8192);
            
 
         }
@@ -134,7 +134,7 @@ namespace ServerApp.SocketNp
             //Console.WriteLine("Key {0} ", Convert.ToBase64String(rijndael.Key));
          
        
-            string json = JMessage.Serialize(JMessage.FromValue<RSAParameters>(RSA.ExportParameters(false), Header.ExchangePKs));
+            string json = JMessage.Serialize(JMessage.FromValue<RSAParameters>(_RSA.ExportParameters(false), Header.ExchangePKs));
             Console.WriteLine(json);
 
             handler.Send(Encoding.ASCII.GetBytes(json));
@@ -203,7 +203,7 @@ namespace ServerApp.SocketNp
                      //   CommonApp.RijndaelClass.TruncateBytesArray(ref bytesNew);
                      //   Console.WriteLine("Truncated array {0}", Convert.ToBase64String(bytesNew));
 
-                        byte[] decrb=  CommonApp.RSAClass.RSADecrypt(bytesNew, RSA.ExportParameters(true), false);
+                        byte[] decrb=  CommonApp.RSAClass.RSADecrypt(bytesNew, _RSA.ExportParameters(true), false);
 
                         string decr = Encoding.Unicode.GetString(decrb);
                         Console.WriteLine("Decrypted message {0}", decr);

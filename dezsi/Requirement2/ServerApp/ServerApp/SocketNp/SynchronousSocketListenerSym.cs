@@ -18,12 +18,13 @@ using System.Threading.Tasks;
 namespace ServerApp.SocketNp
 {
   
-    public class SynchronousSocketListener : ICommunication<Socket>
+    public class SynchronousSocketListenerSym : ICommunication<Socket>
     {
-        private static Messages messages = new Messages();
-        private RijndaelManaged rijndael;
+        private static Messages _messages = new Messages();
+        private RijndaelManaged _rijndael;
+        public static string Data = null;
 
-        public SynchronousSocketListener() {
+        public SynchronousSocketListenerSym() {
 
             GenerateKeyAndArray();
         }
@@ -48,15 +49,11 @@ namespace ServerApp.SocketNp
         }
 
 
-
-        // Incoming data from the client.  
-        public static string data = null;
-
         public void Send(Socket handler, string data) {
             while (data.Length % 16 != 0) {
                 data += '\0';
             }
-            handler.Send(CommonApp.RijndaelClass.EncryptStringToBytes(data, rijndael.Key, rijndael.IV));
+            handler.Send(CommonApp.RijndaelClass.EncryptStringToBytes(data, _rijndael.Key, _rijndael.IV));
 
         }
 
@@ -100,17 +97,17 @@ namespace ServerApp.SocketNp
             }
         }
         public void GenerateKeyAndArray() {
-            rijndael = new RijndaelManaged();
-            rijndael.GenerateKey();
-            rijndael.GenerateIV();
+            _rijndael = new RijndaelManaged();
+            _rijndael.GenerateKey();
+            _rijndael.GenerateIV();
 
         }
         public void SendKeyAndArray(Socket handler) {
 
            
-            Console.WriteLine("Key {0} ", Convert.ToBase64String(rijndael.Key));
-            Console.WriteLine("IV {0} ", Convert.ToBase64String(rijndael.IV));
-            KeyValuePair<byte[],byte[]> msg = new KeyValuePair<byte[],byte[]>( rijndael.Key,rijndael.IV);
+            Console.WriteLine("Key {0} ", Convert.ToBase64String(_rijndael.Key));
+            Console.WriteLine("IV {0} ", Convert.ToBase64String(_rijndael.IV));
+            KeyValuePair<byte[],byte[]> msg = new KeyValuePair<byte[],byte[]>( _rijndael.Key,_rijndael.IV);
             string json = JMessage.Serialize(JMessage.FromValue<KeyValuePair<byte[], byte[]>>(msg, Header.Handshake));
             Console.WriteLine(json);
   
@@ -183,7 +180,7 @@ namespace ServerApp.SocketNp
                         CommonApp.RijndaelClass.TruncateBytesArray(ref bytesNew);
                         Console.WriteLine("Truncated array {0}", Convert.ToBase64String(bytesNew));
 
-                        string decr = CommonApp.RijndaelClass.DecryptStringFromBytes(bytesNew, rijndael.Key, rijndael.IV);
+                        string decr = CommonApp.RijndaelClass.DecryptStringFromBytes(bytesNew, _rijndael.Key, _rijndael.IV);
                         Console.WriteLine("Decrypted message {0}", decr);
                         
                       //  byte[] res = Convert.FromBase64String(decr);

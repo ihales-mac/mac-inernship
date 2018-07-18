@@ -53,9 +53,8 @@
     <Compile Include="Model\Users.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocketNp\SynchronousSocketListener.cs" />
-    <Compile Include="SocketNp\SynchronousSocketListener2.cs" />
-    <Compile Include="SocketNp\ThreadedSocket.cs" />
+    <Compile Include="SocketNp\SynchronousSocketListenerSym.cs" />
+    <Compile Include="SocketNp\SynchronousSocketListenerAsym.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

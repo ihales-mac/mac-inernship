@@ -11,7 +11,7 @@ namespace CommonApp
     {
 
 
-        public static String computeHash(String message, String algo)
+        public static String ComputeHash(String message, String algo)
         {
             byte[] sourceBytes = Encoding.Default.GetBytes(message);
             byte[] hashBytes = null;
