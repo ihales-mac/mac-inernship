@@ -1,0 +1,6 @@
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\CryptographyServices\bin\Debug\CryptographyServices.dll
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\CryptographyServices\bin\Debug\CryptographyServices.pdb
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\CryptographyServices\obj\Debug\CryptographyServices.csprojAssemblyReference.cache
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\CryptographyServices\obj\Debug\CryptographyServices.csproj.CoreCompileInputs.cache
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\CryptographyServices\obj\Debug\CryptographyServices.dll
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\CryptographyServices\obj\Debug\CryptographyServices.pdb

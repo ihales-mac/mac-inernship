@@ -48,9 +48,17 @@
     <Compile Include="ServerUtils.cs" />
     <Compile Include="Utils\EventArgs\ClientListRequestedEventArgs.cs" />
     <Compile Include="Utils\EventArgs\ClientDisconnectEventArgs.cs" />
+    <Compile Include="Utils\EventArgs\ClientLoggedInEventArgs.cs" />
+    <Compile Include="Utils\EventArgs\ClientToClientMessageEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CryptographyServices\CryptographyServices.csproj">
+      <Project>{80DBC658-A86F-489E-8326-DABEE4FBCF71}</Project>
+      <Name>CryptographyServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

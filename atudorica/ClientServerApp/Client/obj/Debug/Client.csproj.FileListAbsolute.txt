@@ -15,3 +15,6 @@ C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\obj\Debug\Client.c
 C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\obj\Debug\Client.exe
 C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\obj\Debug\Client.pdb
 C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\bin\Debug\Client.pdb
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\bin\Debug\CryptographyServices.dll
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\bin\Debug\CryptographyServices.pdb
+C:\Users\Intern\source\repos\atudorica\ClientServerApp\Client\obj\Debug\Client.csproj.CopyComplete

@@ -61,6 +61,10 @@
     <Compile Include="Connection\Contracts\IConnectionService.cs" />
     <Compile Include="Services\AuthentificationService.cs" />
     <Compile Include="Services\ChatServices.cs" />
+    <Compile Include="Utils\EventArguments\ClientListChangedEventArgs.cs" />
+    <Compile Include="Utils\EventArguments\MessageReceivedEventArgs.cs" />
+    <Compile Include="Utils\EventArguments\UpdateTxtChatBoxEventArgs.cs" />
+    <Compile Include="Utils\Message.cs" />
     <Page Include="Chat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +108,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CryptographyServices\CryptographyServices.csproj">
+      <Project>{80DBC658-A86F-489E-8326-DABEE4FBCF71}</Project>
+      <Name>CryptographyServices</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
