@@ -7,11 +7,16 @@
         mc:Ignorable="d"
         Title="Chat" Height="450" Width="800">
     <Grid>
-        <Button Content="Trimit" HorizontalAlignment="Left" Margin="288,288,0,0" VerticalAlignment="Top" Width="148" Height="49" Click="Button_Click" RenderTransformOrigin="0.5,0.5"/>
-        <Button Content="Show" HorizontalAlignment="Left" Margin="647,161,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
-        <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Height="118" Margin="647,21,0,0" VerticalAlignment="Top" Width="100"/>
-        <TextBox x:Name="textboxMessage" HorizontalAlignment="Left" Height="245" Margin="24,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="172"/>
-        <TextBox x:Name="textboxSendMessage" HorizontalAlignment="Left" Height="42" Margin="300,204,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="136"/>
+        <Button Content="Send all
+" HorizontalAlignment="Left" Margin="27,315,0,0" VerticalAlignment="Top" Width="127" Height="37" Click="Button_Click" RenderTransformOrigin="0.5,0.5"/>
+        <Button Content="Show" HorizontalAlignment="Left" Margin="658,169,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+        <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Height="118" Margin="651,20,0,0" VerticalAlignment="Top" Width="86"/>
+        <TextBox x:Name="textboxMessage" HorizontalAlignment="Left" Height="245" Margin="24,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="341"/>
+        <TextBox x:Name="textboxSendMessage" HorizontalAlignment="Left" Height="35" Margin="119,266,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150"/>
+        <Button Content="Logout" HorizontalAlignment="Left" Margin="694,387,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
+        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="717,350,0,0" VerticalAlignment="Top" Width="33"/>
+        <Button Content="Send in private" HorizontalAlignment="Left" Margin="25,366,0,0" VerticalAlignment="Top" Width="127" Height="37" Click="Button_Click_4"/>
+        <Label Content="Message" HorizontalAlignment="Left" Margin="47,271,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
