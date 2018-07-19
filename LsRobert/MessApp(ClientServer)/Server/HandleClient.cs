@@ -8,22 +8,23 @@ namespace Server
 {
     class HandleClient
     {
-        public static  List<String> users = new List<string>();
+        public static List<String> users = new List<string>();
         String nume;
         Dictionary<String, String> listUser = new Dictionary<string, string>()
         {
             {"Robi","a" },
-            {"Andrei","b" }
+            {"Andrei","b" },
+            {"Cata","c" }
         };
         NetworkStream networkStream;
         TcpClient client;
         string clNo;
         public List<TcpClient> cliensTcpList;
 
-        public void startClient(TcpClient inClientSocket, string clineNo,List<TcpClient> clientsTcp)
+        public void startClient(TcpClient inClientSocket, List<TcpClient> clientsTcp)
         {
             this.client = inClientSocket;
-            this.clNo = clineNo;
+
             Thread ctThread = new Thread(doChat);
             ctThread.Start();
             cliensTcpList = clientsTcp;
@@ -31,42 +32,91 @@ namespace Server
 
         private void doChat()
         {
-            while (true)
+
+            try
             {
-                networkStream = client.GetStream();
-                byte[] bytes = new byte[client.ReceiveBufferSize];
-                int toRead = client.GetStream().Read(bytes, 0, client.ReceiveBufferSize);
-                string message = ASCIIEncoding.ASCII.GetString(bytes, 0, toRead);
-                string[] words = message.Split(" ");
-                if (words[0] == "Login")
+                while (true)
                 {
-                    Login(words[1], words[2]);
-                   users.Add(words[1]);
-                    nume = words[1];
 
+                    networkStream = client.GetStream();
+                    byte[] bytes = new byte[client.ReceiveBufferSize];
+                    int toRead = client.GetStream().Read(bytes, 0, client.ReceiveBufferSize);
+                    string message2 = ASCIIEncoding.ASCII.GetString(bytes, 0, toRead);
 
-                }
-                else
-                if (words[0] == "Message")
-                {
-                    Console.WriteLine(words[1]);
-                }
-                else
-                    if(words[0] == "Show")
-                        Show(words);
-                else
-                {
-                    if (words[0] == "Send")
+                    string message = Common.Cryption.DecryptMessage(message2);
+
+                    string[] words = message.Split(" ");
+                    if (words[0] == "Login")
                     {
-                        String mesaj = "";
-                        for (int i = 1; i < words.Length; i++)
-                            mesaj += words[i] + " ";
-                        Send(mesaj);
+                        Login(words[1], words[2]);
+                        users.Add(words[1]);
+                        nume = words[1];
+
+
+                    }
+                    else
+                    if (words[0] == "Message")
+                    {
+                        Console.WriteLine(words[1]);
+                    }
+                    else
+                        if (words[0] == "Show")
+                        Show(words);
+                    else
+                    {
+                        if (words[0] == "Send")
+                        {
+                            String mesaj = "";
+                            for (int i = 1; i < words.Length; i++)
+                                mesaj += words[i] + " ";
+                            Send(mesaj);
+                        }
+                        else
+                            if (words[0] == "Logout")
+                            client.Close();
+                        else
+                            if (words[0] == "SendForOne")
+                        {
+                            String mesaj = "";
+                            for (int i = 2; i < words.Length; i++)
+                                mesaj += words[i] + " ";
+
+                            int numberOfClient = 0;
+                            for (int i = 0; i < users.Count; i++)
+                                if (users[i] == words[1])
+                                    break;
+                                else
+                                    numberOfClient++;
+
+                            SendForOne(mesaj, numberOfClient);
+                        }else
+                            if(words[0] == "SendForOnePrivate")
+                        {
+                            String mesaj = "";
+                            for (int i = 2; i < words.Length; i++)
+                                mesaj += words[i] + " ";
+
+                            int numberOfClient = 0;
+                            for (int i = 0; i < users.Count; i++)
+                                if (users[i] == words[1])
+                                    break;
+                                else
+                                    numberOfClient++;
+
+                            SendForOnePrivate(mesaj, numberOfClient);
+                        }
+
                     }
                 }
             }
-
+            catch (Exception e)
+            {
+                Console.WriteLine("No client");
+            }
         }
+
+
+     
 
         public void Login(String Username, String password)
         {
@@ -89,34 +139,62 @@ namespace Server
         }
         public void Show(String[] words)
         {
-            Byte[] sendBytes2 = Encoding.ASCII.GetBytes(users.Count.ToString());
-            networkStream.Write(sendBytes2, 0, sendBytes2.Length);
-            networkStream.Flush();
-
+            String listOfUsers = "";
             for (int i = 0; i < users.Count; i++)
             {
-                Byte[] sendBytes = Encoding.ASCII.GetBytes(users[i]);
-                networkStream.Write(sendBytes, 0, sendBytes.Length);
-                networkStream.Flush();
-
-                byte[] bytes = new byte[client.ReceiveBufferSize];
-                int toRead = client.GetStream().Read(bytes, 0, client.ReceiveBufferSize);
-                string messageFromClient = ASCIIEncoding.ASCII.GetString(bytes, 0, toRead);
+                listOfUsers += users[i] + " ";
             }
+            string encryptedMessage = Common.Cryption.EncryptMessage("Show" + " " + listOfUsers);
+            Byte[] sendBytes = Encoding.ASCII.GetBytes(encryptedMessage);
+            networkStream.Write(sendBytes, 0, sendBytes.Length);
+            networkStream.Flush();
         }
         public void Send(String msg)
         {
-            for(int i=0;i<cliensTcpList.Count;i++)
+            for (int i = 0; i < cliensTcpList.Count; i++)
             {
                 TcpClient broadcastSocket;
                 broadcastSocket = cliensTcpList[i];
                 NetworkStream broadcastStream = broadcastSocket.GetStream();
                 Byte[] broadcastBytes = null;
-                broadcastBytes = Encoding.ASCII.GetBytes(nume + " says : " + msg);
+
+                string encryptedMessage = Common.Cryption.EncryptMessage("Send" + " " + nume + " says : " + msg);
+                broadcastBytes = Encoding.ASCII.GetBytes(encryptedMessage);
+
                 broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
                 broadcastStream.Flush();
             }
         }
+
+        public void SendForOne(String msg, int numberOfClient)
+        {
+            TcpClient broadcastSocket;
+            broadcastSocket = cliensTcpList[numberOfClient];
+            NetworkStream broadcastStream = broadcastSocket.GetStream();
+            Byte[] broadcastBytes = null;
+
+            string encryptedMessage = Common.Cryption.EncryptMessage("SendForOne" + " " + nume + " says : " + msg);
+            broadcastBytes = Encoding.ASCII.GetBytes(encryptedMessage);
+            broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+            broadcastStream.Flush();
+
         }
+
+        public void SendForOnePrivate(String msg, int numberOfClient)
+        {
+            TcpClient broadcastSocket;
+            broadcastSocket = cliensTcpList[numberOfClient];
+            NetworkStream broadcastStream = broadcastSocket.GetStream();
+            Byte[] broadcastBytes = null;
+
+            string encryptedMessage = Common.Cryption.EncryptMessage("SendForOnePrivate" + " " + nume + " says : " + msg);
+            broadcastBytes = Encoding.ASCII.GetBytes(encryptedMessage);
+            broadcastStream.Write(broadcastBytes, 0, broadcastBytes.Length);
+            broadcastStream.Flush();
+
+        }
+
+
     }
+}
 

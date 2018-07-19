@@ -1,10 +1,12 @@
 ﻿using Client.Events;
+using Client.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,8 +24,12 @@ namespace Client
     /// </summary>
     public partial class Chat : Window
     {
-        public TcpClient clientSocket;
+       
+
+        ICommunication communication;
         IChat chatService;
+        Thread listen;
+        string usernameWindow3Owner;
         public void SendedMessage(object source, SendMessageArgs e)
         {
             this.Dispatcher.Invoke(() =>
@@ -34,32 +40,64 @@ namespace Client
                
             });
         }
+
+        public void ShowUsersInDataGrid(object source, ShowUsers e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                filligDataGrid(e.user);
+            });
+        }
+
+         public void ShowPrivateChat(object source, PrivateChatUser e)
+         {
+             this.Dispatcher.Invoke(() =>
+             {
+                 //Console.WriteLine(usernameWindow3Owner);
+                 PrivateChat win3 = new PrivateChat(communication, chatService,e.user);
+                 win3.Show();
+             });
+         }
+         
+
        
 
-        public Chat(TcpClient client)
+        public  Chat(ICommunication communication_,String username)    
         {
+            this.communication = communication_;
             InitializeComponent();
-            clientSocket = client;
-            chatService = new ChatService(clientSocket);
+           // clientSocket = client;
+            chatService = new ChatService(communication);
             chatService.SendedMessage += SendedMessage;
+            chatService.ShowUserInDataGrid += ShowUsersInDataGrid;
+           chatService.ShowPrivateChat += ShowPrivateChat;
+            label.Content = username;
+            usernameWindow3Owner = username;
+            listen = new Thread(messageFromServer);
+            listen.Start();
 
+        }
+
+        private void messageFromServer()
+        {
+            chatService.alwaysRead();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Console.WriteLine(mesajCareSeTransmiteLaToti);
-          
+            
             String mesaj = textboxSendMessage.Text;
-            chatService.sendMessage(mesaj);
-          
+            chatService.sendMessage(mesaj, "Send");
+
 
 
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-           filligDataGrid (chatService.getListOfUsers());
+            chatService.sendMessage("", "Show");
         }
+    
         public void filligDataGrid(List<String> userList)
         {
             DataTable dt = new DataTable();
@@ -68,6 +106,7 @@ namespace Client
             dt.Columns.Add(user);
 
             for (int i= 0; i < userList.Count; i++){
+              
                 DataRow dataRow = dt.NewRow();
                 dataRow[0] = userList[i];
 
@@ -75,6 +114,47 @@ namespace Client
             }
 
             dataGrid.ItemsSource = dt.DefaultView;
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            chatService.sendMessage("","Logout");
+            listen.Abort();
+            this.Close();
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Console.WriteLine(usernameWindow3Owner);
+                object item = dataGrid.SelectedItem;
+                string username = (dataGrid.SelectedCells[0].Column.GetCellContent(item) as TextBlock).Text;
+                string message = textboxSendMessage.Text;
+                string messageToSend = username + " " + message;
+                chatService.sendMessage(messageToSend, "SendForOne");
+
+                 PrivateChat win3 = new PrivateChat(communication, chatService, username);
+                win3.Show();
+               
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Selecteaza un utilizator cu care sa vorbesti");
+            }
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

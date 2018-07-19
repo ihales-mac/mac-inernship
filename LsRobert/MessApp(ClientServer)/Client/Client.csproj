@@ -54,6 +54,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Communication.cs" />
+    <Compile Include="Events\PrivateChatUser.cs" />
+    <Compile Include="Events\ShowUsers.cs" />
+    <Compile Include="Interface\ICommunication.cs" />
+    <Compile Include="PrivateChat.xaml.cs">
+      <DependentUpon>PrivateChat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Service\LoginService.cs" />
     <Page Include="Chat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -69,15 +77,19 @@
     <Compile Include="Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChatService.cs" />
-    <Compile Include="ClientService.cs" />
+    <Compile Include="Service\ChatService.cs" />
+    <Compile Include="Service\ClientService.cs" />
     <Compile Include="Events\Handles.cs" />
     <Compile Include="Events\SendMessageArgs.cs" />
-    <Compile Include="IChat.cs" />
+    <Compile Include="Interface\IChat.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PrivateChat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -107,6 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{839730f3-5cfb-4c67-a06e-e33b0838e5a3}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
