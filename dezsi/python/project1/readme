@@ -1,0 +1,4 @@
+setup: contine un modul care creeaza in folderul "folders" o structura de foldere si fisiere pentru testare
+        trebuie rulat separat pentru a crea ierarhia
+results: un folder creat cu scopul de a fi folosit ca folder destinatie pentru mutarea selectiva a elementelor
+scripting: creat automat, tot acolo se creeaza si zipurile
