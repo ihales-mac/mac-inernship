@@ -2,3 +2,5 @@ setup: contine un modul care creeaza in folderul "folders" o structura de folder
         trebuie rulat separat pentru a crea ierarhia
 results: un folder creat cu scopul de a fi folosit ca folder destinatie pentru mutarea selectiva a elementelor
 scripting: creat automat, tot acolo se creeaza si zipurile
+
+examplu de rulare: C:/Users/Intern/PycharmProjects/project1/venv/Scripts/python.exe C:/Users/Intern/Documents/GitHub/mac-inernship-2018/dezsi/python/project1/scripting/run.py a_ C:/Users/Intern/Documents/GitHub/mac-inernship-2018/dezsi/python/project1/folders/ C:/Users/Intern/Documents/GitHub/mac-inernship-2018/dezsi/python/project1/results/ zipped
