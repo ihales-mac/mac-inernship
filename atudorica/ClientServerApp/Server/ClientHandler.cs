@@ -14,7 +14,7 @@ namespace Server
     public class ClientHandler
     {
         private readonly CryptographyService _cryptographyService;
-        public char splitChar = '~';
+        public char splitChar = '+';
         public event ClientLoggedInEventHandler ClientLoggedIn;
         public event ClientDisconnectEventHandler ClientDisconnect;
         public event ClientListRequestedEventHandler ClientListRequested;
@@ -94,11 +94,10 @@ namespace Server
         {
             if (ClientSocket.Connected)
             {
-                string serverResponse = _cryptographyService.EncryptText(_clientPublicKey, response);
-                byte[] sendBytes = Encoding.ASCII.GetBytes(serverResponse);
+                byte[] sendBytes = _cryptographyService.EncryptText(_clientPublicKey, response);
                 _networkStream.Write(sendBytes, 0, sendBytes.Length);
                 _networkStream.Flush();
-                Console.WriteLine(" >> " + "Server to client (" + _clientNumber + "): " + serverResponse);
+                Console.WriteLine(" >> " + "Server to client (" + _clientNumber + "): " + Convert.ToBase64String(sendBytes));
             }
         }
 
@@ -107,8 +106,8 @@ namespace Server
             byte[] bytesFrom = new byte[10025];
             int bytesRead = _networkStream.Read(bytesFrom, 0, bytesFrom.Length);
             _networkStream.Flush();
-            string dataFromClient = System.Text.Encoding.ASCII.GetString(bytesFrom, 0, bytesRead);
-            dataFromClient = _cryptographyService.DecryptData(dataFromClient);
+            string dataFromClient = Convert.ToBase64String(bytesFrom);
+            dataFromClient = _cryptographyService.DecryptData(bytesFrom);
             Console.WriteLine(" >> " + "From client( " + _clientNumber + "): " + dataFromClient);
             return dataFromClient;
         }

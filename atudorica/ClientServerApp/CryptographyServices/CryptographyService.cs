@@ -13,35 +13,32 @@ namespace CryptographyServices
         private readonly string _privateKey;
         public CryptographyService()
         {
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048);
             PublicKey = rsa.ToXmlString(false);
             _privateKey = rsa.ToXmlString(true);
         }
 
-        public string EncryptText(string publicKey, string text)
+        public byte[] EncryptText(string publicKey, string text)
         {
-            UnicodeEncoding byteConverter = new UnicodeEncoding();
-            byte[] dataToEncrypt = byteConverter.GetBytes(text);
+            byte[] dataToEncrypt = Convert.FromBase64String(text);
             byte[] encryptedData;
             using (RSACryptoServiceProvider tempRsa = new RSACryptoServiceProvider())
             {
                 tempRsa.FromXmlString(publicKey);
                 encryptedData = tempRsa.Encrypt(dataToEncrypt, false);
             }
-            return Encoding.ASCII.GetString(encryptedData, 0, encryptedData.Length);
+            return encryptedData;
         }
 
-        public string DecryptData(string text)
+        public string DecryptData(byte[] dataToDecrypt)
         {
-            byte[] dataToDecrypt = Encoding.ASCII.GetBytes(text);
             byte[] decryptedData;
             using (RSACryptoServiceProvider tempRsa = new RSACryptoServiceProvider())
             {
                 tempRsa.FromXmlString(_privateKey);
                 decryptedData = tempRsa.Decrypt(dataToDecrypt, false);
             }
-            UnicodeEncoding byteConverter = new UnicodeEncoding();
-            return byteConverter.GetString(decryptedData);
+            return Convert.ToBase64String(decryptedData);
         }
     }
 }

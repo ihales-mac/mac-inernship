@@ -18,7 +18,7 @@ namespace Client.Connection.ConnectionServices
         private CryptographyService _cryptographyService;
         public event ClientListChangedEventHandler ClientListChanged;
         public event MessageReceivedEventHandler MessageReceived;
-        public char splitChar = '~';
+        public char splitChar = '+';
         private volatile static bool _isLoggedIn;
         private TcpClient _clientSocket;
         private IPEndPoint _remoteEp;
@@ -83,8 +83,7 @@ namespace Client.Connection.ConnectionServices
                 {
 
                     int bytesRead = _serverStream.Read(bytes, 0, bytes.Length);
-                    string message = Encoding.ASCII.GetString(bytes, 0, bytesRead);
-                    message = _cryptographyService.DecryptData(message);
+                    string message = _cryptographyService.DecryptData(bytes);
                     string[] messageContent = message.Split(splitChar);
                     if (messageContent[0] == "m")
                     {
@@ -139,7 +138,7 @@ namespace Client.Connection.ConnectionServices
         public void SendMessageToUser(string receiver, string message)
         {
             string messageToEncrypt = "m" + Username + splitChar + receiver + splitChar + message;
-            byte[] msg = Encoding.ASCII.GetBytes(_cryptographyService.EncryptText(_serverPublicKey,messageToEncrypt));
+            byte[] msg = _cryptographyService.EncryptText(_serverPublicKey,messageToEncrypt);
             _serverStream.Write(msg, 0, msg.Length);
             _serverStream.Flush();
         }
@@ -166,11 +165,11 @@ namespace Client.Connection.ConnectionServices
                 }
             try
             {
-                byte[] msg = Encoding.ASCII.GetBytes(_cryptographyService.EncryptText(_serverPublicKey, message));
+                byte[] msg = _cryptographyService.EncryptText(_serverPublicKey, message);
                 _serverStream.Write(msg, 0, msg.Length);
                 _serverStream.Flush();
                 int bytesRead = _serverStream.Read(bytes, 0, bytes.Length);
-                response = Encoding.ASCII.GetString(bytes, 0, bytesRead);
+                response = Convert.ToBase64String(bytes);
             }
             catch (ArgumentNullException ane)
             {
