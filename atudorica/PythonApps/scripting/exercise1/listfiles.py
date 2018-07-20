@@ -1,6 +1,7 @@
 import os
 import zipfile
 import sys
+import argparse
 from shutil import copyfile
 def listPathsToEachFile():
     for root, _ , filenames in os.walk('.\\folder1'):
@@ -42,13 +43,8 @@ def  makeZipFromFileTreeOnlyOnePrefix(root1,zipname,prefixToInclude):
     zipf.close()
 
 
+
 def main(mode,source,dest,prefix):
-    """
-    Args:
-        mode: copy or zip
-        source: root of source folder for copying or zipping
-        dest: root for copy, zipname (with extension) for zip
-        prefix: prefix to exclude from copy or include in zip"""
     if(mode=='copy'):
         copyFileTreeExcludePrefix(source,dest,prefix)
     if(mode=='zip'):
@@ -56,5 +52,11 @@ def main(mode,source,dest,prefix):
 
 
 if(__name__=='__main__'):
-    print(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
-    main(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mode", help="copy or zip")
+    parser.add_argument("source",help="root of source folder for copying or zipping")
+    parser.add_argument("dest",help="root for copy destination, zipname (with extension) for zip")
+    parser.add_argument("prefix",help=" prefix to exclude from copy or include in zip")
+    args=parser.parse_args()
+    print(args.mode,args.source,args.dest,args.prefix)
+    main(args.mode,args.source,args.dest,args.prefix)
