@@ -1,0 +1,8 @@
+run: serv.py
+access it in the browser by typing:
+http://localhost:8080/index.html?location={location}
+
+where location is a valid location argument in lowercase supported by:
+    https://www.metaweather.com/api/#locationsearch
+
+as a result, a page will be displayed containing a JSON with data about the weather in that location for the current day
