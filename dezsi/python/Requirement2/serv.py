@@ -38,17 +38,20 @@ class Serv(BaseHTTPRequestHandler):
                                                              self.get_date()[0],
                                                              self.get_date()[1], self.get_date()[2])) as url:
                 data = json.loads(url.read().decode())
+
             char = self.path.find('?')
 
-            #filter data
+
             for i in range(0, len(data)):
                 data[i].pop("id")
                 data[i].pop("created")
-                data[i].pop("weather_state_abbr")
                 data[i].pop("applicable_date")
                 data[i].pop("wind_direction_compass")
-
-            open(self.path[1:char], 'w').write("<html><head>"
+                data[i]["image"] = "<img src='https://www.metaweather.com/static/img/weather/ico/"+data[i]["weather_state_abbr"]+".ico' alt='IMAGE'>"
+                data[i].pop("weather_state_abbr")
+            data = str(data).replace("{", "<pre>{")
+            data = str(data).replace("},", "},</pre>")
+            open(self.path[1:char], 'w').write("<html><link rel='stylesheet' href='styles.css'><head>"
                                                "<title>{}</title></head><body>{}</body></html>"
                                                .format(param.capitalize()+
                                                        " ("+str(self.get_date()[0])+"/"+str(self.get_date()[1])
