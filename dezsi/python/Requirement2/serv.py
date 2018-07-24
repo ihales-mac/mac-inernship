@@ -25,11 +25,16 @@ class Serv(BaseHTTPRequestHandler):
 
     def do_GET(self):
 
-        param = self.get_param("location")
+        print("do get called")
+
         try:
-            with urllib.request.urlopen("https://www.metaweather.com/api/location/{}/{}/{}/{}/".format(self.get_location(param), self.get_date()[0],
-                                                                                                       self.get_date()[1], self.get_date()[2]
-                                                                                                       )) as url:
+
+            param = self.get_param("location")
+            with urllib.request.\
+                    urlopen("https://www.metaweather.com/api/location/{}/{}/{}/{}/"
+                                                     .format(self.get_location(param),
+                                                             self.get_date()[0],
+                                                             self.get_date()[1], self.get_date()[2])) as url:
                 data = json.loads(url.read().decode())
             char = self.path.find('?')
 
@@ -41,15 +46,14 @@ class Serv(BaseHTTPRequestHandler):
                 data[i].pop("applicable_date")
                 data[i].pop("wind_direction_compass")
 
-
-            open(self.path[1:char], 'w').write("<html><head><title>{}</title></head><body>{}</body></html>"
-                                               .format(param.capitalize()+" ("+str(self.get_date()[0])+"/"+str(self.get_date()[1])
+            open(self.path[1:char], 'w').write("<html><head><link rel='shortcut icon' href=""><title>{}</title></head><body>{}</body></html>"
+                                               .format(param.capitalize()+
+                                                       " ("+str(self.get_date()[0])+"/"+str(self.get_date()[1])
                                                        +"/"+str(self.get_date()[2])+")", data))
             file_to_open = open(self.path[1:char]).read()
             self.send_response(200)
 
         except Exception as e:
-            print(e)
             file_to_open = '<html style="background: repeating-linear-gradient' \
                            '(#c6e5f2, #c6e5f2 20px, #9198e5 20px, #9198e5 25px);">' \
                            '<head><title>404</title></head><body><div style= "border-radius: 360px; background: ' \
