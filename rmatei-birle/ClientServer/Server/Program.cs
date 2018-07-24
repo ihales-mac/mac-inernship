@@ -27,6 +27,7 @@ namespace Server
 
         static void Main(string[] args)
         {
+            Crypt.Crypt.Decrypt(Crypt.Crypt.Encrypt("no ni mesaj"));
             Console.WriteLine("Starting");
             PopulateUsers();
             InterpretArgs(args);
@@ -93,7 +94,7 @@ namespace Server
         {
             foreach (ClientHandler ch in Handlers)
             {
-                if(ch.GetUsername() == username)
+                if (ch.GetUsername() == username)
                 {
                     return ch;
                 }
@@ -190,31 +191,9 @@ namespace Server
         {
             foreach (ClientHandler ch in Handlers)
             {
-                if (ch.GetUsername() != ignore)
+                if (ch.GetUsername() != ignore && ch.LoggedIn)
                 {
                     ch.SendMessage(message);
-                }
-            }
-        }
-
-        private static void ModifyEncryption(bool symmetric, bool set)
-        {
-            if (symmetric)
-            {
-                SymmetricEncryption = set;
-
-                foreach (ClientHandler ch in Handlers)
-                {
-                    ch.SymmetricEncryption = set;
-                }
-            }
-            else
-            {
-                AsymmetricEncryption = set;
-
-                foreach (ClientHandler ch in Handlers)
-                {
-                    ch.AsymmetricEncryption = set;
                 }
             }
         }

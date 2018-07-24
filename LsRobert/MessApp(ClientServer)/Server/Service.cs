@@ -15,12 +15,11 @@ namespace Server
             {"Robi","a" },
             {"Andrei","b" }
         };
-        public List<String> users = new List<string>();
 
+        public List<String> users = new List<string>();
         int port;
-         TcpListener listener;
+        TcpListener listener;
         public   List<TcpClient> clients = new List<TcpClient>();
-     //   public List<String> users = new List<string>();
         NetworkStream networkStream;
 
         public Service(int port = 5432)

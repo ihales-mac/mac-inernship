@@ -16,19 +16,58 @@ namespace Crypt
 
         private static readonly ICryptoTransform _encryptor = _rijndaelRMCrypto.CreateEncryptor(_key, _iv);
         private static readonly ICryptoTransform _decryptor = _rijndaelRMCrypto.CreateDecryptor(_key, _iv);
-        
+
         public static string Encrypt(string message)
         {
             byte[] bytes = Encoding.ASCII.GetBytes(message);
+            int diff = 16 - bytes.Length % 16;
+            if (diff < 0)
+            {
+                diff += 16;
+            }
+            if ((bytes.Length % 16) != 16)
+            {
+                byte[] newBytes = new byte[bytes.Length + diff];
+                bytes.CopyTo(newBytes, 0);
+                for (int i = 0; i < diff; i++)
+                {
+                    newBytes[bytes.Length + i] = 0;
+                }
+
+                bytes = new byte[bytes.Length + diff];
+                newBytes.CopyTo(bytes, 0);
+            }
             byte[] encrypted = _encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
-            return Encoding.ASCII.GetString(encrypted);
+            return Convert.ToBase64String(encrypted);
         }
 
         public static string Decrypt(string message)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
+            byte[] bytes = Convert.FromBase64String(message);
             byte[] decrypted = _decryptor.TransformFinalBlock(bytes, 0, bytes.Length);
-            return Encoding.ASCII.GetString(decrypted);
+
+            int lastCharIndex = decrypted.Length;
+
+            for (int i = decrypted.Length - 1; i >= 0; i--)
+            {
+                if (decrypted[i] != 0)
+                {
+                    lastCharIndex = i;
+                    break;
+                }
+            }
+
+            byte[] aux = new byte[lastCharIndex + 1];
+
+            for (int i = 0; i < aux.Length; i++)
+            {
+                aux[i] = decrypted[i];
+            }
+
+            bytes = aux;
+
+
+            return Encoding.ASCII.GetString(bytes);
         }
 
 

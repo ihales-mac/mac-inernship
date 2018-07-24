@@ -21,9 +21,11 @@ namespace Client.Views
     /// </summary>
     public partial class ChatView : Window
     {
-        private readonly IChatService _chatService = new ChatService();
+        private readonly IChatService _chatService;
         private string _currentUser;
         private List<string> _onlineUsers;
+        private string _mostRecentUnreadChat = null;
+        public string Me;
 
         public ChatView()
         {
@@ -31,10 +33,11 @@ namespace Client.Views
             {
                 InitializeComponent();
                 _onlineUsers = new List<string>();
-                this.Closing += ChatView_Closing;
-                this._chatService.MessageToView += ChatService_MessageToView;
-                this._chatService.CommandAddToView += _chatService_CommandAddToView;
-                this._chatService.CommandRemoveToView += _chatService_CommandRemoveToView;
+                Closing += ChatView_Closing;
+                _chatService = new ChatService();
+                _chatService.MessageToView += ChatService_MessageToView;
+                _chatService.CommandAddToView += _chatService_CommandAddToView;
+                _chatService.CommandRemoveToView += _chatService_CommandRemoveToView;
             }
         }
 
@@ -43,7 +46,12 @@ namespace Client.Views
             OnlineUsers.Dispatcher.BeginInvoke((Action)(() =>
             {
                 _onlineUsers.Remove(e.User);
-                OnlineUsers.ItemsSource = _onlineUsers;
+                OnlineUsers.Items.Clear();
+                foreach (string usr in _onlineUsers)
+                {
+                    OnlineUsers.Items.Add(new { User = usr });
+                }
+
             }));
         }
 
@@ -52,7 +60,11 @@ namespace Client.Views
             OnlineUsers.Dispatcher.BeginInvoke((Action)(() =>
             {
                 _onlineUsers.Add(e.User);
-                OnlineUsers.ItemsSource = _onlineUsers;
+                OnlineUsers.Items.Clear();
+                foreach (string usr in _onlineUsers)
+                {
+                    OnlineUsers.Items.Add(new { User = usr });
+                }
             }));
         }
 
@@ -63,27 +75,29 @@ namespace Client.Views
 
         private void ChatService_MessageToView(object sender, EventArguments.MessageToViewEventArgs e)
         {
-            PopulateChat();
+            ChatTextBox.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        this._mostRecentUnreadChat = e.Username;
+                        this.Title += " - New message from: " + this._mostRecentUnreadChat;
+                        GetChat();
+                    }
+                ));
         }
 
-        private void PopulateChat()
+        private void GetChat()
         {
-            ChatTextBox.Dispatcher.BeginInvoke((Action)(() =>
-                   {
-                       List<Tuple<string, string>> messages = _chatService.GetMessages(_currentUser);
-                       StringBuilder sb = new StringBuilder();
+            List<Tuple<string, string>> messages = _chatService.GetMessages(_currentUser);
+            StringBuilder sb = new StringBuilder();
 
-                       foreach (Tuple<string, string> msg in messages)
-                       {
-                           sb.Append(">> ");
-                           sb.Append(msg.Item1);
-                           sb.Append(": ");
-                           sb.Append(msg.Item2);
-                           sb.Append("\n");
-                       }
-                       ChatTextBox.Text = sb.ToString();
-                   }
-                ));
+            foreach (Tuple<string, string> msg in messages)
+            {
+                sb.Append(">> ");
+                sb.Append(msg.Item1);
+                sb.Append(": ");
+                sb.Append(msg.Item2);
+                sb.Append("\n");
+            }
+            ChatTextBox.Text = sb.ToString();
         }
 
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
@@ -94,14 +108,28 @@ namespace Client.Views
                 {
                     _chatService.SendMessage(UserInputText.Text, _currentUser);
                     UserInputText.Text = "";
+                    GetChat();
                 }
             }
         }
 
         private void OnlineUsers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _currentUser = OnlineUsers.SelectedValue.ToString();
-            PopulateChat();
+            try
+            {
+                _currentUser = OnlineUsers.SelectedValue.ToString().Split('=')[1].Split(' ')[1];
+
+                if (_currentUser == _mostRecentUnreadChat)
+                {
+                    this.Title = this.Me + "'s Chat";
+                }
+
+                if (_currentUser != null)
+                {
+                    GetChat();
+                }
+            }
+            catch { }
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

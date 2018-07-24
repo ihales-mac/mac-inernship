@@ -11,9 +11,11 @@
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Content="Login" HorizontalAlignment="Left" Margin="317,275,0,0" VerticalAlignment="Top" Width="126" Height="60" Click="Button_Click" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="textbox1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="24" Margin="336,124,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="textbox2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="24" Margin="336,188,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Login" HorizontalAlignment="Left" Margin="283,280,0,0" VerticalAlignment="Top" Width="154" Height="60" Click="Button_Click" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="textbox1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="24" Margin="283,133,0,0" TextWrapping="Wrap" Text="Robi" VerticalAlignment="Top" Width="155"/>
+        <TextBox x:Name="textbox2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="24" Margin="283,208,0,0" TextWrapping="Wrap" Text="a" VerticalAlignment="Top" Width="155" RenderTransformOrigin="-0.244,1.175"/>
+        <Label Grid.ColumnSpan="2" Content="Username" HorizontalAlignment="Left" Margin="316,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.07,-0.111" Height="25" Width="77"/>
+        <Label Grid.ColumnSpan="2" Content="Password" HorizontalAlignment="Left" Margin="316,176,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.07,-0.111" Height="27" Width="77"/>
 
     </Grid>
 </Window>

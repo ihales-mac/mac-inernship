@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -21,7 +22,8 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        ClientService ClientService = new ClientService();
+        static ICommunication communication = new Communication();
+        ClientService ClientService = new ClientService(communication);
 
         public MainWindow()
         {
@@ -39,7 +41,9 @@ namespace Client
             }
             else
             {
-                Chat win2 = new Chat(ClientService.getClient());
+                //Chat win2 = new Chat(ClientService.getClient());
+                Chat win2 = new Chat(communication,username);
+
                 win2.Show();
                 this.Close();
 

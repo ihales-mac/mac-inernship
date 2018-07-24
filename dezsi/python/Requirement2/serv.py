@@ -25,6 +25,7 @@ class Serv(BaseHTTPRequestHandler):
 
     def do_GET(self):
 
+
         print(self.path)
         if (self.path == "/favicon.ico"):
             self.send_response(200)
