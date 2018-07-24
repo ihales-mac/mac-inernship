@@ -1,10 +1,10 @@
-body {
+html {
 background: repeating-linear-gradient(#f9fcfc, #f9fcfc 20px, #cff7f0 20px, #cff7f0 25px);
  font-family: "Times New Roman", Times, serif;
 }
 
-body *{
-    font-size: 1.5em !important;
+html *{
+    font-size: 1.25em !important;
     color: #000 !important;
     font-family: Arial !important;
     font-weight: 700 !important;
