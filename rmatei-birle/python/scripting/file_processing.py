@@ -45,9 +45,9 @@ parser.add_argument('-z', '--zname')
 
 args = parser.parse_args()
 
-destination = args.dest
-home = args.source
-zname = args.zname
+destination = str(args.dest)
+home = str(args.source)
+zname = str(args.zname)
 
 if not os.path.isdir(home):
     print ("Home path: {} is not a directory".format(home))

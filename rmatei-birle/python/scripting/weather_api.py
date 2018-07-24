@@ -10,10 +10,10 @@ import urllib
 
 class WeatherHandler(BaseHTTPRequestHandler):
     _api_key = "45530cecc46160e09c605fbd1b4006a5"
-    _location = "cluj-napoca,ro"
+    _location = "Cluj-napoca,ro"
 
     def format_response(self):
-        response = req.get("http://api.openweathermap.org/data/2.5/forecast?q={}&APPID={}".format(_location, _api_key))
+        response = req.get("http://api.openweathermap.org/data/2.5/forecast?q={}&APPID={}".format(self._location, self._api_key))
         response = response.json()
 
         composing_response = response["list"]
@@ -55,15 +55,15 @@ class WeatherHandler(BaseHTTPRequestHandler):
         
         if len(loc.keys()) != 0:
             try:
-                _location = loc["city"][0] + "," + loc["country"][0]
-                print(_location)
-            except: 
-                _location = "cluj-napoca,ro"
+                self._location = loc["city"][0] + "," + loc["country"][0]
+                print(self._location)
+            except:
+                self._location = "Cluj-napoca,ro"
         else:
-                _location = "cluj-napoca,ro"
+            self._location = "Cluj-napoca,ro"
 
-
-        self.wfile.write(bytes("<h1>Weather for the next 24 hours in {}!</h1><br><br>".format(_location), "utf-8"))
+        response = self.format_response()
+        self.wfile.write(bytes("<h1>Weather for the next 24 hours in {}!</h1><br><br>".format(self._location), "utf-8"))
         _bytes_to_write = bytes(json2html.convert(json=response), "utf-8")
         self.wfile.write(_bytes_to_write)
         print("sent response")

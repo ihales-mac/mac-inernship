@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set "VIRTUAL_ENV=C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\python\scripting"
+set "VIRTUAL_ENV=C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\python\Scripting"
 
 if not defined PROMPT (
     set "PROMPT=$P$G"
@@ -23,7 +23,7 @@ if defined _OLD_VIRTUAL_PYTHONHOME (
 )
 
 set "_OLD_VIRTUAL_PROMPT=%PROMPT%"
-set "PROMPT=(scripting) %PROMPT%"
+set "PROMPT=(Scripting) %PROMPT%"
 
 if defined PYTHONHOME (
     set "_OLD_VIRTUAL_PYTHONHOME=%PYTHONHOME%"
