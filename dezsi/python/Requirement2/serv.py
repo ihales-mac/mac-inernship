@@ -24,12 +24,14 @@ class Serv(BaseHTTPRequestHandler):
         return query_components[param]
 
     def do_GET(self):
-
-        print("do get called")
+        try:
+            param = self.get_param("location")
+        except Exception as e:
+            # this is a favicon.ico request
+            return
 
         try:
 
-            param = self.get_param("location")
             with urllib.request.\
                     urlopen("https://www.metaweather.com/api/location/{}/{}/{}/{}/"
                                                      .format(self.get_location(param),
@@ -46,7 +48,8 @@ class Serv(BaseHTTPRequestHandler):
                 data[i].pop("applicable_date")
                 data[i].pop("wind_direction_compass")
 
-            open(self.path[1:char], 'w').write("<html><head><link rel='shortcut icon' href=""><title>{}</title></head><body>{}</body></html>"
+            open(self.path[1:char], 'w').write("<html><head>"
+                                               "<title>{}</title></head><body>{}</body></html>"
                                                .format(param.capitalize()+
                                                        " ("+str(self.get_date()[0])+"/"+str(self.get_date()[1])
                                                        +"/"+str(self.get_date()[2])+")", data))
