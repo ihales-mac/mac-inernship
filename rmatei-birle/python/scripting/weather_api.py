@@ -33,7 +33,7 @@ class WeatherHandler(BaseHTTPRequestHandler):
             p["Humidity"] = str(item["main"]["humidity"]) + "%"
             p["Pressure"] = item["main"]["pressure"]
             p["Downfall"] = item["weather"][0]["description"]
-            d["Main"] = p
+            d["General"] = p
             
             d["Wind"] = item["wind"]
             response.append(d)
