@@ -24,11 +24,21 @@ class Serv(BaseHTTPRequestHandler):
         return query_components[param]
 
     def do_GET(self):
-        try:
-            param = self.get_param("location")
-        except Exception as e:
-            # this is a favicon.ico request
+
+
+        print(self.path)
+        if (self.path == "/favicon.ico"):
+            self.send_response(200)
             return
+
+        if (self.path == "/styles.css"):
+            file_to_open = open("styles.css").read()
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(bytes(file_to_open, 'utf-8'))
+            return
+
+        param = self.get_param("location")
 
         try:
 

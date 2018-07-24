@@ -1,0 +1,18 @@
+html {
+background: repeating-linear-gradient(#f9fcfc, #f9fcfc 20px, #cff7f0 20px, #cff7f0 25px);
+ font-family: "Times New Roman", Times, serif;
+}
+
+html *{
+    font-size: 1.25em !important;
+    color: #000 !important;
+    font-family: Arial !important;
+    font-weight: 700 !important;
+    text-shadow: 2px 2px #a0a0a0 !important;
+}
+
+img {
+    border:2px solid grey;
+     z-index: 500;
+
+}
