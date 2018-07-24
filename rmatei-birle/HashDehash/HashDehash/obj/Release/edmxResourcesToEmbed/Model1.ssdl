@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HashDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Rainbow">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Password" Type="char" MaxLength="5" Nullable="false" />
+    <Property Name="MD5" Type="char" MaxLength="32" Nullable="false" />
+    <Property Name="SHA1" Type="char" MaxLength="32" Nullable="false" />
+    <Property Name="SHA256" Type="char" MaxLength="32" Nullable="false" />
+    <Property Name="SHA384" Type="char" MaxLength="32" Nullable="false" />
+    <Property Name="SHA512" Type="char" MaxLength="32" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="HashDBModelStoreContainer">
+    <EntitySet Name="Rainbow" EntityType="Self.Rainbow" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

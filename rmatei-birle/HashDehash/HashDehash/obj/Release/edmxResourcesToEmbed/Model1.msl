@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HashDBModelStoreContainer" CdmEntityContainer="HashDBEntities">
+    <EntitySetMapping Name="Rainbows">
+      <EntityTypeMapping TypeName="HashDBModel.Rainbow">
+        <MappingFragment StoreEntitySet="Rainbow">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="MD5" ColumnName="MD5" />
+          <ScalarProperty Name="SHA1" ColumnName="SHA1" />
+          <ScalarProperty Name="SHA256" ColumnName="SHA256" />
+          <ScalarProperty Name="SHA384" ColumnName="SHA384" />
+          <ScalarProperty Name="SHA512" ColumnName="SHA512" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
