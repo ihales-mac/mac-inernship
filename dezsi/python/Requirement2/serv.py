@@ -25,10 +25,12 @@ class Serv(BaseHTTPRequestHandler):
 
     def do_GET(self):
 
-
         print(self.path)
         if (self.path == "/favicon.ico"):
+            file_to_open = open("favicon.ico", 'rb').read()
             self.send_response(200)
+            self.end_headers()
+            self.wfile.write(bytearray(file_to_open))
             return
 
         if (self.path == "/styles.css"):
