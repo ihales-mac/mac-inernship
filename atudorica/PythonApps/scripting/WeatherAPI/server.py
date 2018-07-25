@@ -20,18 +20,14 @@ class myHandler(BaseHTTPRequestHandler):
         justMeteo=justMeteo[0:9]
         result = []
         for s in justMeteo :
-            print(s)
             s1=s['main']
             s2=s['weather']
-            print(s2[0])
             s4=s['wind']
             x={}
-            x['General']={"temperature": s1['temp'], "minimal temperature":s1['temp_min'], "maximal temperature":s1['temp_max'], "wind speed": s4['speed'],  "pressure":s1['pressure'], "humidity":s1['humidity']}
+            x['General']={"temperature": s1['temp']-274.15, "minimal temperature":s1['temp_min']-274.15, "maximal temperature":s1['temp_max']-274.15, "wind speed": s4['speed'],  "pressure":s1['pressure'], "humidity":s1['humidity']}
             x["Weather"]={"name": s2[0]['main'],  "description": s2[0]['description']}
             x["Date And Time"]=s['dt_txt']
-            print(x)
             result.append(x)
-        print(result)
         return result
 
     def do_GET(self):
@@ -41,7 +37,6 @@ class myHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type','text/html')
             self.end_headers()    
-            print(self.path)
             
             if(self.path.endswith(".css") or self.path.endswith(".ico")):
                 f = open(curdir + sep + self.path)
@@ -54,14 +49,12 @@ class myHandler(BaseHTTPRequestHandler):
             query = urlparse(self.path).query
             query_components = dict(qc.split("=") for qc in query.split("&"))
             location = query_components["location"]
-            print(query_components)
 
             response = self.getDataForLocation(location)
             parsed=response.json()
             output = self.getValuableContent(parsed)
             
             print("data printed in browser")
-            #./Table_Fixed_Header/Table_Fixed_Header/css/main.css
             rsp = StringIO()
             rsp.write("""<!doctype html>
                             <html>
