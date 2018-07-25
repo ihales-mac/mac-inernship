@@ -1,0 +1,10 @@
+C:\Users\Macadamian\source\repos\Login\Login\bin\Debug\Login.dacpac
+C:\Users\Macadamian\source\repos\Login\Login\bin\Debug\Login.dll
+C:\Users\Macadamian\source\repos\Login\Login\bin\Debug\Login.pdb
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\Login.sqlprojAssemblyReference.cache
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\Login.dll
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\Login.pdb
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\Model.xml
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\refactor.xml
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\postdeploy.sql
+C:\Users\Macadamian\source\repos\Login\Login\obj\Debug\predeploy.sql
