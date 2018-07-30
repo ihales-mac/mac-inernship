@@ -2,16 +2,15 @@
 
 {% block body %}
 
+ <ul>
+        <li><p>Browse:</p></li>
+        <li><a href="{% url 'texts' %}">Text Posts</a></li>
+        <li><a href="{% url 'links' %}">Link Posts</a></li>
+        <li><a href="{% url 'files' %}">Image/Video Posts</a></li>
 
-<ul>
-{% for text in texts %}
-    <li>{{ text.title }}</li>
-    <li>{{ text.user }}</li>
-    <li>{{ text.section }}</li>
-    <li>{{ text.likes}}</li>
-    {% endfor %}
-</ul>
-
+    </ul>
+<style>
 
 
+</style>
 {% endblock %}

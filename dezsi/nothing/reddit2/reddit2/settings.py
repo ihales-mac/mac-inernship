@@ -128,3 +128,8 @@ LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = ''
 
 AUTH_USER_MODEL = "post_app.Poster"
+
+#Authentication backends
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+    )

@@ -1,0 +1,31 @@
+{% extends 'C:\Users\Intern\PycharmProjects\reddit2\user_app\templates\user_app\base.html' %}
+
+{% block body %}
+
+
+<form  action="{% url '' %}" method='GET'>
+        <button name="login">Login</button>
+    <fieldset>
+        <legend>Select a type of post:</legend>
+
+        <div>
+            <input type="radio" id="text" name="post" />
+            <label for="text">Text</label>
+        </div>
+
+        <div>
+            <input type="radio" id="link" name="post" />
+            <label for="link">Link</label>
+        </div>
+
+        <div>
+            <input type="radio" id="file" name="post" />
+            <label for="file">Image/Video</label>
+        </div>
+
+    </fieldset>
+    <input type="button" value="Select">
+</form>
+<div id="content"></div>
+{% include "user_app/.html" %}
+{% endblock %}
