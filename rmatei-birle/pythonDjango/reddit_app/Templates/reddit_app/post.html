@@ -22,7 +22,9 @@
                 data: {
                     csrfmiddlewaretoken: token
                 },
-                success: window.location.replace('/')
+                success: setTimeout(function(){
+                    window.location.replace('/')
+                }, 500)
             });
             $.post('', {text: 'sadf', csrfmiddlewaretoken: token})
         });
@@ -32,8 +34,10 @@
 
 <ul>
     {{ post.text }}
-    <br>
-    <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+    {% if post.photo %}
+        <br>
+        <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+    {% endif %}
     <br>
     {% if comments %}
         Comments:
@@ -43,7 +47,9 @@
             <li>
                 <ul>
                     <li>
-                        <img src= "{{ MEDIA_URL }}/{{ comm.user.user_details.avatar.name }}" width = 50px>
+                        {% if comm.user.user_details.avatar %}
+                            <img src= "{{ MEDIA_URL }}/{{ comm.user.user_details.avatar.name }}" width = 50px>
+                        {% endif %}
                         {{comm.user.username}}
                     </li>
                     <li>{{comm.text}}</li>

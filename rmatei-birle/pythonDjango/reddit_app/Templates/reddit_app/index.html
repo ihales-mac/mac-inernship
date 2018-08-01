@@ -9,8 +9,10 @@
         <ul>
         {% for post, comments in data %}
             <a href="post/{{post.id}}">{{ post.text }}</a>
-            <br>
-            <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+            {% if post.photo %}
+                <br>
+                <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+            {% endif %}
             <br>
             {% if comments %}
                 Comments:

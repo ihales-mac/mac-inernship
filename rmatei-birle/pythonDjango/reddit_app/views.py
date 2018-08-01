@@ -29,7 +29,10 @@ class SignUp(APIView):
     def post(self, request):
         serializer = SignupSerializer()
         post = request.POST.copy()
-        photo = request.FILES['avatar']
+        try:
+            photo = request.FILES['avatar']
+        except:
+            photo = None
         serializer.create(validated_data=dict(post), photo=photo)
         return HttpResponseRedirect("/")
 
@@ -47,7 +50,11 @@ class MakePost(APIView):
             user = request.user
             serializer = MakePostSerializer()
             post = request.POST.copy()
-            photo = request.FILES['photo']
+            try:
+                photo = request.FILES['photo']
+            except:
+                photo = None
+
             serializer.create(validated_data=dict(post), user=user, foto=photo)
 
         return HttpResponseRedirect("/")
@@ -58,7 +65,6 @@ class PostView(APIView):
     template_name = 'reddit/post.html'
 
     def get(self, request, pid):
-        print(2222)
         serializer = PostSerializer()
         serializerComm = CommSerializer()
         post, comments = serializer.get_post(pid)
@@ -66,7 +72,6 @@ class PostView(APIView):
         return render(request, 'reddit_app/post.html', context)
 
     def delete(self, request, pid):
-        print("asdfazdsFgzxfzdSSGFDSHFGDFSDFSGFDHGFHXFGDFSGHFGDFGFDHGFJHGFGDHFGDSFDSHGFDFDGFDGDFDFGFHGHFGHG")
         if request.user.is_authenticated:
             current_post = Post.objects.get(pk=pid, user=request.user)
             if current_post:
