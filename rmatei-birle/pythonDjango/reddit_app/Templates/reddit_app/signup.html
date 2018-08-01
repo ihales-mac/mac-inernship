@@ -1,0 +1,16 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<ul>
+    <form action="{% url 'reddit_signup' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% render_form serializer %}
+        <input type="submit" value="Save">
+    </form>
+</ul>
+{% endblock %}
+

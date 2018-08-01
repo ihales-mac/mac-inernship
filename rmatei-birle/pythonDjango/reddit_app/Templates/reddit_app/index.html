@@ -1,0 +1,31 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+    {% if data %}
+        <ul>
+        {% for post, comments in data %}
+            <a href="post/{{post.id}}">{{ post.text }}</a>
+            <br>
+            <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+            <br>
+            {% if comments %}
+                Comments:
+                <br>
+                <ul>
+                {% for comm in comments %}
+                    <li>{{comm.text}}</li>
+
+                {% endfor%}
+            </ul>
+            {% endif %}
+            <br><br>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No posts are available.</p>
+    {% endif %}
+{% endblock %}

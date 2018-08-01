@@ -15,7 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import reddit_app
+from django.conf.urls import url, include
+from . import settings
+from django.views.static import serve
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^', include('reddit_app.urls')),
 ]
+
+if settings.DEBUG:
+    root = settings.MEDIA_ROOT
+    urlpatterns.append(
+        url(r'^media/(?P<path>.*)$', serve, {'document_root': root}))
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += staticfiles_urlpatterns()

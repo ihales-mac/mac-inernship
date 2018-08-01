@@ -1,0 +1,16 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<ul>
+    <form role="form" action="{% url 'reddit_login' %}" method="post">
+        {% csrf_token %}
+        <p>Please login</p>
+        {{ form }}
+        <button type="submit">Sign in</button>
+    </form>
+</ul>
+{%endblock%}

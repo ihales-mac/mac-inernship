@@ -1,0 +1,73 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#delete").click(function(e) {
+            e.preventDefault();
+            var token = '{{ csrf_token }}';
+            $.get('');
+            $.ajax({
+                url: $(location).attr('href'),
+                type: 'DELETE',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", token);
+                },           
+                data: {
+                    csrfmiddlewaretoken: token
+                },
+                success: window.location.replace('/')
+            });
+            $.post('', {text: 'sadf', csrfmiddlewaretoken: token})
+        });
+    });
+</script>
+
+
+<ul>
+    {{ post.text }}
+    <br>
+    <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+    <br>
+    {% if comments %}
+        Comments:
+        <br>
+        <ul>
+        {% for comm in comments %}
+            <li>
+                <ul>
+                    <li>
+                        <img src= "{{ MEDIA_URL }}/{{ comm.user.user_details.avatar.name }}" width = 50px>
+                        {{comm.user.username}}
+                    </li>
+                    <li>{{comm.text}}</li>
+                    <br>
+                </ul>
+            </li>
+        {% endfor%}
+        </ul>
+    {% endif %}
+    <br><br>
+    <form method="delete">
+        {% csrf_token %}
+        {% if post.user.username == user.get_username %}
+            <button id="delete" type="submit">Delete</button>
+        {%endif%}
+    </form>
+</ul>
+<ul>
+    <form role="form" action="" method="post">
+        {% csrf_token %}
+        {% render_form serializer %}
+        <input type="submit" value="Save">
+    </form>
+</ul>
+
+
+{%endblock%}

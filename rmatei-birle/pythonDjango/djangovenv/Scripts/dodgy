@@ -1,0 +1,4 @@
+#!C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\pythonDjango\djangovenv\Scripts\python.exe
+
+import dodgy.run
+dodgy.run.run()
