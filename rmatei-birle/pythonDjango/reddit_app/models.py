@@ -6,7 +6,7 @@ from django.utils import timezone
 class UserDetails(models.Model):
     firstname = models.CharField(max_length=40)
     lastname = models.CharField(max_length=40)
-    avatar = models.ImageField(blank=True, upload_to = "avatars")
+    avatar = models.ImageField(blank=True, upload_to="avatars")
     created = models.DateTimeField(default=None)
     modified = models.DateTimeField(default=None)
 
@@ -40,7 +40,7 @@ class CustomUser(AbstractUser):
 class Post(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     text = models.CharField(max_length=2000)
-    photo = models.ImageField(blank=True, upload_to = "gallery")
+    photo = models.ImageField(blank=True, upload_to="gallery")
     created = models.DateTimeField(default=None)
     modified = models.DateTimeField(default=None)
 

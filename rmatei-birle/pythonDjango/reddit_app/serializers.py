@@ -1,4 +1,5 @@
 from . models import *
+from django import forms
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
@@ -10,11 +11,12 @@ class UserDetailsSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
-    user_details = UserDetailsSerializer(many=True)
+    user_details = UserDetailsSerializer(many=False)
+    password = serializers.CharField(style={'input_type': 'password'})
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'password', )
+        fields = ('username', 'password', 'user_details', )
 
 
 class SignupSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,6 +52,31 @@ class SignupSerializer(serializers.HyperlinkedModelSerializer):
         usr.save()
 
         return usr
+
+    def update(self, validated_data, uid):
+        user = CustomUser.objects.get(id=uid)
+
+        username = validated_data.pop('username')[0]
+        password = validated_data.pop('password')[0]
+        firstname = validated_data.pop('user_details.firstname')[0]
+        lastname = validated_data.pop('user_details.lastname')[0]
+        try:
+            avatar = request.FILES['avatar']
+        except:
+            avatar = None
+        
+        user.username = username
+        user.user_details.firstname = firstname
+        user.user_details.lastname = lastname
+
+        if avatar:
+            user.user_details.avatar = avatar
+        if password != '':
+            user.set_password(password)
+
+        user.user_details.save()
+        user.save()
+        return user
 
 
 class MakePostSerializer(serializers.HyperlinkedModelSerializer):

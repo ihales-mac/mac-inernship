@@ -1,0 +1,43 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<ul>
+    <form action="{% url 'reddit_profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type='hidden' name='csrfmiddlewaretoken' value='YcT5psbEJLYL0R8thq8CZwPU6FTHhKSOf80SCckSPnt4dmuuYHz5FNqzplitCCzg' />
+        <div class="form-group ">
+            <label >Username</label>
+            <input name="username" class="form-control" type="text"  value={{serializer.username}}>
+            <span class="help-block">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
+        </div>
+        <div class="form-group ">
+            <label >Password</label>
+            <input name="password" class="form-control" type="password" >
+        </div>
+        <fieldset>
+            <legend >
+                User details
+            </legend>
+            <div class="form-group ">
+                <label >Firstname</label>
+                <input name="user_details.firstname" class="form-control" type="text"  value={{serializer.user_details.firstname}} >
+            </div>
+            <div class="form-group ">
+                <label >Lastname</label>
+                <input name="user_details.lastname" class="form-control" type="text"  value={{serializer.user_details.lastname}} >
+            </div>
+            <div class="form-group ">
+                <label >Avatar</label>
+                <input name="user_details.avatar"  type="file" >
+            </div>
+        </fieldset>
+        <input type="submit" value="Save">
+    </form>
+</ul>
+
+
+{% endblock %}

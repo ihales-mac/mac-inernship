@@ -62,20 +62,23 @@ class MakePost(APIView):
 
 class PostView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'reddit/post.html'
+    template_name = 'reddit_app/post.html'
 
     def get(self, request, pid):
         serializer = PostSerializer()
         serializerComm = CommSerializer()
         post, comments = serializer.get_post(pid)
-        context = {'post': post, 'comments': comments,  'serializer': serializerComm}
+        context = {
+            'post': post,
+            'comments': comments,
+            'serializer': serializerComm,
+            }
         return render(request, 'reddit_app/post.html', context)
 
     def delete(self, request, pid):
         if request.user.is_authenticated:
             current_post = Post.objects.get(pk=pid, user=request.user)
             if current_post:
-                # Post.objects.delete(current_post)
                 current_post.delete()
         return HttpResponseRedirect("/")
 
@@ -87,3 +90,21 @@ class PostView(APIView):
             vd = request.POST.copy()
             serializer.create(validated_data=dict(vd), user=user, post=post)
             return HttpResponseRedirect("/post/" + pid)
+
+
+class ProfileView(APIView):
+    render_classes = [TemplateHTMLRenderer]
+    template_name = 'reddit_app/profile.html'
+
+    def get(self, request):
+        serializer = CustomUserSerializer(request.user)
+        context = {'serializer': serializer.data}
+        return render(request, 'reddit_app/profile.html', context)
+    
+    def post(self, request):
+        if request.user.is_authenticated:
+            serializer = SignupSerializer()
+            vd = request.POST.copy()
+            print(vd)
+            #serializer.update(validated_data=vd, uid=request.user.id)
+            return HttpResponseRedirect("/profile")
