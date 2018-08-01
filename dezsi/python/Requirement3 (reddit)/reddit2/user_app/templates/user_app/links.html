@@ -1,0 +1,26 @@
+{% extends 'user_app/base.html' %}
+
+{% block body %}
+
+
+{% for link in links %}
+<h2>{{link.id}}</h2>
+<ul>
+
+    <li><h3 style="border-style: outset">Title: {{ link.title }} <br></h3></li><br>
+    <hr>
+    <li>uploaded by: {{ link.user }}</li><br>
+    <li>created at: {{ link.created_date }}</li><br>
+    <hr>
+
+    <li>Content:<b><a style="all:initial; color:blue; cursor:pointer" href =" {{ link.url }}"> {{link.title}} link</a></b> </li><br>
+
+    <li> Likes: {{ link.nr_likes}}</li><br>
+    <li><a href = "/post/links/{{link.id}}">View post</a></li>
+
+</ul>
+    {% endfor %}
+
+
+
+{% endblock %}

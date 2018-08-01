@@ -1,0 +1,25 @@
+{% extends 'user_app/base.html' %}
+
+{% block body %}
+
+<ul>
+    <br>
+    <li>Username: {{ poster.0.username}}</li><br>
+    <hr>
+    <li>First Name: {{ details.0.first_name }}</li><br>
+    <hr>
+    <li>Last Name: {{ details.0.last_name }}</li><br>
+    <hr>
+    <li>Email: {{ poster.0.email }}</li><br>
+    <hr>
+    <li>Gender: {{ details.0.gender }}</li><br>
+    <hr>
+    <li>Date of Birth: {{ details.0.date_of_birth }}</li>
+
+</ul>
+
+
+
+{% endblock %}
+
+</html>

@@ -1,0 +1,17 @@
+{% extends 'user_app/base.html' %}
+
+{% block body %}
+
+ <ul>
+        <li><a style="background-color: #111">Browse:</a></li>
+        <li><a href="{% url 'texts' %}">Text Posts</a></li>
+        <li><a href="{% url 'links' %}">Link Posts</a></li>
+        <li><a href="{% url 'files' %}">Image/Video Posts</a></li>
+
+    </ul>
+
+
+    <h2>Welome to the awesome reddit2! Feel free to browse one of the sections above.</h2>
+
+
+{% endblock %}
