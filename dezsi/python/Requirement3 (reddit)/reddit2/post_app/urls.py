@@ -24,6 +24,8 @@ urlpatterns = [
     url("(?P<post_id>[0-9]+)/(?P<type>[a-zA-Z]+)/comments", CommentView.as_view(), name='add_comment'),
 
 
+    path('my_posts/', views.my_posts, name='my_posts'),
+
 
 
 ]

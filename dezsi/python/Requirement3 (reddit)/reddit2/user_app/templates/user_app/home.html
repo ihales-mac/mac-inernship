@@ -1,17 +1,19 @@
-{% extends 'user_app/base.html' %}
+{% extends 'post_app/base.html' %}
 
 {% block body %}
+    <br>
 
- <ul>
-        <li><a style="background-color: #111">Browse:</a></li>
-        <li><a href="{% url 'texts' %}">Text Posts</a></li>
-        <li><a href="{% url 'links' %}">Link Posts</a></li>
-        <li><a href="{% url 'files' %}">Image/Video Posts</a></li>
-
-    </ul>
-
-
-    <h2>Welome to the awesome reddit2! Feel free to browse one of the sections above.</h2>
-
+    <h2>Welcome to reddit2! Feel free to browse one of the sections below.</h2>
+    <div class="container"><br>
+        <a href ="{% url 'texts' %}" data-toggle="tooltip" title="text posts">
+            <img src="/media/if_icon-document-text_211656.png">
+        </a>
+        <a href ="{% url 'files' %}" data-toggle="tooltip" title="image/video posts">
+            <img src="/media/if_pic_285660.png">
+        </a>
+        <a href ="{% url 'links' %}" data-toggle="tooltip" title="link posts">
+            <img src="/media/if_link_227581.png">
+        </a>
+    </div>
 
 {% endblock %}

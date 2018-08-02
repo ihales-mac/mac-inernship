@@ -12,12 +12,18 @@ class Poster(AbstractUser):
     pass
 
 
-
+class Profile(models.Model):
+    objects = models.Manager()
+    user = models.OneToOneField(Poster, on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length=50, blank = True)
+    last_name = models.CharField(max_length=50, blank=True)
+    gender = models.CharField(max_length=6, blank=True, default='')
+    date_of_birth = models.DateField(blank=True, default='1900-01-01')
+    avatar = models.FileField(default='default_pic.jpg')
 
 
 class Post(models.Model):
     created_date = models.DateTimeField(default=datetime.now)
-
     title = models.CharField(max_length=250)
     original_content = models.BooleanField(blank=True, default=False)
     spoiler = models.BooleanField(blank=True, default=False)
@@ -32,14 +38,15 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(Poster, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     created_date = models.DateTimeField()
     comment = models.CharField(max_length=250, default='', blank=True)
 
- # Following fields are required for using GenericForeignKey
+    # Following fields are required for using GenericForeignKey
     content_type = models.ForeignKey(ContentType, on_delete=CASCADE, blank=True)
     object_id = models.PositiveIntegerField()
     post = GenericForeignKey()
+
 
 class Like(models.Model):
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
@@ -51,7 +58,6 @@ class Like(models.Model):
     post = GenericForeignKey()
 
 
-
 class Text(Post):
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
     text = models.CharField(max_length=1000, default='', blank=True)
@@ -60,7 +66,7 @@ class Text(Post):
 
     @property
     def class_name(self):
-        return "Text"
+        return "texts"
 
 
 class File(Post):
@@ -71,7 +77,8 @@ class File(Post):
 
     @property
     def class_name(self):
-        return "File"
+        return "files"
+
 
 class Link(Post):
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
@@ -81,19 +88,7 @@ class Link(Post):
 
     @property
     def class_name(self):
-        return "Link"
-
-
-
-class Profile(models.Model):
-    objects = models.Manager()
-    user = models.OneToOneField(Poster, on_delete=models.CASCADE, related_name='profile')
-    first_name = models.CharField(max_length=50, blank = True)
-    last_name = models.CharField(max_length=50, blank=True)
-    gender = models.CharField(max_length=6, blank=True, default='')
-    date_of_birth = models.DateField(blank=True, default='1900-01-01')
-
-
+        return "links"
 
 
 

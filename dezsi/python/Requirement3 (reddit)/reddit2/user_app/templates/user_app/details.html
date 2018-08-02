@@ -1,22 +1,44 @@
-{% extends 'user_app/base.html' %}
+{% extends 'post_app/base.html' %}
 
 {% block body %}
+<div class="container">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">Username</div>
+            <div class="panel-body">{{ poster.0.username}}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Picture</div>
+            <div class="panel-body"><img src="{{ details.0.avatar}}"></div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">First Name</div>
+            <div class="panel-body">{{ details.0.first_name}}</div>
+        </div>
 
-<ul>
-    <br>
-    <li>Username: {{ poster.0.username}}</li><br>
-    <hr>
-    <li>First Name: {{ details.0.first_name }}</li><br>
-    <hr>
-    <li>Last Name: {{ details.0.last_name }}</li><br>
-    <hr>
-    <li>Email: {{ poster.0.email }}</li><br>
-    <hr>
-    <li>Gender: {{ details.0.gender }}</li><br>
-    <hr>
-    <li>Date of Birth: {{ details.0.date_of_birth }}</li>
+        <div class="panel panel-default">
+            <div class="panel-heading">Last Name</div>
+            <div class="panel-body">{{ details.0.last_name}}</div>
+        </div>
 
-</ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">Email</div>
+            <div class="panel-body">{{ poster.0.email}}</div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">{{ details.0.gender}}</div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Date of Birth</div>
+            <div class="panel-body">{{ details.0.date_of_birth}}</div>
+        </div>
+
+    </div>
+</div>
+
 
 
 

@@ -1,77 +1,20 @@
 from pprint import pprint
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-
-# Create your views here.
-from django.urls import reverse
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from post_app.forms import *
 from post_app.serializers import *
 from . models import Text
+from django.core.exceptions import ObjectDoesNotExist
 
-class TextList(APIView):
-
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = "user_app/home.html"
-    def get(self, request):
-        texts = Text.objects.all()
-        serializer = TextSerializer(texts, many=True)
-        pprint({'texts': serializer.data})
-        return Response({'texts': serializer.data})
-
-
-@login_required(login_url='/accounts/login/')
-def texts(request):
-    texts = Text.objects.all()
-
-    template = 'user_app/texts.html'
-    context = {'texts': texts}
-    return render(request, template, context)
-
-
-@login_required(login_url='/accounts/login/')
-def links(request):
-    links = Link.objects.all()
-
-    template = 'user_app/links.html'
-    context = {'links': links}
-    return render(request, template, context)
-
-
-@login_required(login_url='/accounts/login/')
-def files(request):
-    files = File.objects.all()
-    template = 'user_app/files.html'
-    context = {'files': files}
-    return render(request, template, context)
-
-
-@login_required(login_url='/accounts/login/')
-def create_post(request):
-    if request.method == "POST":
-        value = request.POST.get('post')
-
-        if value == 'text':
-            return TextView().get(request)
-        elif value == 'file':
-            return FileView().get(request)
-        else:
-            return LinkView().get(request)
-
-
-    else:
-        context = {}
-        return render(request,'user_app/create_post.html', context)
-
+#region Class-based views
 
 class LinkView(APIView):
     def get(self, request):
         form = LinkForm()
-        return render(request, 'user_app/create_link.html', {'form': form})
+        return render(request, 'post_app/create_link.html', {'form': form})
 
     def post(self, request):
         data = request.data
@@ -88,7 +31,7 @@ class LinkView(APIView):
 
         if not serializer.is_valid():
             form = LinkForm(request.data)
-            return render(request, 'user_app/create_link.html', {'form': form})
+            return render(request, 'post_app/create_link.html', {'form': form})
 
         serializer.save()
         return redirect('/')
@@ -96,12 +39,12 @@ class LinkView(APIView):
 
 class TextView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'user_app/create_text.html'
+    template_name = 'post_app/create_text.html'
     style = {'template_pack': 'rest_framework/vertical/'}
 
     def get(self, request):
         form = TextForm()
-        return render(request, 'user_app/create_text.html', {'form': form})
+        return render(request, 'post_app/create_text.html', {'form': form})
 
 
     def post(self, request):
@@ -123,7 +66,7 @@ class TextView(APIView):
 
         if not serializer.is_valid():
             form = TextForm(request.data)
-            return render(request, 'user_app/create_text.html', {'form': form})
+            return render(request, 'post_app/create_text.html', {'form': form})
 
         serializer.save()
         return redirect('/')
@@ -131,12 +74,12 @@ class TextView(APIView):
 
 class FileView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'user_app/create_file.html'
+    template_name = 'post_app/create_file.html'
     style = {'template_pack': 'rest_framework/vertical/'}
 
     def get(self, request):
         form = FileForm(request.FILES)
-        return render(request, 'user_app/create_file.html', {'form': form})
+        return render(request, 'post_app/create_file.html', {'form': form})
 
 
     def post(self, request):
@@ -158,10 +101,111 @@ class FileView(APIView):
 
         if not serializer.is_valid():
             form = FileForm(request.data,request.FILES)
-            return render(request, 'user_app/create_file.html', {'form': form})
+            return render(request, 'post_app/create_file.html', {'form': form})
 
         serializer.save()
         return redirect('/')
+
+
+class CommentView(APIView):
+
+
+    def post(self, request, post_id, type=''):
+        data = request.data
+
+        if (type == ''):
+            type = request.path.split('/')[2]
+
+        dat = {'user':request.user.id,'created_date':datetime.now(), 'comment' : request.data.get('comment'),
+               'content_type':ContentType.objects.get(model=type.strip('s')).id, 'object_id':post_id }
+        serializer = CommentSerializer(data= dat )
+        pprint(data)
+        if not serializer.is_valid():
+            print(serializer.errors)
+            return redirect("/post/"+type+"/"+post_id)
+
+
+
+        serializer.save()
+        return redirect("/post/"+type+"/"+post_id)
+
+
+class TextList(APIView):
+
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "post_app/home.html"
+    def get(self, request):
+        texts = Text.objects.all()
+        serializer = TextSerializer(texts, many=True)
+        pprint({'texts': serializer.data})
+        return Response({'texts': serializer.data})
+
+#endregion
+
+#region Function-based views
+@login_required(login_url='/accounts/login/')
+def my_posts(request):
+    posts = []
+    texts, files, links =[],[],[]
+    try:
+        texts = Text.objects.filter(user=request.user.id)
+        files = File.objects.filter(user=request.user.id)
+        links = Link.objects.filter(user=request.user.id)
+    except ObjectDoesNotExist:
+        pass
+    posts.extend(texts)
+    posts.extend(files)
+    posts.extend(links)
+
+    return render(request, 'post_app/all_posts.html', {'posts':posts})
+
+@login_required(login_url='/accounts/login/')
+def texts(request):
+    texts = Text.objects.all()
+
+    template = 'post_app/texts.html'
+    context = {'texts': texts}
+    return render(request, template, context)
+
+
+@login_required(login_url='/accounts/login/')
+def links(request):
+    links = Link.objects.all()
+
+    template = 'post_app/links.html'
+    context = {'links': links}
+    return render(request, template, context)
+
+
+@login_required(login_url='/accounts/login/')
+def files(request):
+    files = File.objects.all()
+    template = 'post_app/files.html'
+    context = {'files': files}
+    return render(request, template, context)
+
+@login_required(login_url='/accounts/login/')
+def all_posts(request):
+    posts = Post.objects.all()
+    context = {'posts':posts}
+    return render(request, 'all_posts', context)
+
+@login_required(login_url='/accounts/login/')
+def create_post(request):
+    if request.method == "POST":
+        value = request.POST.get('post')
+
+        if value == 'text':
+            return TextView().get(request)
+        elif value == 'file':
+            return FileView().get(request)
+        else:
+            return LinkView().get(request)
+
+
+    else:
+        context = {}
+        return render(request,'post_app/create_post.html', context)
 
 
 
@@ -189,38 +233,17 @@ def like(request, post_id, type):
 
 @login_required(login_url='/accounts/login/')
 def post(request, post_id, type=''):
-    template_name = 'user_app/post.html'
-    if (type == ''):
+    template_name = 'post_app/post.html'
+    if type == '':
         type = request.path.split('/')[2]
     post = get_post_of_type(type, post_id)
 
 
     comments = post.comments.all()
     comment_form = CommentForm()
-    context = {'type': type, 'post_id': post_id, 'post': post ,'comments': comments, 'comment_form':comment_form }
+    context = {'type': type, 'post_id': post_id, 'post': post ,'comments': comments, 'comment_form':comment_form  }
 
     return render(request, template_name, context)
 
+#endregion
 
-
-class CommentView(APIView):
-
-
-    def post(self, request, post_id, type=''):
-        data = request.data
-
-        if (type == ''):
-            type = request.path.split('/')[2]
-
-        dat = {'user':request.user.id,'created_date':datetime.now(), 'comment' : request.data.get('comment'),
-               'content_type':ContentType.objects.get(model=type.strip('s')).id, 'object_id':post_id }
-        serializer = CommentSerializer(data= dat )
-        pprint(data)
-        if not serializer.is_valid():
-            print(serializer.errors)
-            return redirect("/post/"+type+"/"+post_id)
-
-        print('CORRECT')
-
-        serializer.save()
-        return redirect("/post/"+type+"/"+post_id)

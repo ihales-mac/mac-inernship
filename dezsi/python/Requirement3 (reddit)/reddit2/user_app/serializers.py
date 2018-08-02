@@ -20,16 +20,10 @@ class ProfileSerializerStruct(serializers.ModelSerializer):
         poster_data = validated_data.pop('poster')
         poster = Poster.objects.create(poster_data)
         profile = Profile.objects.create(user = poster, first_name = validated_data.first_name, last_name = validated_data.last_name,
-                               gender = validated_data.gender, date_of_birth = validated_data.date_of_birth)
+                               gender = validated_data.gender, avatar=validated_data.avatar, date_of_birth = validated_data.date_of_birth)
         return profile
-'''
-class OrderSerializer(serializers.ModelSerializer):
-    product = OrderProductSerializer(many=True, source='product_set')
 
-    class Meta:
-        model = Order
-        fields = '__all__'
-'''
+
 class ProfileSerializerFlat(serializers.ModelSerializer):
 
     username = serializers.CharField(source='Poster.username')
@@ -37,7 +31,7 @@ class ProfileSerializerFlat(serializers.ModelSerializer):
     email = serializers.CharField(source='Poster.email')
     class Meta:
         model = Profile
-        fields = ('username','password','email','first_name', 'last_name','gender','date_of_birth')
+        fields = ('username','password','email','first_name', 'last_name','gender','date_of_birth','avatar')
 
     def create(self, validated_data):
         user = Poster.objects.create(
@@ -47,6 +41,11 @@ class ProfileSerializerFlat(serializers.ModelSerializer):
         )
         user.set_password(validated_data['Poster']['password'])
         user.save()
+        try:
+            avatar = validated_data['avatar']
+        except:
+            avatar = 'default_pic.jpg'
+
         try:
             first = validated_data['first_name']
         except:
@@ -64,7 +63,7 @@ class ProfileSerializerFlat(serializers.ModelSerializer):
         except:
             dob = '1900-01-01'
         profile= Profile.objects.create(
-
+            avatar = avatar,
             first_name=first,
             last_name=last,
             gender=gen,
@@ -73,12 +72,3 @@ class ProfileSerializerFlat(serializers.ModelSerializer):
         )
         profile.save()
         return profile
-    '''
-    def create(self, validated_data):
-        poster = validated_data.pop('Poster')
-
-        with transaction.atomic():
-            poster = PosterSerializer.create(PosterSerializer(), validated_data=poster)
-
-            return Profile.objects.create(user=poster, **validated_data)    
-    '''

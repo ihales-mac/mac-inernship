@@ -9,7 +9,7 @@ class BaseForm(forms.Form):
 
 
 class TextForm(BaseForm):
-    text = forms.CharField( widget=forms.Textarea, max_length=1000)
+    text = forms.CharField(empty_value='', widget=forms.Textarea, max_length=1000)
 
 
 class FileForm(BaseForm):
@@ -22,4 +22,4 @@ class LinkForm(BaseForm):
 
 class CommentForm(forms.Form):
 
-    comment = forms.CharField( widget=forms.Textarea )
+    comment = forms.CharField( widget=forms.Textarea(attrs={'placeholder': 'Type your comment here','rows': 4, 'cols': 50}) )

@@ -84,27 +84,6 @@ class Register(APIView):
         return redirect('/home/')
 
 
-'''
-def register(request):
-    template = 'registration/register.html'
-    if request.method == 'POST':
-
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
-            login(request, user)
-            return redirect('index')
-
-    else:
-        form = SignUpForm()
-
-    context = {'form': form}
-    return render(request, template, context)
-'''
-
-
 class DetailsList(APIView):
 
     renderer_classes = [TemplateHTMLRenderer]
@@ -114,7 +93,9 @@ class DetailsList(APIView):
         usern = request.user.username
         profiles = Profile.objects.filter(user__username = usern)
         serializer1 = ProfileSerializerStruct(profiles, many=True)
-
-        posters = Poster.objects.filter(id=serializer1.data[-1]["user"])
+        try:
+            posters = Poster.objects.filter(id=serializer1.data[-1]["user"])
+        except:
+            return redirect("http://localhost:8000/admin/")
         serializer2 = PosterSerializer(posters, many=True)
         return Response({'details': serializer1.data, 'poster': serializer2.data})
