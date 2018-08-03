@@ -19,7 +19,6 @@ urlpatterns = [
 
     url('(texts|files|links)/(?P<post_id>[0-9]+)', views.post, name='post'),
 
-
     url("(?P<post_id>[0-9]+)/(?P<type>[a-zA-Z]+)/likes", views.like, name='add_like'),
     url("(?P<post_id>[0-9]+)/(?P<type>[a-zA-Z]+)/comments", CommentView.as_view(), name='add_comment'),
 

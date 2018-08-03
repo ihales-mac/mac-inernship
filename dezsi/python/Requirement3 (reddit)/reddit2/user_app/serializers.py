@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.db import transaction
@@ -27,7 +28,7 @@ class ProfileSerializerStruct(serializers.ModelSerializer):
 class ProfileSerializerFlat(serializers.ModelSerializer):
 
     username = serializers.CharField(source='Poster.username')
-    password = serializers.CharField(source='Poster.password')
+    password = serializers.CharField( style={'input_type': 'password'},source='Poster.password')
     email = serializers.CharField(source='Poster.email')
     class Meta:
         model = Profile

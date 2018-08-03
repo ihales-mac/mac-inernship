@@ -61,7 +61,8 @@ class Like(models.Model):
 class Text(Post):
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
     text = models.CharField(max_length=1000, default='', blank=True)
-    likes = GenericRelation(Like)
+    likes = GenericRelation(Like, related_query_name='like_text')
+
     comments = GenericRelation(Comment)
 
     @property
@@ -72,7 +73,7 @@ class Text(Post):
 class File(Post):
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
     file = models.FileField()
-    likes = GenericRelation(Like)
+    likes = GenericRelation(Like, related_query_name='like_file')
     comments = GenericRelation(Comment)
 
     @property
@@ -83,7 +84,8 @@ class File(Post):
 class Link(Post):
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
     url = models.URLField()
-    likes = GenericRelation(Like)
+    likes = GenericRelation(Like, related_query_name='like_link')
+
     comments = GenericRelation(Comment)
 
     @property

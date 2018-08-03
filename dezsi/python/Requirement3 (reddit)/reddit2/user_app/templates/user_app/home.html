@@ -1,19 +1,13 @@
-{% extends 'post_app/base.html' %}
+{%extends 'post_app/base.html' %}
 
 {% block body %}
-    <br>
+<h4>Welcome! Feel free to browse one of the sections above. </h4>
 
-    <h2>Welcome to reddit2! Feel free to browse one of the sections below.</h2>
-    <div class="container"><br>
-        <a href ="{% url 'texts' %}" data-toggle="tooltip" title="text posts">
-            <img src="/media/if_icon-document-text_211656.png">
-        </a>
-        <a href ="{% url 'files' %}" data-toggle="tooltip" title="image/video posts">
-            <img src="/media/if_pic_285660.png">
-        </a>
-        <a href ="{% url 'links' %}" data-toggle="tooltip" title="link posts">
-            <img src="/media/if_link_227581.png">
-        </a>
-    </div>
+<hr>
+<h5>Here below you can find all the posts:</h5>
+<br>
 
-{% endblock %}
+
+{%include 'post_app/render_any.html'%}
+
+{%endblock%}

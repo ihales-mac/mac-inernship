@@ -9,6 +9,7 @@ class PosterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class TextSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text
@@ -25,6 +26,7 @@ class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
         fields = '__all__'
+
 
 
 class CommentSerializer(serializers.ModelSerializer):

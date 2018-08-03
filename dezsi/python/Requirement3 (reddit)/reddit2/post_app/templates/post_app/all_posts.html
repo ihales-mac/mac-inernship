@@ -1,10 +1,5 @@
 {% extends 'post_app/base.html' %}
 
 {% block body %}
-<ul class="list-group">
-{% for post in posts %}
-    <li class="list-group-item">Title: <a href="/post/{{post.class_name}}/{{post.id}}"> {{post.title}}</a></li>
-
-{% endfor %}
-</ul>
+{% include 'post_app/render_any.html'%}
 {% endblock %}

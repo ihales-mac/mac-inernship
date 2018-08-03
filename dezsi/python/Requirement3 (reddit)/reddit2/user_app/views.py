@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 
@@ -37,8 +38,31 @@ def login_v(request):
 
 @login_required(login_url='/accounts/login/')
 def home(request):
+    query = request.GET.get('search_query')
     template = 'user_app/home.html'
-    context = {}
+    posts = []
+    texts,texts2, files, links = [], [], [],[]
+    if query is None:
+        try:
+            texts = Text.objects.all()
+            files = File.objects.all()
+            links = Link.objects.all()
+        except ObjectDoesNotExist:
+            pass
+    else:
+        try:
+            texts = Text.objects.filter(text__icontains = query)
+            texts2 = Text.objects.filter(title__icontains = query)
+            files = File.objects.filter(title__icontains = query)
+            links = Link.objects.filter(title__icontains = query)
+        except ObjectDoesNotExist:
+            pass
+
+    posts.extend(texts2)
+    posts.extend(texts)
+    posts.extend(files)
+    posts.extend(links)
+    context = {'elems':set(posts)}
     return render(request, template, context)
 
 

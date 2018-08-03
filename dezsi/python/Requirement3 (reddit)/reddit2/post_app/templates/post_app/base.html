@@ -30,27 +30,9 @@
          </li>
 
 
-
          <li class="nav-item">
             <a class="nav-link" href="{% url 'create_post' %}">New Post</a>
          </li>
-
-        <!--
-         <li class="nav-item dropdown">
-            <a class="btn nav-link dropdown-toggle" id="navbarDropdownCreateLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            New Post
-            </a>
-
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'texts' %}">Text Posts</a>
-                <a class="dropdown-item" href="{% url 'links' %}">Link Posts</a>
-                <a class="dropdown-item" href="{% url 'files' %}">Image/Video Posts</a>
-            </div>
-
-         </li>
-         -->
-
-
 
          <li class="nav-item">
             <a class="nav-link" href="{% url 'my_posts' %}">My Posts</a>
@@ -85,6 +67,11 @@
 
     </ul>
       {% if user.is_authenticated %}
+         <form class="form-inline my-2 my-lg-0" action="{% url 'home' %}" >
+             {% csrf_token %}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search_query">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
         <span class="navbar-text">
       Logged in as {{request.user.username}}
         </span>

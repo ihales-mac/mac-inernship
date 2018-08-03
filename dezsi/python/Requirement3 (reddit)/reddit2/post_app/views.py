@@ -1,5 +1,6 @@
 from pprint import pprint
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from post_app.serializers import *
 from . models import Text
 from django.core.exceptions import ObjectDoesNotExist
 
-#region Class-based views
+#region Class-Based Views
 
 class LinkView(APIView):
     def get(self, request):
@@ -28,6 +29,8 @@ class LinkView(APIView):
         serializer = LinkSerializer(
             data={'user': user.id, 'title': title, 'url': link, 'nsfw': nsfw, 'original_content': original_content,
                   'spoiler': spoiler})
+
+        serializer.is_valid()
 
         if not serializer.is_valid():
             form = LinkForm(request.data)
@@ -119,7 +122,10 @@ class CommentView(APIView):
         dat = {'user':request.user.id,'created_date':datetime.now(), 'comment' : request.data.get('comment'),
                'content_type':ContentType.objects.get(model=type.strip('s')).id, 'object_id':post_id }
         serializer = CommentSerializer(data= dat )
-        pprint(data)
+
+
+
+
         if not serializer.is_valid():
             print(serializer.errors)
             return redirect("/post/"+type+"/"+post_id)
@@ -142,7 +148,7 @@ class TextList(APIView):
 
 #endregion
 
-#region Function-based views
+#region Function-Based Views
 @login_required(login_url='/accounts/login/')
 def my_posts(request):
     posts = []
@@ -157,7 +163,7 @@ def my_posts(request):
     posts.extend(files)
     posts.extend(links)
 
-    return render(request, 'post_app/all_posts.html', {'posts':posts})
+    return render(request, 'post_app/all_posts.html', {'elems':posts})
 
 @login_required(login_url='/accounts/login/')
 def texts(request):
@@ -225,11 +231,26 @@ def get_post_of_type(type, post_id):
 
 @login_required(login_url='/accounts/login/')
 def like(request, post_id, type):
-    post = get_post_of_type(type, post_id)
-    post.nr_likes += 1
-    post.save()
+
+    p = get_post_of_type(type, post_id)
+    '''
+    content_type = models.ForeignKey(ContentType, on_delete=CASCADE)
+    object_id = models.PositiveIntegerField()
+    post = GenericForeignKey()
+
+    '''
+    try:
+        Like.objects.get(user=request.user, object_id = p.id, content_type=ContentType.objects.get(model=type.strip('s')).id)
+        return render(request, 'post_app/post.html', {'liked': True, 'post':p, 'post_id':p.id, 'type':type})
+    except ObjectDoesNotExist:
+        # cool, user hasn't liked this post yet
+        Like.objects.create(user=request.user, object_id=p.id,content_type=ContentType.objects.get(model=type.strip('s')), created_date= datetime.now())
+        p.nr_likes += 1
+        p.save()
 
     return redirect('/post/'+type+'/'+post_id)
+
+
 
 @login_required(login_url='/accounts/login/')
 def post(request, post_id, type=''):
@@ -243,7 +264,14 @@ def post(request, post_id, type=''):
     comment_form = CommentForm()
     context = {'type': type, 'post_id': post_id, 'post': post ,'comments': comments, 'comment_form':comment_form  }
 
+    try:
+        Like.objects.get(user=request.user, object_id=post.id,
+                         content_type=ContentType.objects.get(model=type.strip('s')).id)
+        context['liked'] = True
+
+    except ObjectDoesNotExist:
+        pass
+
     return render(request, template_name, context)
 
 #endregion
-

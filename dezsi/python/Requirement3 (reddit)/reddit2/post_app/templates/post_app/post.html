@@ -2,8 +2,7 @@
 
 {% block body %}
 
-<h2>{{post.title}}</h2>
-<br>
+<h2 style="diplay: inline-block" > {{post.title}}</h2>
 
     <hr>
     {% if type == 'files' %}
@@ -12,24 +11,38 @@
     </div>
 
     {% endif %}
-
+     <div class="container">
     {% if type == 'texts' %}
-    <textarea  readonly>{{ post.text }}</textarea>
+
+        <p style="font-size: 20px" class="font-weight-bold">
+        {{ post.text }}
+        </p>
+
     {% endif %}
 
     {% if type == 'links' %}
-    <a style="all:initial; color:blue; cursor:pointer" href =" {{ post.url }}"> {{post.title}} link</a>
+    <a  class="font-weight-bold" style="all:initial; color:blue; cursor:pointer; font-size: 25px" href =" {{ post.url }}"> {{post.url}} </a>
     {% endif %}
+     </div>
 
         <div class="shadow-lg p-3 mb-5 bg-white rounded">
         <p>uploaded by: {{ post.user }}</p>
         <p>created at: {{ post.created_date }}</p>
         <p>likes: {{ post.nr_likes}}
-            <form  action="{% url 'add_like' post_id type %} method='post'">
+        {%if liked == None %}
+            <form action="{% url 'add_like' post_id type %} method='post'">
             {% csrf_token %}
             <input  class="btn btn-default" type="submit" value="Like">
 
             </form>
+        {% endif %}
+
+
+        {%if liked == True %}
+            <p style="color:green">you like this post</p>
+        {%endif%}
+
+
         </p>
     </div>
 

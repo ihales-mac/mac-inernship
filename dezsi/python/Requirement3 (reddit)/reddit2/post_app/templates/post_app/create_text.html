@@ -1,17 +1,15 @@
 {% extends 'post_app/create_post.html' %}
 
 {% block body %}
-  {% load rest_framework%}
 
 
 <form action="{% url 'add_post_text' %}" method = "post" id="post_form">
 {% csrf_token %}
-    {%if form.errors %}
-    <p>Please fill in the required fields!</p>
-    {% endif %}
 
- {{ form| linebreaks | safe }}
+ {% for line in form %}
+   {{line.label_tag}} {{line}}<br>
 
+{% endfor %}
   <input type="submit" value="Submit">
 </form>
 
