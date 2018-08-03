@@ -12,7 +12,9 @@ class UserDetailsSerializer(serializers.HyperlinkedModelSerializer):
 
 class CustomUserSerializer(serializers.HyperlinkedModelSerializer):
     user_details = UserDetailsSerializer(many=False)
-    password = serializers.CharField(style={'input_type': 'password'})
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        )
 
     class Meta:
         model = CustomUser
@@ -118,3 +120,31 @@ class CommSerializer(serializers.HyperlinkedModelSerializer):
         comm = Comment.objects.create(user=user, post=post, text=text)
 
         return comm
+
+
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+
+    def get_post_likes(self, pid):
+        post = Post.objects.get(id=pid)
+        try:
+            likes = Like.objects.filter(post=post)
+            return likes
+        except:
+            return None
+
+    def get_user_likes(self, uid):
+        user = CustomUser.objects.get(id=uid)
+        try:
+            likes = Like.objects.filter(user=user)            
+            return likes
+        except:
+            return None
+
+    def create(self, pid, uid):
+        post = Post.objects.get(id=pid)
+        user = CustomUser.objects.get(id=uid)
+        try:
+            like = Like.objects.get(post=post, user=user)
+        except:
+            like = Like.objects.create(post=post, user=user)
+        return like

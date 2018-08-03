@@ -5,29 +5,29 @@
 {% load rest_framework %}
 
 {% block content %}
+<div class="w3-row ">
     {% if data %}
-        <ul>
-        {% for post, comments in data %}
-            <a href="post/{{post.id}}">{{ post.text }}</a>
-            {% if post.photo %}
+        {% for post, like, comments in data %}
+            <div class="w3-card-4 w3-margin w3-white" style="width:70%; margin:auto 0px;">
+                <div class="w3-container">
+                    <h3><b>{{post.user.username}}</b></h3>
+                    <h4>
+                        <span class="w3-opacity">{{ post.created }}</span>
+                    </h4>
+                    <h5>
+                        <a href="post/{{post.id}}">{{ post.text }}</a>
+                    </h5>
+                </div>
+                {% if post.photo %}
+                    <img src="{{ MEDIA_URL }}/{{ post.photo.name }}" style="width:100%" class="w3-round">
+                {% endif %}
                 <br>
-                <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
-            {% endif %}
+                <h4>Likes: {{like}}</h4>
+            </div>
             <br>
-            {% if comments %}
-                Comments:
-                <br>
-                <ul>
-                {% for comm in comments %}
-                    <li>{{comm.user.username}}: {{comm.text}}</li>
-
-                {% endfor%}
-            </ul>
-            {% endif %}
-            <br><br>
         {% endfor %}
-        </ul>
     {% else %}
         <p>No posts are available.</p>
     {% endif %}
+</div>
 {% endblock %}
