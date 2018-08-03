@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% load staticfiles %}
+{% block title %} Reddit: Posts {% endblock %}
+
+{% block content%}
+{% for post in posts %}
+<div class="card" >
+    <a href="{% url 'reddit_post_details' pk=post.id %}">
+    <img class="card-img-top" src="{{ post.image }}">
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+    </div>
+    </a>
+    <div class="card-footer">
+        <small class="text-muted">Category: <strong>{{post.category}}</strong> Posted by: <strong>{{post.owner.username}}</strong> <div class="float-right">Posted: {{post.posted_date}} #Likes :{{ post.likes | length}}</div></small>
+    </div>
+</div>
+<br>
+<br>
+{% endfor %}
+{% endblock %}

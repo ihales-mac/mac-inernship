@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load rest_framework %}
+{% load staticfiles %}
+{% block title %} Reddit: Posts {% endblock %}
+
+{% block content%}
+<div class="card">
+    <img class="card-img-top" src="{{ post.image }}">
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+    </div>
+    <div class="card-footer">
+        <small class="text-muted">Category: <strong>{{post.category}}</strong>
+            <div class="float-right">Posted: {{post.posted_date}} #Likes :{{ post.likes | length}}
+                 <form class="formcomment"  action="{% url 'reddit_give_like' pk=post.id %}"  method="POST">
+                    {% csrf_token %}
+                    <!--<span type="submit"  id='give_like'><i class="ml-2 fa fa-thumbs-up mr-2"></i></span>-->
+                    <input class="btn btn-primary btn-sm" type="submit" value="Like">
+                </form>
+            </div>
+        </small>
+        <br>
+    </div>
+</div>
+<br>
+<br>
+<!--Comment section-->
+<div class="details-comments">
+    <!--User Comment-->
+    <!--<div class="user-comment">-->
+        <!--<form class="formcomment" id="user-comment">-->
+            <!--<div class="form-group d-flex d-inline">-->
+                <!--<textarea id="comment-input" class="form-control ml-4" rows="3" pattern=".{4,15}"-->
+                          <!--placeholder="Add a public comment…"></textarea>-->
+            <!--</div>-->
+            <!--<div class="button-group float-right">-->
+                <!--<input type="reset" class="btn btn-light btn-sm mr-2" value="Cancel">-->
+                <!--<button type="submit" class="btn btn-primary btn-sm" id="comment">Post</button>-->
+            <!--</div>-->
+        <!--</form>-->
+    <!--</div>-->
+     <!--End User Comment -->
+
+    <form class="formcomment"  action="{% url 'reddit_give_comment' pk=post.id %}" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+        {% render_form comment_serializer %}
+        </div>
+    <input class="btn btn-primary btn-sm" type="submit" value="Save">
+    </form>
+
+    <!--Others comments-->
+    <ul class="comments">
+        {% for comment in post.comments %}
+            <li  id="comment-template-2">
+                <div class="block-2">
+                    <img width="50" src="{{ comment.owner.avatar }}" alt="Avatar"/>
+                    <a style="display:block">{{comment.owner.username}}</a>
+                </div>
+                <p class="block-2">{{ comment.text }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<!--End Comment section-->
+{% endblock %}
+
+
