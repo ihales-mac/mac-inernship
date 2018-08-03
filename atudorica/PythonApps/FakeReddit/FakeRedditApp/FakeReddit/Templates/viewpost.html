@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#delete").click(function(e) {
+            e.preventDefault();
+            var token = '{{ csrf_token }}';
+            $.get('');
+            $.ajax({
+                url: $(location).attr('href'),
+                type: 'DELETE',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", token);
+                },           
+                data: {
+                    csrfmiddlewaretoken: token
+                },
+                success: setTimeout( function(){
+                        window.location.replace('/')
+                        }, 500) 
+            });
+            $.post('', {text: 'sadf', csrfmiddlewaretoken: token})
+        });
+
+        $("#like").click(function(e) {
+            e.preventDefault();
+            var token = '{{ csrf_token }}';
+            $.ajax({
+                url: $(location).attr('href'),
+                type: 'PUT',
+                beforeSend: function(xhr) {               
+                    xhr.setRequestHeader("X-CSRFToken", token);
+                },          
+                data: {
+                    csrfmiddlewaretoken: token
+                },
+                success: setTimeout(function(){
+                    window.location.reload()
+                }, 500)
+            });
+        });
+    });
+</script>
+
+
+<ul>
+    <h2>{{ post.title }}</h2>
+    <h3>{{post.text}}</h3>
+    <br>
+    <img src= "{{ MEDIA_URL }}/{{ post.photo.name }}" width = 800px>
+    <h5>created by {{post.user.username}} on {{post.created}}</h5>
+    <br>
+    <form method="delete">
+        {% csrf_token %}
+        {% if post.user.username == user.get_username %}
+            <button id="delete" type="submit">Delete</button>
+        {%endif%}
+    </form>
+    <form method="put">
+        {% csrf_token %}
+        <input type="submit" value="Like" id="like">
+    {{likes}} likes
+    </form>
+    <br><br>
+    {% if comments %}
+        Comments:
+        <br>
+        <ul>
+        {% for comm in comments %}
+            <li>
+                <ul>
+                    <img src= "{{ MEDIA_URL }}/{{ comm.user.user_details.avatar.name }}" width = 50px class="img-thumbnail">
+                    {{comm.user.username}}
+                    
+                    <li>{{comm.text}}</li>
+                    <br>
+                </ul>
+            </li>
+        {% endfor%}
+        </ul>
+    {% endif %}
+    
+</ul>
+<ul>
+    <form role="form" action="" method="post">
+        {% csrf_token %}
+        {% render_form serializer %}
+        <input type="submit" value="Save">
+    </form>
+</ul>
+
+
+{%endblock%}

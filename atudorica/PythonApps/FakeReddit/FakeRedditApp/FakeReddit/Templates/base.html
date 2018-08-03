@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>FakeReddit</title>
+  {% block extra-head %} {% load static %}
+  <!-- Bootstrap core CSS - remote -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">\ {% endblock %}
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+</head>
+
+<body>
+  <header>
+    <h2>
+      <a href="/">Fake Reddit</a>
+    </h2>
+
+    {% if user.is_authenticated %} 
+    {% block makepost %} <a href="{% url 'makepost' %}">Make post</a>{% endblock %}
+    <div class="pull-right">
+      <form action="{% url 'logout' %}" method="POST">
+        {%csrf_token%} 
+        {% block editprofile %}<a href="{% url 'editprofile' %}">{{user.username}}</a>{% endblock %}
+        <button type="submit" class="btn btn-link">Log Out</button>
+
+      </form>
+    </div>
+    {% else %}
+    <div class="pull-right">
+      {% block login %} <a href="{% url 'login' %}">Log In</a>{% endblock %} / 
+      {% block signup %} <a href="{% url 'signup' %}">Sign Up</a>{% endblock %}
+    </div>
+    {% endif %}
+
+    <br>
+    <hr>
+  </header>
+      <div style="left:50%" class="center">
+      {% block content %}
+      
+      {% endblock %}
+  </div>
+</body>
+
+</html>

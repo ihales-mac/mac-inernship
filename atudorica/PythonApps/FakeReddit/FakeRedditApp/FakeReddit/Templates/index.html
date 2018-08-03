@@ -1,0 +1,52 @@
+{% extends "base.html" %} 
+{% block extra-head %} 
+{{ block.super }} 
+{% endblock %} 
+{% load rest_framework %} 
+{% block content%} 
+{% if data %}
+        <div class="w3-container" style="max-width: 1400px">
+        {% for post, likes, comments in data %}
+        <div class="w3-card-4" style="width: 70%">
+            
+            <header class="w3-container w3-black"><a href="viewpost/{{post.id}}">{{ post.title }}</a></header>
+            <div class="card-body">
+                {% if post.photo%}
+                    <img src="{{ MEDIA_URL }}/{{ post.photo.name }}" class="card-img-top" style="width:100%"> 
+                {%endif%} 
+                <p class="card-text">{{post.text}}</p>
+                <br>
+                <h6>created by {{post.user.username}} on {{post.created}}</h6>
+                {{likes}} likes
+
+                <br> {% if comments %} 
+                
+                
+                <ul class="w3-ul w3-border"> 
+                    <li><h2>Comments:</h2></li>
+                        {% for comm in comments %}
+                        {%if comm.text%}
+                            <li class="w3-bar">
+                                    <div class="w3-bar-item"> <img src= "{{ MEDIA_URL }}/{{ comm.user.user_details.avatar.name }}" style="vertical-align: middle;
+                                    width: 50px;
+                                    height: 50px;
+                                    border-radius: 50%;">
+                                    {{comm.user.username}}
+                                </div>
+                                    <div class="w3-bar-item">{{comm.text}}</div>
+                                    <br>
+                            
+                            </li>
+                        {% endif %}
+                    {% endfor%}
+                </ul>
+                {% endif %}
+            </div>
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No posts are available.</p>
+{% endif %} 
+{% endblock %}
