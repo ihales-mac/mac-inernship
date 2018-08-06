@@ -1,0 +1,7 @@
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\bin\Release\Server.exe.config
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\bin\Release\Server.exe
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\bin\Release\Server.pdb
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\obj\Release\Server.csprojAssemblyReference.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\obj\Release\Server.csproj.CoreCompileInputs.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\obj\Release\Server.exe
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\ClientServer\Server\obj\Release\Server.pdb

@@ -1,0 +1,10 @@
+{% extends 'base2.html' %}
+{% load rest_framework %}
+
+{% block content%}
+<form action="{% url 'reddit_sign_up'%}" enctype="multipart/form-data"  method="POST">
+    {% csrf_token %}
+    {% render_form serializer %}
+    <input class="btn btn-primary" type="submit" value="Save">
+</form>
+{% endblock %}

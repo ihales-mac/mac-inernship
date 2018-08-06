@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RainbowModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Bulk">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Pass" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="MD5" Type="String" MaxLength="32" FixedLength="true" Unicode="false" />
+    <Property Name="SHA1" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+    <Property Name="SHA2" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Pass">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Pass1" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="MD5" Type="String" MaxLength="32" FixedLength="true" Unicode="false" />
+    <Property Name="SHA1" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+    <Property Name="SHA2" Type="String" MaxLength="64" FixedLength="true" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="RainbowEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Bulks" EntityType="Self.Bulk" />
+    <EntitySet Name="Passes" EntityType="Self.Pass" />
+    <EntitySet Name="BulksPasswords" EntityType="RainbowModel.BulksPassword" />
+  </EntityContainer>
+  <EntityType Name="BulksPassword">
+    <Key>
+      <PropertyRef Name="Pass" />
+    </Key>
+    <Property Name="Pass" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>
