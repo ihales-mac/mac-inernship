@@ -1,0 +1,18 @@
+{% extends 'user_app/create_post.html' %}
+
+{% block body %}
+
+
+<form action="{% url 'add_post_link' %}" method = "post" id="post_form">
+{% csrf_token %}
+    {%if form.errors %}
+    <p>Please fill in the required fields!</p>
+    {% endif %}
+
+ {{ form }}
+  <input type="submit" value="Submit">
+
+
+
+</form>
+{% endblock %}
