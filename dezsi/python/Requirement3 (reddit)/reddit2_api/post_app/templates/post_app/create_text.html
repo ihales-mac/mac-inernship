@@ -1,0 +1,16 @@
+{% extends 'post_app/create_post.html' %}
+
+{% block body %}
+
+
+<form action="{% url 'add_post_text' %}" method = "post" id="post_form">
+{% csrf_token %}
+
+ {% for line in form %}
+   {{line.label_tag}} {{line}}<br>
+
+{% endfor %}
+  <input type="submit" value="Submit">
+</form>
+
+{% endblock %}
