@@ -1,0 +1,76 @@
+{% extends 'user_app/base.html' %}
+
+{% block body %}
+
+<h2>{{post.title}}</h2>
+<ul>
+
+    <li><h3 style="border-style: outset">Title: {{ post.title }} <br></h3></li><br>
+    <hr>
+    <li>uploaded by: {{ post.user }}</li><br>
+    <li>created at: {{ post.created_date }}</li><br>
+
+
+    <hr>
+    {% if type == 'files' %}
+    <li>Content: <img width=300px height=200px style="border-style:solid" src="/media/{{ post.file }}"></li><br>
+    {% endif %}
+
+    {% if type == 'texts' %}
+    <li>Content: <textarea style = "height:200px; width:200px;" readonly>{{ post.text }}</textarea></li><br>
+    {% endif %}
+
+    {% if type == 'links' %}
+    <li>Content:<b><a style="all:initial; color:blue; cursor:pointer" href =" {{ post.url }}"> {{post.title}} link</a></b> </li><br>
+    {% endif %}
+
+    <li>Likes: {{ post.nr_likes}}  <br></li>
+    <form action="{% url 'add_like' post_id type %} method='post'">
+        {% csrf_token %}
+        <input type="submit" value="Like">
+
+    </form>
+
+
+    <hr>
+    {% if post_id != '' %}
+
+    <form action="{% url 'add_comment' post_id type %}" method = "post" id="post_form" >
+        {% csrf_token %}
+        {%if comment_form.errors %}
+        <p>Please fill in the required fields!</p>
+    {% endif %}
+
+    {{ comment_form }}
+    <input type="submit" value="Submit">
+
+    </form>
+    {% endif %}
+    <li> </br><h4>Comments:</h4>
+
+    {%  for comm in comments %}
+
+        <table>
+            <tr><td>from: </td><td>{{comm.user}}</td></tr>
+            <tr><td>sent at: </td><td>{{comm.created_date}}</td></tr>
+            <br><tr><td>message: </td><td><textarea readonly style="width: 800px; height:100px">{{comm.comment}}</textarea></td></tr>
+
+
+        </table>
+
+        <hr>
+    {% endfor %}
+
+</li><br>
+<br><br>
+
+
+
+
+
+</ul>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends 'user_app/base.html' %}
+
+{% block body %}
+
+
+{% for file in files %}
+<h2>{{file.id}}</h2>
+<ul>
+
+    <li><h3 style="border-style: outset">Title: {{ file.title }} <br></h3></li><br>
+    <hr>
+    <li>uploaded by: {{ file.user }}</li><br>
+    <li>created at: {{ file.created_date }}</li><br>
+
+
+    <hr>
+
+    <li>Content: <img width=300px height=200px style="border-style:solid" src="/media/{{ file.file }}"></li><br>
+
+    <li> Likes: {{ file.nr_likes}}</li><br>
+    <hr>
+    <li><a href = "/post/files/{{file.id}}">View post</a></li>
+
+</ul>
+    {% endfor %}
+
+
+
+{% endblock %}
