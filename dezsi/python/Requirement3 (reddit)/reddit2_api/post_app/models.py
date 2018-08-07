@@ -9,8 +9,10 @@ from django.db.models import CASCADE
 from django.utils.datetime_safe import datetime
 
 
+
 class Poster(AbstractUser):
     pass
+
 
 
 class Profile(models.Model):
@@ -38,7 +40,7 @@ class Post(models.Model):
 class Comment(models.Model):
     objects = models.Manager()
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    created_date = models.DateTimeField()
+    created_date = models.DateTimeField(default=datetime.now)
     comment = models.CharField(max_length=250, default='', blank=True)
     post = models.ForeignKey(Post, on_delete=CASCADE)
 
@@ -46,5 +48,5 @@ class Comment(models.Model):
 class Like(models.Model):
     objects = models.Manager()
     user = models.ForeignKey(Poster, on_delete=models.CASCADE)
-    created_date = models.DateTimeField()
+    created_date = models.DateTimeField(default=datetime.now)
     post = models.ForeignKey(Post, on_delete=CASCADE)

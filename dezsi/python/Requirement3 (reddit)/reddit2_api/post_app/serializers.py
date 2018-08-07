@@ -1,8 +1,16 @@
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import Permission
+
 from django.db import transaction
 from django.forms import PasswordInput
+from django.shortcuts import redirect
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
 
 from post_app.models import *
+from reddit2_api import settings
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -23,7 +31,6 @@ class PostCreateUpdateSerializer(serializers.ModelSerializer):
         model = Post
         fields = [
 
-            'title',
 
             'title',
             'content',
@@ -83,9 +90,70 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
             return Profile.objects.create(user=user, **validated_data)
 
+
 class CommentCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('comment','post')
+        fields = ('comment',)
+
+
+class LikeCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Like
+        fields = ()
+
+
+class UserLoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    class Meta:
+        model = Poster
+        fields = ['username', 'password']
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def validate(self, data):
+        username = data['username']
+        password = data['password']
+
+
+        user = Poster.objects.get(username = username)
+        if not user:
+            raise ValidationError('This user name is not valid')
+
+        if not user.check_password(password):
+            raise ValidationError('This password is not valid')
+
+
+        return user
+
+
+
+class UserLogouterializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Poster
+        fields = ['username', 'password']
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def validate(self, data):
+        username = data['username']
+        password = data['password']
+
+
+        user = Poster.objects.get(username = username)
+        if not user:
+            raise ValidationError('This user name is not valid')
+
+        if not user.check_password(password):
+            raise ValidationError('This password is not valid')
+
+
+        return user
+
+
+
+
 
