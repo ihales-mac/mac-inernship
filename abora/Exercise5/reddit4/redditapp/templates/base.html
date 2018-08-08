@@ -35,7 +35,7 @@
                     <a class="nav-link" href="{% url 'reddit_create_post' %}">Create Post</a>
                 </li>
                 <div class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <input id="search-input" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button id="btn-search" class="btn btn-outline-success my-2 my-sm-0">Search</button>
                 </div>
             </ul>
@@ -61,10 +61,8 @@
 <script>
 
     $('#btn-search').click(function(){
-        console.log('here');
-        $.get('http://127.0.0.1:8000/home/?q=post',function(data){
-            console.log('done');
-        })
+        var txt = $('#search-input').val();
+        window.location.replace("http://127.0.0.1:8000/home/?q=" + txt);
     });
 
 </script>
