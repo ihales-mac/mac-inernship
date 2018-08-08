@@ -5,88 +5,97 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from django.http import HttpResponseRedirect
+from rest_framework import status
 
 
-def index(request):
-    latest_posts = Post.objects.order_by('-created')[:5]
-    data_list = []
-    likeS = LikeSerializer()
-    for post in latest_posts:
-        comments = Comment.objects.filter(post=post).order_by('-created')[:5]
-        likes = len(likeS.get_post_likes(post.id))
-        data_list.append((post, likes, comments))
+# def index(request):
+#     latest_posts = Post.objects.order_by('-created')[:5]
+#     data_list = []
+#     likeS = LikeSerializer()
+#     for post in latest_posts:
+#         comments = Comment.objects.filter(post=post).order_by('-created')[:5]
+#         likes = len(likeS.get_post_likes(post.id))
+#         data_list.append((post, likes, comments))
 
-    context = {'data': data_list}
-    return render(request, 'reddit_app/index.html', context)
+#     context = {'data': data_list}
+#     return render(request, 'reddit_app/index.html', context)
+
+
+class Index(APIView):
+    def get(self, request):
+        posts = Post.objects.all()
+        serializer = IndexSerializer(posts, many=True)
+        print(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class LogIn(APIView):
+    
+    def get(self, request):
+        serializer = LogInSerializer()
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = LogInSerializer()
+        data = serializer.validate(request.data)
+        
+        username = data['username']
+        token = data['token']
+
+        return Response({'username': username, 'token': token}, status=status.HTTP_200_OK)
 
 
 class SignUp(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'reddit_app/signup.html'
 
     def get(self, request):
         serializer = SignupSerializer()
-        return Response({'serializer': serializer})
+        return Response(serializer.data)
     
     def post(self, request):
-        serializer = SignupSerializer()
-        post = request.POST.copy()
         try:
-            photo = request.FILES['avatar']
+            serializer = SignupSerializer()
+            post = request.POST.copy()
+            try:
+                photo = request.FILES['avatar']
+            except:
+                photo = None
+            serializer.create(validated_data=dict(post), photo=photo)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
-            photo = None
-        serializer.create(validated_data=dict(post), photo=photo)
-        return HttpResponseRedirect("/")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MakePost(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'reddit_app/makepost.html'
 
     def get(self, request):
         serializer = MakePostSerializer()
-        return Response({'serializer': serializer})
+        return Response(serializer.data)
 
     def post(self, request):
-        if request.user.is_authenticated:
-            user = request.user
-            serializer = MakePostSerializer()
-            post = request.POST.copy()
-            try:
-                photo = request.FILES['photo']
-            except:
-                photo = None
+        try:
+            if request.user.is_authenticated:
+                user = request.user
+                serializer = MakePostSerializer()
+                post = request.POST.copy()
+                try:
+                    photo = request.FILES['photo']
+                except:
+                    photo = None
 
-            serializer.create(validated_data=dict(post), user=user, foto=photo)
+                serializer.create(validated_data=dict(post), user=user, foto=photo)
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return HttpResponseRedirect("/")
+        except:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostView(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'reddit_app/post.html'
 
     def get(self, request, pid):
         serializer = PostSerializer()
-        serializerComm = CommSerializer()
-        post, comments = serializer.get_post(pid)
-        likeS = LikeSerializer()
-        likes = len(likeS.get_post_likes(post.id))
-        context = {
-            'post': post,
-            'likes': likes,
-            'comments': comments,
-            'serializer': serializerComm,
-            }
-        return render(request, 'reddit_app/post.html', context)
-
-    def delete(self, request, pid):
-        if request.user.is_authenticated:
-            current_post = Post.objects.get(pk=pid, user=request.user)
-            if current_post:
-                current_post.delete()
-                return HttpResponseRedirect("/")
-        return HttpResponseRedirect("/login")
+        return Response(serializer.data)
 
     def post(self, request, pid):
         if request.user.is_authenticated:
@@ -95,7 +104,7 @@ class PostView(APIView):
             post = Post.objects.get(id=pid)
             vd = request.POST.copy()
             serializer.create(validated_data=dict(vd), user=user, post=post)
-            return HttpResponseRedirect("/post/" + pid)
+            return Response(serializer.data)
         return HttpResponseRedirect("/login")
 
     def put(self, request, pid):
@@ -103,24 +112,16 @@ class PostView(APIView):
             serializer = LikeSerializer()
             user = request.user
             serializer.create(uid=user.id, pid=pid)
-            return HttpResponseRedirect("/post/{0}/".format(pid))
+            return Response(serializer.data)
         return HttpResponseRedirect("/login/")
 
 
 class ProfileView(APIView):
-    render_classes = [TemplateHTMLRenderer]
-    template_name = 'reddit_app/profile.html'
 
     def get(self, request):
         user = request.user
         serializer = CustomUserSerializer(user)
-        likeS = LikeSerializer()
-        likes = likeS.get_user_likes(user.id)
-        context = {
-            'serializer': serializer.data,
-            'likes': likes
-            }
-        return render(request, 'reddit_app/profile.html', context)
+        return Response(serializer.data)
     
     def post(self, request):
         if request.user.is_authenticated:

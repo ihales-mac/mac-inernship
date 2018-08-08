@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from . views import index, SignUp, MakePost, PostView, ProfileView
+from . views import Index, SignUp, MakePost, PostView, ProfileView, LogIn
 from django.contrib.auth.views import LoginView, LogoutView
 from reddit_clone import settings
 from django.contrib.staticfiles.urls import static
@@ -27,10 +27,10 @@ from django.views.static import serve
 urlpatterns = [
     url(r'profile$', ProfileView.as_view(), name="reddit_profile"),
     url(r'post/(?P<pid>\d+)/$', PostView.as_view(), name="reddit_post"),
-    url(r'login$', LoginView.as_view(template_name="reddit_app/login.html"), 
-        name="reddit_login"),
+    url(r'login$', LogIn.as_view(), name="reddit_login"),
     url(r'logout$', LogoutView.as_view(), name="reddit_logout"),
     url(r'signup$', SignUp.as_view(), name="reddit_signup"),
     url(r'make_post$', MakePost.as_view(), name="reddit_make_post"),
-    url(r'^$', index, name="index"),
+    url(r'^$', Index.as_view(), name="index"),
+    #url(r'^$', index, name="index"),
 ]

@@ -2,6 +2,41 @@ from . models import *
 from django import forms
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+
+
+class TokenSerializer(serializers.HyperlinkedModelSerializer):
+    token = serializers.CharField()
+
+
+class LogInSerializer(serializers.HyperlinkedModelSerializer):
+    username = serializers.CharField()
+    password = serializers.CharField(
+        style={'input_type': 'password'},
+        )
+    token = serializers.CharField()
+    
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'password', 'token')
+
+    def validate(self, data):
+        us = data.pop('username')
+        pw = data.pop('password')
+        data['username'] = us
+        data['password'] = pw
+
+        try:
+            user = CustomUser.objects.get(username=us)
+            if user.check_password(pw):
+                Token.objects.get_or_create(user=user)
+                tk = Token.objects.get(user=user)
+                print(tk)
+                data['token'] = tk.key
+        except:
+            return data
+
+        return data
 
 
 class UserDetailsSerializer(serializers.HyperlinkedModelSerializer):
@@ -98,19 +133,15 @@ class MakePostSerializer(serializers.HyperlinkedModelSerializer):
         post = Post.objects.create(user=user, text=text, photo=photo)
 
         return post
-
-
-class PostSerializer(serializers.HyperlinkedModelSerializer):
-    def get_post(self, id):
-        post = Post.objects.get(id=id)
-        comments = Comment.objects.filter(post=post)
-        return (post, comments)
-
+    
 
 class CommSerializer(serializers.HyperlinkedModelSerializer):
+    username = serializers.CharField(
+        source="reddit_app.UserDetails.username")
+
     class Meta:
         model = Comment
-        fields = ('text',)
+        fields = ('text', 'username')
 
     def create(self, validated_data, user, post):
         user = user
@@ -123,6 +154,12 @@ class CommSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    username = serializers.CharField(
+        source="reddit_app.UserDetails.username")
+
+    class Meta:
+        model = Like
+        fields = ('username',)
 
     def get_post_likes(self, pid):
         post = Post.objects.get(id=pid)
@@ -148,3 +185,35 @@ class LikeSerializer(serializers.HyperlinkedModelSerializer):
         except:
             like = Like.objects.create(post=post, user=user)
         return like
+
+
+class PostSerializer(serializers.HyperlinkedModelSerializer):
+    comments = CommSerializer(many=True)
+    likes = LikeSerializer(many=True)
+    username = serializers.CharField(
+        source="reddit_app.UserDetails.username")
+
+    class Meta:
+        model = Post
+        fields = ('text', 'photo', 'comments', 'likes', 'username')
+
+    def get_post(self, id):
+        post = Post.objects.get(id=id)
+        comments = Comment.objects.filter(post=post)
+        return (post, comments)
+
+
+class IndexSerializer(serializers.HyperlinkedModelSerializer):
+    likes = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Post
+        fields = ('text', 'photo', 'likes', 'username')
+
+    def get_likes(self, obj):
+        likes_list = Like.objects.filter(post=obj)
+        return len(likes_list)
+
+    def get_username(self, obj):
+        return obj.user.username
