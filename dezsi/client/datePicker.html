@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Date Picker</title>
+    <style>
+
+        td {
+            background-color:white;
+
+
+        }
+        .dateBase {
+            background-color:rgb(185, 179, 179);
+            display:table;
+            height:150px;
+            width:150px;
+
+        }
+        .arrow {
+            width: 0; 
+            height: 0; 
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            
+            position: absolute;
+        }
+
+        .arrow-right {
+            border-left: 8px solid #000;
+            right: 0;
+        }
+
+        .arrow-left {
+            border-right: 8px solid #000; 
+            left: 0;
+        }
+
+        .container {
+        
+            position: relative;
+            font-weight: bold;
+            font-size:20px;
+            width: 10em;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .calElem {
+            font-weight: bold;
+            font-size:18px;
+        
+
+
+        }
+
+        
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+    
+    <script>
+       
+
+    $( document ).ready(function() {
+    random_identifier = Math.floor(Date.now() + Math.random());
+
+    function daysInMonth(iMonth, iYear){
+        return new Date(iYear, iMonth+1, 0).getDate();
+    }
+
+  
+    (function setUpInitial(){
+
+
+
+    })
+    function setDate(currentYear, currentMonth){
+        $('#dayTab012345 tbody').html('')
+        var firstDay =new Date(currentYear, currentMonth, 1).getDay();
+        $('#dayTab012345 tbody').append($('<tr>'))
+
+        if (firstDay != 6)
+            for (var i = 0; i < firstDay; i++)
+                $('#dayTab012345 tbody tr:last').append($('<td>').html("&nbsp"))
+
+    
+        
+        dim = daysInMonth(currentMonth, currentYear)
+        current= 1;
+        
+        while (current <= dim){ 
+            var count = $("#dayTab012345 tbody tr:last > td").length;
+            console.log(count);
+            while ((count !== 7) && (current <= dim)){
+                $('#dayTab012345 tbody tr:last').append($('<td>').html(current))
+                count++;
+                current++;
+            }
+        
+            if ((count == 7)&&(current <= dim))
+                $('#dayTab012345 tbody').append($('<tr>'))
+
+        }
+        while (count != 7){
+            $('#dayTab012345 tbody tr:last').append($('<td>').html("&nbsp"))
+            count++;
+        }
+        }
+    //called
+    (function setUpDateElements(){
+        var date = new Date()
+
+         currentYear = date.getFullYear();
+         currentMonth =date.getMonth();
+
+        var month = new Array();
+        var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        $("#selectElementId012345").change(function() {
+            currentYear = $( "#selectElementId012345 option:selected" ).text();
+            currentYear = parseInt(currentYear)
+            console.log(currentYear)
+            setDate(currentYear, currentMonth)
+
+        })
+
+        $( ".header-label" ).html(month[currentMonth])
+
+        $(".arrow-left").click(function() {
+            currentMonth -=1;
+            $( ".header-label" ).html(month[currentMonth])
+            setDate(currentYear, currentMonth)
+        })
+
+        $(".arrow-right").click(function() {
+            currentMonth +=1;
+            $( ".header-label" ).html(month[currentMonth])
+            setDate(currentYear, currentMonth)
+        })
+
+        setDate(currentYear, currentMonth)
+    
+    })();
+
+
+    
+    (function createListOfYears(){
+        var min = 1900,
+            max = 2020,
+            select = document.getElementById('selectElementId012345');
+
+        for (var i = min; i<=max; i++){
+            var opt = document.createElement('option');
+            opt.value = i;
+            opt.innerHTML = i;
+            select.appendChild(opt);
+        }
+
+        select.value = new Date().getFullYear();
+    })();
+
+    (function setUpBaseElements(){
+
+    id = 'datePickerElement'+random_identifier
+    $(document.body).on('datePickerEvent', '.datePickerElement',  datePickerEventHandler );
+    
+    $( ".datePickerInput" ).click(function() {
+        if (document.getElementById(id))
+            return
+        var $newDiv = $("<div/>")
+        .attr("class", "dateBase")
+        .attr("id", id)            
+
+        $(this).after($newDiv);
+
+        triggerDatePicker( id );
+        
+    })
+    })();
+    
+    function triggerDatePicker(id){
+        $("#"+id).trigger("datePickerEvent")
+    }
+
+    function datePickerEventHandler(event){
+        $('#'+event.target.id ).addClass('dateBase');
+
+        var $newDiv = $("<div/>").attr("class", "header-container")         
+        $('#'+event.target.id ).after($newDiv);
+
+
+        $('#'+event.target.id ).addClass('dateBase');
+        $("#"+event.target.id).addClass('header-container')
+        $("#"+event.target.id).addClass('header-container')
+    }
+    
+    })
+    </script>
+    
+   
+</head>
+<body>
+    <form  action="" action="post">
+
+        <input type="text" name="date" class="datePickerInput">
+        <button type="submit" >Submit</button>
+
+        <hr>
+        TEST
+        <hr>
+
+
+        <div  class = "dateBase">
+     
+          
+            <div class="header container">
+                <select id="selectElementId012345"></select>
+                <a class="arrow arrow-left" role="button"></a>
+                <span class="header-label"></span>
+                <a class="arrow arrow-right" role="button"></a>
+            </div> 
+            
+        
+            <hr>
+         
+            <div class="calElem dayCal">
+                <table class='dayTab' id="dayTab012345" style="width:100%">
+                        <thead>
+                            <tr>
+                            <th>Su</th>
+                            <th>Mo</th>
+                            <th>Tu</th> 
+                            <th>We</th>
+                            <th>Th</th>
+                            <th>Fr</th>
+                            <th>Sa</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        </table>
+
+
+            </div>
+        </div>
+
+    </form>
+    
+    
+</body>
+</html>
