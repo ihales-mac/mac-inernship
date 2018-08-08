@@ -37,6 +37,9 @@ class Like(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='likes', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = (('owner', 'post',),)
+
 
 class Comment(models.Model):
     text = models.TextField()

@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.http import Http404
 from django.shortcuts import render
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -102,6 +103,7 @@ class UserLoginView(APIView):
             return Response({'username': username, "token": token}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+
 # Version 2
 # class LoginView(APIView):
 #
@@ -157,7 +159,10 @@ class GiveLikeView(APIView):
     def post(self, request, pk, format=None):
         post = self.get_object(pk)
         serializer = GiveLikeSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user, post=post)
+        if serializer.is_valid(raise_exception=True):
+            try:
+                serializer.save(owner=request.user, post=post)
+            except Exception as e:
+                raise ValidationError({"status_code": 405, "details": e})
             return Response(serializer.data, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
