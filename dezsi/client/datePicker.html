@@ -138,12 +138,7 @@
         var month = new Array();
         var month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         
-        //remove widget from dom if clicked outside
-        $('body').on('click',function(event){
-            if($(event.target).parents('#datePickerElement'+id).length == 0){
-                $('#datePickerElement'+id).remove();
-        }
-        });
+
 
         $('#selectElementId'+id).change(function() {
             currentYear = $( '#selectElementId'+id+' option:selected' ).text();
@@ -218,7 +213,8 @@
 
         $('#datePickerElement'+id ).addClass('dateBase');
         $('#datePickerElement'+id ).attr('tabindex',-1); 
-        $('#datePickerElement'+id ).html(        
+        $('#datePickerElement'+id ).html(      
+            "<div class = 'child'>"  +
            "<div class='header '>"+
             "<div class='container'>"+
                 "<select class='dateSelector' id='selectElementId"+id+"'></select>"+
@@ -250,7 +246,7 @@
                         "</tbody>"+
                         "</table>"+
 
-
+            "</div>"+                            
             "</div>")
             createListOfYears(id)
             setUpDateElements(id)
@@ -260,7 +256,7 @@
     
     //main
     $(document).ready(function(){
-    $("body").on('click','.datePickerInput', function () {
+    $("body").on('mouseenter','.datePickerInput', function () {
   
   var random_identifier = Math.floor(Date.now() + Math.random());
   id = 'datePickerElement'+random_identifier
@@ -274,10 +270,12 @@
 
  // triggerDatePicker( id );
   datePickerEventHandler(random_identifier)
+    })
 
-
-
-})
+    //remove widget from dom if hovered outside
+    $('body').on('mouseleave','.dateBase', function () {
+        $('.dateBase').remove()
+    })
 }
 )
     </script>
@@ -285,14 +283,17 @@
    
 </head>
 <body>
-    <form action=""  name="input1" action='post'>
-        <input type='text' class='datePickerInput'>
-        <button type='submit'>Submit</button>
-    </form>
-    <form  action="" name="input2" action='post'>
-        <input type='text' class='datePickerInput'>
-        <button type='submit' >Submit</button>
-    </form>
+    <!--
+        you have to hover inside the input to make the widget appear
+        you have to hover outside to make it disappear
+        result: de value of the input will be changed to the selected date in yyyy/mm/dd format
+
+
+    -->
+    From:<input type='text' class='datePickerInput'>
+    To:<input type='text' class='datePickerInput'>
+
+   
         
 </body>
 </html>
