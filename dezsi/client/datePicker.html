@@ -92,7 +92,7 @@
         var firstDay =new Date(currentYear, currentMonth, 1).getDay();
         $('#dayTab'+id+' tbody').append($('<tr>'))
 
-        if (firstDay != 6)
+        if (firstDay != 0)
             for (var i = 0; i < firstDay; i++){
                 $('#dayTab'+id+' tbody tr:last').append($('<td>').html('&nbsp'))
                 $('#dayTab'+id+' tbody tr:last td:last ').css("border"," 2px solid white")
