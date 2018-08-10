@@ -10,7 +10,8 @@
     .dateSelector{
       
         width:70px;
-        height: 25px;
+        height: 36px;
+        line-height: 60px;
         text-align:center;
         font-size:16px;
         margin-right:8px;
@@ -150,15 +151,31 @@
         $( '#header-label'+id ).html(month[currentMonth])
 
         $('.arrow-left').click(function() {
-            currentMonth -=1;
-            $( '#header-label'+id ).html(month[currentMonth])
-            setDate(currentYear, currentMonth, id)
+            if (currentMonth == 0){
+                currentYear -= 1
+                currentMonth = 11
+                $( '#selectElementId'+id+' option:selected' ).text(currentYear);
+                $( '#header-label'+id ).html(month[currentMonth])
+                setDate(currentYear, currentMonth,id)    
+            }else{
+                currentMonth -=1;
+                $( '#header-label'+id ).html(month[currentMonth])
+                setDate(currentYear, currentMonth, id)
+            }
         })
 
         $('.arrow-right').click(function() {
-            currentMonth +=1;
-            $( '#header-label'+id ).html(month[currentMonth])
-            setDate(currentYear, currentMonth, id)
+            if (currentMonth == 11){
+                currentYear += 1
+                currentMonth = 0
+                $( '#selectElementId'+id+' option:selected' ).text(currentYear);
+                $( '#header-label'+id ).html(month[currentMonth])
+                setDate(currentYear, currentMonth,id)
+            }else{
+                currentMonth +=1;
+                $( '#header-label'+id ).html(month[currentMonth])
+                setDate(currentYear, currentMonth, id)
+            }
         })
        
         $("#dayTab"+id).on("click", "td", function() {
@@ -175,7 +192,8 @@
             $(this).css( 'border-color', ' #0066ff')
           
             var res= $(this).parents('.dateBase').get(0).id;
-            var res2 = $("#"+res).prev('input').val(currentYear+"/"+currentMonth+"/"+$(this).html())
+            month = currentMonth+1
+            var res2 = $("#"+res).prev('input').val(currentYear+"/"+month+"/"+$(this).html())
 
      
         });
@@ -217,7 +235,7 @@
             "<div class = 'child'>"  +
            "<div class='header '>"+
             "<div class='container'>"+
-                "<select class='dateSelector' id='selectElementId"+id+"'></select>"+
+                "<select class='dateSelector' onfocus='this.size=10;' onblur='this.size=1;' onchange='this.size=1; this.blur();' id='selectElementId"+id+"'></select>"+
                 "<a class='arrow arrow-left' id=arrow-left"+id+" role='button'></a>"+
                 "<span class='header-label' id='header-label"+id+"'></span>"+
                 "<a class='arrow arrow-right' id=arrow-right"+id+" role='button'></a>"+
