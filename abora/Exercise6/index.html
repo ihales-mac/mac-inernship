@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Date Picker</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+</head>
+
+<body>
+    <br>
+    <div class='container'>
+        <div class="input-container">
+            <input type="text" id="date-input">
+            <i id="calendar-icon" class="fa fa-calendar" aria-hidden="true"></i>
+        </div>
+
+        <div class="card" id="calendar-table" style="width: 25rem;">
+            <div class="card-body">
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-right"></i>
+               
+                <div class="card-title" id="month-year-title">
+                    <!-- Insert year and month -->
+                </div>
+                <table id="calendar-table2">
+                    <thead>
+                        <tr>
+                            <th>Su</th>
+                            <th>Mo</th>
+                            <th>Tu</th>
+                            <th>We</th>
+                            <th>Th</th>
+                            <th>Fr</th>
+                            <th>Sa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-table-3">
+                        <!-- Day of month to be added -->
+                    </tbody>
+                </table>
+                <br>
+                <select id="select-month">
+                    <option value="0">Jan</option>
+                    <option value="1">Feb</option>
+                    <option value="2">Mar</option>
+                    <option value="3">Apr</option>
+                    <option value="4">May</option>
+                    <option value="5">Jun</option>
+                    <option value="6">Jul</option>
+                    <option value="7">Aug</option>
+                    <option value="8">Sep</option>
+                    <option value="9">Oct</option>
+                    <option value="10">Nov</option>
+                    <option value="11">Dec</option>
+                </select>
+                <select id="select-year">
+
+                </select>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+
+    $(document).ready(function () {
+        var selectedDates = [];
+        let today = new Date();
+        let currentYear = today.getFullYear();
+        // nr of month in a Year starting from 0
+        let currentMonth = today.getMonth();
+        let currentDay = today.getDate();
+
+        loadCalendar();
+        $('#select-year').on('change', resetCalendar);
+        $('#select-month').on('change', resetCalendar);
+
+        $("#calendar-icon").on("click", function () {
+            let showCalendar = document.getElementById("calendar-table");
+            if (showCalendar.style.display === 'none') {
+                showCalendar.style.display = 'block';
+            } else {
+                showCalendar.style.display = 'none';
+            }
+        });
+
+        $(".fa-arrow-left").on("click",function(){
+            let selectedYear = $('#select-year').val();
+            let selectedMonth = $("#select-month").val();
+            let new_month = selectedMonth-1;
+            let new_year = selectedYear;
+            if(new_month < 0){
+                new_month += 12;
+                console.log("negative_month" + new_month);                
+                new_year--;
+            }
+            loadNewCalendar(new_year,new_month);
+            setSelectors(new_month,new_year);
+        });
+
+        $(".fa-arrow-right").on("click",function(){
+            let selectedYear = $('#select-year').val();
+            let selectedMonth = $("#select-month").val();
+            let new_month = +selectedMonth + 1;
+            let new_year = +selectedYear;
+            console.log(new_month);
+            console.log(new_year);
+            if(new_month > 11){
+                new_month = 0;
+                new_year++;
+            }
+            loadNewCalendar(new_year,new_month);
+            setSelectors(new_month,new_year);
+        });
+
+
+        function resetCalendar() {
+            // console.log(this.value);
+            let selectedYear = $('#select-year').val();
+            let selectedMonth = $("#select-month").val();
+            loadNewCalendar(selectedYear, selectedMonth);
+        }
+
+        function loadNewCalendar(year, month) {
+            //erase the old one
+            $("#calendar-table-3").empty();
+            let currentDay = new Date().getDate();
+            // Maximum number of days in a month
+            let maxDay = getDayInAMonth(year, month + 1);
+            //Compute when is first day of a month where 0 is Sunday
+            let firstDayOfMonth = getFirstDayOfMonth(year, month);
+            fillCalendar(year, month, currentDay, maxDay, firstDayOfMonth);
+        }
+
+        function loadCalendar() {
+            // Maximum number of days in a month
+            let maxDay = getDayInAMonth(currentYear, currentMonth + 1);
+            //Compute when is first day of a month where 0 is Sunday
+            let firstDayOfMonth = getFirstDayOfMonth(currentYear, currentMonth);
+            //Help change background only for todays date
+            fillCalendar(currentYear, currentMonth, currentDay, maxDay, firstDayOfMonth);
+            setSelectors(currentMonth, currentYear);
+        }
+
+        function setSelectors(month, year) {
+            //load the years
+            yearSelector = document.getElementById('select-year');
+            for (let i = 2000; i <= year; i++) {
+                let opt = document.createElement('option');
+                var attr = document.createAttribute('value');
+                attr.value = i;
+                opt.setAttributeNode(attr);
+                opt.innerHTML = i;
+                yearSelector.append(opt);
+            }
+            //remove the attribute selected from prev
+            var prevSelected = $('option[selected]');
+            for(let i = 0;i < prevSelected.length;i++){
+                prevSelected[i].removeAttribute("selected");
+            }
+
+            //make selector show the current year
+            let attr2 = document.createAttribute('selected');
+            initYear = $(`#select-year option[value="${year}"]`);
+            initYear[0].setAttributeNode(attr2);
+
+            //make selector show current month
+            let attr3 = document.createAttribute('selected');
+            initMonth = $(`#select-month option[value="${month}"]`);
+            initMonth[0].setAttributeNode(attr3);
+        }
+
+
+
+        // Utils function
+
+        function showDate() {
+            let day = this.innerHTML;
+            //change old selection background to white
+            for(let i = 0;i<selectedDates.length;i++){
+                selectedDates[i].style.backgroundColor = 'white';
+                selectedDates[i].style.color = 'black';
+            }
+            selectedDates.push(this);
+            //change background to the current selected date
+            this.style.backgroundColor = 'red';
+            this.style.color = 'white';
+            let selectedYear = $('#select-year').val();
+            let selectedMonth = $("#select-month").val();
+            let formatedDate = day + "." + selectedMonth + "." + selectedYear;
+            let dateInput = document.getElementById("date-input");
+            dateInput.value = formatedDate;
+        }
+
+        function fillCalendar(year, month, day, maxDay, firstDay) {
+            // Generate header
+            header = document.getElementById("month-year-title");
+            header.innerHTML = getMonthByName(month) + ' ' + year;
+
+            let nr_rows = getCalendarRows(firstDay, maxDay);
+            //Generate first row
+            var table = document.getElementById("calendar-table-3");
+            let row = document.createElement("tr");
+            for (let i = 0; i < 7; i++) {
+                let td = document.createElement('td');
+                if (i < firstDay) {
+                    row.append(td);
+                } else {
+                    //change background if td is today's date
+                    if(i == day-1 && currentYear == year && currentMonth == month){
+                        td.style.backgroundColor = '#00bfff';
+                        td.style.color = 'white';
+                    }
+                    td.innerHTML = i - firstDay + 1
+                    td.onclick = showDate;
+                    row.append(td);
+                }
+            }
+            table.append(row);
+
+            var dayCount = 7 - firstDay + 1;
+            //generate intermediate lines
+            for (let i = 0; i < (nr_rows - 2); i++) {
+                let row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) {
+                    let td = document.createElement('td');
+                    //change background if td is today's date
+                    if(dayCount == day && currentYear == year && currentMonth == month){
+                        td.style.backgroundColor = '#00bfff';
+                        td.style.color = 'white';
+                    }
+                    td.innerHTML = dayCount++;
+                    td.onclick = showDate;
+                    row.append(td);
+                }
+                table.append(row);
+            }
+
+            //generate last row
+            let last_row = document.createElement('tr');
+            for (let i = 0; i < 7; i++) {
+                let td = document.createElement('td');
+                if (dayCount <= maxDay) {
+                    //change background if td is today's date
+                    if(dayCount == day && currentYear == year && currentMonth == month){
+                        td.style.backgroundColor = '#00bfff';
+                        td.style.color = 'white';
+                    }
+                    td.innerHTML = dayCount++;
+                    td.onclick = showDate;
+                }
+                last_row.append(td);
+            }
+            table.append(last_row);
+
+            //change mouse pointer for the cell that are not empty
+            let emptyTds = $("td").filter(function(){
+                return ($(this).text().trim() != "")
+            });
+            emptyTds.each(function(){
+                this.style.cursor = "pointer";
+            });
+            
+        }
+
+
+        function getCalendarRows(firstDay, maxDay) {
+            return Math.ceil((firstDay + maxDay) / 7)
+        }
+
+        function getDayInAMonth(year, month) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        function getMonthByName(month) {
+            return monthNames[month];
+        }
+
+        function getFirstDayOfMonth(year, month) {
+            return new Date(year, month, 1).getDay();
+        }
+    });
+</script>
+
+</html>
