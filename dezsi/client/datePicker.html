@@ -257,7 +257,8 @@
     //main
     $(document).ready(function(){
     $("body").on('mouseenter','.datePickerInput', function () {
-  
+  if ($('.dateBase').length != 0)
+	return
   var random_identifier = Math.floor(Date.now() + Math.random());
   id = 'datePickerElement'+random_identifier
   if (document.getElementById(id))
