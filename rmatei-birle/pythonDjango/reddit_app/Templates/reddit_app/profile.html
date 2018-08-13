@@ -1,0 +1,75 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+
+<div class="w3-row">
+    <div class="w3-card-4 w3-padding-16 w3-white" style="width:70%; height:100%" align="left">
+        <div class="w3-card-4 w3-margin w3-padding-16 w3-white" style="width:95%;">
+            <div class="w3-container">
+                <form action="{% url 'reddit_profile' %}" method="POST" enctype="multipart/form-data">
+            
+                    <input type='hidden' name='csrfmiddlewaretoken' value='YcT5psbEJLYL0R8thq8CZwPU6FTHhKSOf80SCckSPnt4dmuuYHz5FNqzplitCCzg' />
+                    <div class="form-group  w3-padding-small">
+                        <label >Username</label>
+                        <input name="username" class="form-control" type="text"  value={{serializer.username}} readonly onfocus="this.removeAttribute('readonly');">
+                        <br>
+                        <span class="help-block">Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</span>
+                    </div>
+                    <div class="form-group  w3-padding-small">
+                        <label >New password</label>
+                        <input name="password" class="form-control" readonly onfocus="this.removeAttribute('readonly');">
+                    </div>
+                    <fieldset>
+                        <legend >
+                            User details
+                        </legend>
+                        <div class="form-group w3-padding-small">
+                            <label >Firstname</label>
+                            <input name="user_details.firstname" class="form-control" type="text"  value={{serializer.user_details.firstname}} >
+                        </div>
+                        <div class="form-group  w3-padding-small">
+                            <label >Lastname</label>
+                            <input name="user_details.lastname" class="form-control" type="text"  value={{serializer.user_details.lastname}} >
+                        </div>
+                        <div class="form-group  w3-padding-small">
+                            <label >Avatar</label>
+                            <input name="user_details.avatar"  type="file" >
+                        </div>
+                    </fieldset>
+                    {% csrf_token %}
+                    <br>
+                    <input type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+    
+        <div class="w3-card-4 w3-margin w3-padding-16 w3-white" style="width:95%; margin:auto 0px;">
+            <div class="w3-container">
+                Liked posts:
+                <br>
+                
+                <div class="wrapper">
+                    {% for like in likes %}
+                        <div class="box">
+                            <div class="w3-card-4 w3-padding-16 w3-white" >
+                                <div class="w3-container" style="word-wrap: break-word;">
+                                    <a href="post/{{like.post.id}}" >{{ like.post.text }}</a>
+                                    {% if like.post.photo %}
+                                        <br>
+                                        <img src= "{{ MEDIA_URL }}/{{ like.post.photo.name }}" class="w3-round" style="width:100%;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

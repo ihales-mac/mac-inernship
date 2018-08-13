@@ -1,0 +1,63 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<script>
+function give_like(id){
+    console.log(id);
+    var token = '{{ csrf_token }}';
+    $.ajax({
+        url: "/post/" + id + "/",
+        type: 'PUT',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", token);                },           
+        data: {
+            csrfmiddlewaretoken: token                },
+        success: setTimeout(function(){
+            window.location.reload()
+        }, 500)
+    });
+}
+</script>
+
+<div class="w3-row ">
+    {% if data %}
+        {% for post, like, comments in data %}
+            <div class="w3-card-4 w3-margin w3-white" style="width:70%; margin:auto 0px;" align="left">
+                <div class="w3-container">
+                    <h3><b>{{post.user.username}}</b></h3>
+                    <h4>
+                        <span class="w3-opacity">{{ post.created }}</span>
+                    </h4>
+                    <h5>
+                        <a href="post/{{post.id}}">{{ post.text }}</a>
+                    </h5>
+                    {% if post.photo %}
+                        <img src="{{ MEDIA_URL }}/{{ post.photo.name }}" style="width:100%" class="w3-round">
+                    {% endif %}
+                    <br>
+                    <h4>Likes: {{like}}</h4>
+                    <form>
+                        {% if user.is_authenticated %}
+                            <button id={{post.id}} type="submit" class="w3-button w3-light-gray">Like</button>
+                            <script>
+                                $("#" + '{{post.id}}').click(function(){
+                                    var id = '{{post.id}}'
+                                    give_like(id)
+                                })
+                            </script>
+                        {%endif%}
+                    </form>
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No posts are available.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
