@@ -1,0 +1,40 @@
+
+{% for elem in elems %}
+
+<div class="card" style="width: 25rem;">
+    <h5 class="card-title"> {{ elem.title }}</h5>
+    <h6 class="card-subtitle mb-2 elem-muted"> uploaded by: {{ elem.user }}</h6>
+    <div class="card-body">
+        {% if elem.class_name == 'texts'%}
+        {{ elem.text }}
+        {%endif%}
+        {% if elem.class_name == 'links'%}
+         Link:
+        <a href="{{ elem.url }} ">{{ elem.url }} </a>
+        {%endif%}
+        {% if elem.class_name == 'files'%}
+        <img width=300px height=200px style="border-style:solid" src="/media/{{ elem.file }}">
+        {%endif%}
+
+    </div>
+    <li class="list-group-item">likes: {{elem.nr_likes}}</li>
+
+    {% if elem.class_name == 'texts'%}
+         <a href="/post/texts/{{elem.id}}" class="btn btn-primary" style="">View post</a>
+        {%endif%}
+        {% if elem.class_name == 'links'%}
+       <a href="/post/links/{{elem.id}}" class="btn btn-primary" style="">View post</a>
+        {%endif%}
+        {% if elem.class_name == 'files'%}
+         <a href="/post/files/{{elem.id}}" class="btn btn-primary" style="">View post</a>
+        {%endif%}
+
+    <div class="card-footer elem-muted">
+    created: {{elem.created_date}}
+    </div>
+
+</div>
+<hr>
+
+
+{% endfor %}

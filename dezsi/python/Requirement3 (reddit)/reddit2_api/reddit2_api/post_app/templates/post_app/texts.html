@@ -1,0 +1,31 @@
+{% extends 'post_app/base.html' %}
+
+{% block body %}
+
+{% for text in texts %}
+
+
+<div class="card" style="width: 25rem;">
+    <h5 class="card-title"> {{ text.title }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted"> uploaded by: {{ text.user }}</h6>
+    <div class="card-body">
+        {{ text.text }}
+    </div>
+    <li class="list-group-item">likes: {{text.nr_likes}}</li>
+
+    <a href="/post/texts/{{text.id}}" class="btn btn-primary" style="">View post</a>
+    <div class="card-footer text-muted">
+    created: {{text.created_date}}
+    </div>
+
+</div>
+<hr>
+
+
+
+
+    {% endfor %}
+
+
+
+{% endblock %}
