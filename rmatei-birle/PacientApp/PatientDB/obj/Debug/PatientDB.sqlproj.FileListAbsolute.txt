@@ -1,0 +1,6 @@
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientDB\bin\Debug\PatientDB.dacpac
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientDB\bin\Debug\PatientDB.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientDB\bin\Debug\PatientDB.pdb
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientDB\obj\Debug\PatientDB.sqlprojAssemblyReference.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientDB\obj\Debug\PatientDB.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientDB\obj\Debug\PatientDB.pdb

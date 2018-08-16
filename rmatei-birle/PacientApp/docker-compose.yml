@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pacientapp:
+    image: ${DOCKER_REGISTRY}pacientapp
+    build:
+      context: .\PacientApp
+      dockerfile: Dockerfile

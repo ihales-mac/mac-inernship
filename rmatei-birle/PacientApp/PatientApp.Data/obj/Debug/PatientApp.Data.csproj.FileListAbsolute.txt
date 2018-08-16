@@ -1,0 +1,14 @@
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\PatientApp.Data.dll.config
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\PatientApp.Data.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\PatientApp.Data.pdb
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\EntityFramework.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\PatientDB.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\PatientDB.pdb
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\EntityFramework.xml
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\obj\Debug\PatientApp.Data.csprojAssemblyReference.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\obj\Debug\PatientApp.Data.csproj.CoreCompileInputs.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\obj\Debug\PatientApp.Data.csproj.CopyComplete
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\obj\Debug\PatientApp.Data.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Data\obj\Debug\PatientApp.Data.pdb

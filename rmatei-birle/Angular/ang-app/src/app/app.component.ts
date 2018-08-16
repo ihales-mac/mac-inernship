@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'ang-app';
+  heading1 = 'Look, it my first heading!'
 }
