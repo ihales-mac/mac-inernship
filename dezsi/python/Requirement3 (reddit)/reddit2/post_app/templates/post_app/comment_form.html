@@ -1,0 +1,12 @@
+
+<form action="{% url 'add_comment' post_id type %}" method = "post" id="post_form" >
+{% csrf_token %}
+    {%if comment_form.errors %}
+    <p>Please fill in the required fields!</p>
+    {% endif %}
+
+ {{ comment_form  }}
+  <input type="submit" value="Submit">
+
+</form>
+

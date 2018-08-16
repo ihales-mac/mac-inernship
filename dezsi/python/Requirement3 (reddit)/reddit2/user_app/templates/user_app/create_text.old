@@ -1,0 +1,18 @@
+  Title:<br>
+  <input type="text" name="title"><br>
+  Content:<br>
+<textarea id="contentText" class="text" cols="86" rows ="20" name="contentText" form="post_form"></textarea>
+  <br>
+
+   <div>
+    <input type="checkbox" id="original" name="original_content" value="original_content">
+    <label for="original">Original content</label>
+  </div>
+  <div>
+    <input type="checkbox" id="nsfw" name="nsfw" value="nsfw">
+    <label for="original">NSFW</label>
+  </div>
+  <div>
+    <input type="checkbox" id="spoiler" name="spoiler" value="spoiler">
+    <label for="spoiler">Spoiler</label>
+  </div>

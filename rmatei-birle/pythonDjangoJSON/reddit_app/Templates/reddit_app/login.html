@@ -1,0 +1,26 @@
+{% extends "reddit_app/base.html" %}
+{% block extra-head %}
+{{ block.super }}
+{% endblock %}
+{% load rest_framework %}
+
+{% block content %}
+<div class="w3-card-4 w3-margin w3-padding-16 w3-white" style="width:20%;" align='left'>
+    <div class="w3-container">
+        <form role="form" action="{% url 'reddit_login' %}" method="post">
+            {% csrf_token %}
+            <p>Please login</p>
+            <label for="id_username">Username:</label>
+            <br>
+            <input type="text" name="username" autofocus maxlength="254" required id="id_username" />
+            <br>
+            <label for="id_password">Password:</label>
+            <br>
+            <input type="password" name="password" required id="id_password" />
+            <br>
+            <br>
+            <button type="submit">Sign in</button>
+        </form>
+    </div>
+</div>  
+{%endblock%}

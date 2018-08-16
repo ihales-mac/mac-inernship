@@ -1,0 +1,12 @@
+{% extends 'base2.html' %}
+{% load rest_framework %}
+
+{% block content%}
+    <form role="form" action="{% url 'reddit_login' %}" method="post">
+        {% csrf_token %}
+        <p>Please login</p>
+        {{ form }}
+        <button type="submit">Sign in</button>
+    </form>
+    <p>Create an account <a href="{% url 'reddit_sign_up' %}" >Register</a></p>
+{% endblock %}

@@ -1,0 +1,17 @@
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\obj\Release\HashDehash.csprojAssemblyReference.cache
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\obj\Release\HashDehash.csproj.CoreCompileInputs.cache
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\HashDehash.exe.config
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\HashDehash.exe
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\HashDehash.pdb
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\EntityFramework.dll
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\EntityFramework.SqlServer.dll
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\System.Data.SQLite.dll
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\System.Data.SQLite.EF6.dll
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\System.Data.SQLite.Linq.dll
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\EntityFramework.xml
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\EntityFramework.SqlServer.xml
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\System.Data.SQLite.xml
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\bin\Release\System.Data.SQLite.dll.config
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\obj\Release\HashDehash.csproj.CopyComplete
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\obj\Release\HashDehash.exe
+c:\Users\Macadamian\source\repos\HashDehash\HashDehash\obj\Release\HashDehash.pdb

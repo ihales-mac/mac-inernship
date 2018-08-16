@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+
+    <ul>
+        <li><a class="active" href="/">Home</a></li>
+        <li><a href="{% url 'personal_data' %}">Profile</a></li>
+        <li><a href="{% url 'create_post' %}">Create Post</a></li>
+         <li><a href="">My Posts</a>
+        <li><a href="{% url 'logout_view' %}">Log Out</a> </li>
+        <li style="float:right"><a  style="background-color:#111">Logged in as {{request.user.username}}</a></li>
+
+    </ul>
+
+
+{% block body %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends 'user_app/base.html' %}
+
+{% block body %}
+
+{% for text in texts %}
+<h2>{{text.id}}</h2>
+<ul>
+
+    <li><h3 style="border-style: outset">Title: {{ text.title }} <br></h3></li><br>
+    <hr>
+    <li>uploaded by: {{ text.user }}</li><br>
+
+    <li>created at: {{ text.created_date }}</li><br>
+    <hr>
+    <li>Content: <textarea style = "height:200px; width:200px;" readonly>{{ text.text }}</textarea></li><br>
+
+    <li> Likes: {{ text.nr_likes}}</li><br>
+
+    <li><a href = "/post/texts/{{text.id}}">View post</a></li>
+
+</ul>
+
+
+
+
+
+    {% endfor %}
+
+
+
+{% endblock %}

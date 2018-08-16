@@ -1,0 +1,22 @@
+#calendar-table{
+    display: none;
+}
+
+td{
+    border-radius: 50% !important;
+    width: 50px !important;
+    height: 50px !important;
+    text-align: center;
+  }
+
+.fa-arrow-right{
+    float: right;
+}
+
+.fa-arrow-left, .fa-arrow-right{
+    margin-bottom:40px; 
+}
+
+.fas:hover{
+    cursor: pointer;
+}

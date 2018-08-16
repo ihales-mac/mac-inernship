@@ -1,0 +1,50 @@
+{% extends 'post_app/base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">Username</div>
+            <div class="panel-body">{{ poster.0.username}}</div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Picture</div>
+            <div class="panel-body"><img src="{{ details.0.avatar}}"></div>
+        </div>
+        {% if details.0.first_name != '' %}
+        <div class="panel panel-default">
+            <div class="panel-heading">First Name</div>
+            <div class="panel-body">{{ details.0.first_name}}</div>
+        </div>
+        {% endif %}
+         {% if details.0.last_name != '' %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Last Name</div>
+            <div class="panel-body">{{ details.0.last_name}}</div>
+        </div>
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Email</div>
+            <div class="panel-body">{{ poster.0.email}}</div>
+        </div>
+        {% if details.0.gender != '' %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Gender</div>
+            <div class="panel-body">{{ details.0.gender}}</div>
+        </div>
+        {% endif %}
+        {% if details.0.date_of_birth != '1900-01-01' %}
+        <div class="panel panel-default">
+            <div class="panel-heading">Date of Birth</div>
+            <div class="panel-body">{{ details.0.date_of_birth}}</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+</html>

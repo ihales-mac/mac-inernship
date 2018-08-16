@@ -1,0 +1,17 @@
+{% extends 'base2.html' %}
+{% load rest_framework %}
+
+{% block content%}
+<br>
+<br>
+
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" src="{{ serializer.avatar }}">
+    <div class="card-body">
+        <h5 class="card-title">{{serializer.user}}</h5>
+        <p class="card-text">First Name : {{serializer.first_name}}</p>
+        <p class="card-text">Last Name : {{serializer.last_name}}</p>
+        <p class="card-text">Email : {{serializer.email}}</p>
+    </div>
+</div>
+{% endblock %}

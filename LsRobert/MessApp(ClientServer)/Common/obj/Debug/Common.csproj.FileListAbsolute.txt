@@ -1,0 +1,14 @@
+D:\LsRobert\MessApp(ClientServer)\Common\bin\Debug\Common.exe.config
+D:\LsRobert\MessApp(ClientServer)\Common\bin\Debug\Common.exe
+D:\LsRobert\MessApp(ClientServer)\Common\bin\Debug\Common.pdb
+D:\LsRobert\MessApp(ClientServer)\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+D:\LsRobert\MessApp(ClientServer)\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+D:\LsRobert\MessApp(ClientServer)\Common\obj\Debug\Common.exe
+D:\LsRobert\MessApp(ClientServer)\Common\obj\Debug\Common.pdb
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\bin\Debug\Common.exe.config
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\bin\Debug\Common.exe
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\bin\Debug\Common.pdb
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\obj\Debug\Common.csprojAssemblyReference.cache
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\obj\Debug\Common.csproj.CoreCompileInputs.cache
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\obj\Debug\Common.exe
+C:\Users\Intern\Desktop\MessApp(ClientServer)\Common\obj\Debug\Common.pdb

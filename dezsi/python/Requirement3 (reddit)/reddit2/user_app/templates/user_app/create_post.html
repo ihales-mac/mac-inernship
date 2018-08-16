@@ -1,0 +1,33 @@
+{% extends 'user_app/base.html' %}
+
+
+{% block body %}
+
+
+<form  action="{% url 'create_post' %}" method='POST'>
+
+{% csrf_token %}
+    <fieldset>
+        <legend>Select a type of post:</legend>
+
+        <div>
+            <input type="radio" id="text" name="post" value="text"/>
+            <label for="text">Text</label>
+        </div>
+
+        <div>
+            <input type="radio" id="link" name="post" value="link" />
+            <label for="link">Link</label>
+        </div>
+
+        <div>
+            <input type="radio" id="file" name="post" value="file" />
+            <label for="file">Image/Video</label>
+        </div>
+
+    </fieldset>
+    <input type="submit" value="Select">
+</form>
+<div id="content"></div>
+
+{% endblock %}

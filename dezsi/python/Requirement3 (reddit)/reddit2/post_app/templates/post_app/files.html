@@ -1,0 +1,21 @@
+{% extends 'post_app/base.html' %}
+
+{% block body %}
+{% for file in files %}
+<div class="card" style="width: 25rem;">
+    <h5 class="card-title"> {{ file.title }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted"> uploaded by: {{ file.user }}</h6>
+    <div class="card-body">
+         <img width=300px height=200px style="border-style:solid" src="/media/{{ file.file }}">
+    </div>
+    <li class="list-group-item">likes: {{file.nr_likes}}</li>
+
+    <a href="/post/files/{{file.id}}" class="btn btn-primary" style="">View post</a>
+    <div class="card-footer text-muted">
+    created: {{file.created_date}}
+    </div>
+
+</div>
+<hr>
+{% endfor %}
+{% endblock %}
