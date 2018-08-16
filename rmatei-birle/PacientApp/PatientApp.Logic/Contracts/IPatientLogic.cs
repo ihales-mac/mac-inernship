@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PatientApp.Logic.Services
+namespace PatientApp.Logic.Contracts
 {
     public interface IPatientLogic
     {

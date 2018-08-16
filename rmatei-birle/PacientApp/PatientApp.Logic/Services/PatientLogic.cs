@@ -7,9 +7,9 @@ using PatientApp.Data.Models.Command;
 using PatientApp.Data.Models.Query;
 using PatientApp.Data.Contracts;
 
-namespace PatientApp.Logic.Contracts
+namespace PatientApp.Logic.Services
 {
-    public class PatientLogic : Services.IPatientLogic
+    public class PatientLogic : Contracts.IPatientLogic
     {
         IPatientRepo _pr;
 

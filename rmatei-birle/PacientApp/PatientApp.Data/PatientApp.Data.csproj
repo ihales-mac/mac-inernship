@@ -51,29 +51,11 @@
   <ItemGroup>
     <Compile Include="Contracts\IPatientRepo.cs" />
     <Compile Include="Mappers\PatientMapper.cs" />
+    <Compile Include="Model1.cs" />
     <Compile Include="Models\Command\PatientC.cs" />
     <Compile Include="Models\Query\PatientQ.cs" />
-    <Compile Include="Patient.cs">
-      <DependentUpon>PatientDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PatientDB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PatientDB.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PatientDB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PatientDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PatientDB.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PatientDB.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="PatientDetail.cs">
-      <DependentUpon>PatientDB.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Patient.cs" />
+    <Compile Include="PatientDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\PatientRepo.cs" />
   </ItemGroup>
@@ -84,29 +66,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="PatientDB.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>PatientDB.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
     <None Include="packages.config" />
-    <None Include="PatientDB.edmx.diagram">
-      <DependentUpon>PatientDB.edmx</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="PatientDB.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PatientDB.Context.cs</LastGenOutput>
-      <DependentUpon>PatientDB.edmx</DependentUpon>
-    </Content>
-    <Content Include="PatientDB.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PatientDB.edmx</DependentUpon>
-      <LastGenOutput>PatientDB.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

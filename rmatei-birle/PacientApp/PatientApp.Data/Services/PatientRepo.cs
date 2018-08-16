@@ -18,14 +18,12 @@ namespace PatientApp.Data.Services
             var pt = _mapper.Map(patient);
             Patient p = pt.Item1;
             PatientDetail pd = pt.Item2;
+            p.PatientDetail = pd;
 
-            using (var _db = new PatientDBEntities())
+            using (var _dbContext = new Model1())
             {
-                _db.PatientDetails.Add(pd);
-                _db.SaveChanges();
-                p.ID = pd.ID;
-                _db.Patients.Add(p);
-                _db.SaveChanges();
+                _dbContext.Patients.Add(p);
+                _dbContext.SaveChanges();
             }
 
         }
@@ -35,10 +33,10 @@ namespace PatientApp.Data.Services
             List<Patient> lp;
             List<PatientDetail> lpd;
 
-            using (var _db = new PatientDBEntities())
+            using (var _dbContext = new Model1())
             {
-                lp = _db.Patients.ToList();
-                lpd = _db.PatientDetails.ToList();
+                lp = _dbContext.Patients.ToList();
+                lpd = _dbContext.PatientDetails.ToList();
             }
             List<PatientQ> patients = new List<PatientQ>();
 

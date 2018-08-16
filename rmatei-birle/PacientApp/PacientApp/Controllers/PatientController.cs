@@ -1,6 +1,6 @@
 ﻿using PatientApp.Data.Models.Command;
 using PatientApp.Data.Models.Query;
-using PatientApp.Logic.Services;
+using PatientApp.Logic.Contracts;
 using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
