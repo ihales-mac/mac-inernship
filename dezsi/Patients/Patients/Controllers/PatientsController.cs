@@ -11,22 +11,11 @@ using Unity.Attributes;
 
 namespace Patients.Controllers
 {
-    public class PatientsController : ApiController, IPatientsController
+    public class PatientsController : ApiController
     {
-        private IPatientService _patientService = new PatientService();
-        //private IPatientService patientService = new PatientService();
-       
+        private IPatientService _patientService;
 
-        public PatientsController(IPatientService patientService) {
-            this._patientService = patientService;
-        }
-   
-        /*
-        public PatientsController()
-        {
-            _patientService = patientService;
-        }
-        */
+        public PatientsController(IPatientService serv) { this._patientService = serv; }
         // GET api/patients
         [SwaggerOperation("GetAll")]
         public IEnumerable<Patient> Get()

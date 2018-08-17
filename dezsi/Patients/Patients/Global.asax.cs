@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using Patients.App_Start;
 using Patients.Controllers;
 using Patients.Services;
@@ -7,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace Patients
@@ -16,17 +19,16 @@ namespace Patients
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-         
-            Autofac.IContainer container  = AutofacConfig.BuildContainer();
-            using (var scope = container.BeginLifetimeScope())
-            {
-                scope.Resolve<IPatientService>();
-                scope.Resolve<IPatientsController>();
-                scope.Resolve<IPatientService>();
+            Autofac.IContainer container = AutofacConfig.BuildContainer();
+            container.Resolve<PatientsController>();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            GlobalConfiguration.Configuration.DependencyResolver =
+ new AutofacWebApiDependencyResolver(container);
 
+            
 
-            }
 
         }
     }
+
 }
