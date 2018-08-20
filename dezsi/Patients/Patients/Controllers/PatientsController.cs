@@ -1,5 +1,6 @@
-﻿using Patients.Models;
-using Patients.Services;
+﻿
+using Patients.BusinessLogic.Services;
+using Patients.DataAccessLayer.Models;
 using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
