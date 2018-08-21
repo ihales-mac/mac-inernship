@@ -35,7 +35,7 @@ namespace PatientApp.Data.Services
 
             using (var _dbContext = new Model1())
             {
-                lp = _dbContext.Patients.ToList();
+                lp = _dbContext.Patients.Include(x => x.);
                 lpd = _dbContext.PatientDetails.ToList();
             }
             List<PatientQ> patients = new List<PatientQ>();

@@ -19,14 +19,21 @@ namespace PacientApp.Controllers
             _pl = patientLogic;
         }
 
+        //// GET: api/Patient
+        //[SwaggerOperation("GetAll")]
+        //public IEnumerable<string> Get()
+        //{
+        //    List<PatientQ> patients = _pl.GetAll();
+        //    List<string> response = new List<string>();
+        //    patients.ForEach(p => { response.Add(p.ToString()); });
+        //    return response;
+        //}
+
         // GET: api/Patient
         [SwaggerOperation("GetAll")]
-        public IEnumerable<string> Get()
+        public IEnumerable<PatientQ> Get()
         {
-            List<PatientQ> patients = _pl.GetAll();
-            List<string> response = new List<string>();
-            patients.ForEach(p => { response.Add(p.ToString()); });
-            return response;
+            return _pl.GetAll();
         }
 
         // POST: api/Patient
