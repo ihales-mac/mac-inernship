@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 ﻿using Patients.Models;
 using Patients.Services;
-=======
-﻿
-using Patients.BusinessLogic.Services;
-using Patients.DataAccessLayer.Models;
->>>>>>> 130406503a4bf3f64b1f957d63838fcb0fe087c9
 using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
@@ -17,11 +11,22 @@ using Unity.Attributes;
 
 namespace Patients.Controllers
 {
-    public class PatientsController : ApiController
+    public class PatientsController : ApiController, IPatientsController
     {
-        private IPatientService _patientService;
+        private IPatientService _patientService = new PatientService();
+        //private IPatientService patientService = new PatientService();
+       
 
-        public PatientsController(IPatientService serv) { this._patientService = serv; }
+        public PatientsController(IPatientService patientService) {
+            this._patientService = patientService;
+        }
+   
+        /*
+        public PatientsController()
+        {
+            _patientService = patientService;
+        }
+        */
         // GET api/patients
         [SwaggerOperation("GetAll")]
         public IEnumerable<Patient> Get()

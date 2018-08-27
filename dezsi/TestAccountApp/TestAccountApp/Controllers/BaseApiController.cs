@@ -13,6 +13,7 @@ namespace TestAccountApp.Controllers
         private ApplicationUserManager _AppUserManager = null;
         private ApplicationRoleManager _AppRoleManager = null;
 
+
         protected ApplicationUserManager AppUserManager
         {
             get

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,65 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using TestAccountApp.Database;
 using TestAccountApp.Models;
+
 using TestAccountApp.UserManagement;
 
 namespace TestAccountApp.Controllers
-{      
+{
 
     [RoutePrefix("api/accounts")]
     public class AccountController : BaseApiController
     {
 
+        //helpers
+        #region Helpers
+        private void addDetails(AspNetUserDetail detail) {
+            var det = detail;
+
+            ApplicationDbContext dbcon = AppUserManager.ApplicationDbContext;
+            dbcon.AspNetUserDetails.Add(detail);
+            dbcon.SaveChanges();
+        }
+
+        private void addUserWithDetails(CreateUserBindingModel userModel) {
+
+
+        }
+
+        #endregion
+        private new IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            if (result == null)
+            {
+                return InternalServerError();
+            }
+
+            if (!result.Succeeded)
+            {
+                if (result.Errors != null)
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // No ModelState errors are available to send, so just return an empty BadRequest.
+                    return BadRequest();
+                }
+
+                return BadRequest(ModelState);
+            }
+
+            return null;
+        }
+
+
+        #region Admin methods 
+
+        [SwaggerOperation("GetAll")]
         [Authorize(Roles = "Admin")]
         [Route("users")]
         public IHttpActionResult GetUsers()
@@ -51,6 +102,7 @@ namespace TestAccountApp.Controllers
             return NotFound();
 
         }
+        [SwaggerOperation("Create")]
         [Authorize(Roles = "Admin")]
         [Route("create")]
         public async Task<IHttpActionResult> CreateUser(CreateUserBindingModel createUserModel)
@@ -68,8 +120,17 @@ namespace TestAccountApp.Controllers
                 LastName = createUserModel.LastName,
                 Level = 3,
                 JoinDate = DateTime.Now.Date,
+                
             };
 
+            var userDetails = new AspNetUserDetail()
+            {
+
+                DOB = createUserModel.DOB,
+                UserId = user.Id
+            };
+            
+            //add user
             IdentityResult addUserResult = await this.AppUserManager.CreateAsync(user, createUserModel.Password);
 
             if (!addUserResult.Succeeded)
@@ -77,10 +138,13 @@ namespace TestAccountApp.Controllers
                 return GetErrorResult(addUserResult);
             }
 
+            //add details
+            this.addDetails(userDetails);
+
             Uri locationHeader = new Uri(Url.Link("GetUserById", new { id = user.Id }));
 
             return Created(locationHeader, TheModelFactory.Create(user));
-        
+
         }
 
         [Authorize(Roles = "Admin")]
@@ -125,6 +189,69 @@ namespace TestAccountApp.Controllers
 
             return Ok();
         }
+
+        #endregion
+
+
+        #region User methods
+
+        // POST api/Account/Register
+        [AllowAnonymous]
+        [Route("register")]
+        public async Task<IHttpActionResult> Register(CreateUserBindingModel userModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = new ApplicationUser()
+            {
+                UserName = userModel.Username,
+                Email = userModel.Email,
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Level = 3,
+                JoinDate = DateTime.Now.Date,
+            };
+
+            IdentityResult addUserResult = await this.AppUserManager.CreateAsync(user, userModel.Password);
+
+            var newUser = AppUserManager.FindByName(user.UserName);
+
+
+
+            var userDetails = new AspNetUserDetail()
+            {
+
+                DOB = userModel.DOB,
+                UserId = newUser.Id
+            };
+
+            this.addDetails(userDetails);
+
+        
+
+          
+
+            AppUserManager.AddToRoles(newUser.Id, new string[] { "Patient" });
+
+
+            if (!addUserResult.Succeeded)
+            {
+                return GetErrorResult(addUserResult);
+            }
+
+            Uri locationHeader = new Uri(Url.Link("GetUserById", new { id = user.Id }));
+
+            return Created(locationHeader, TheModelFactory.Create(user));
+
+        }
+
+        #endregion
+
+
+
+
+
     }
-    
 }

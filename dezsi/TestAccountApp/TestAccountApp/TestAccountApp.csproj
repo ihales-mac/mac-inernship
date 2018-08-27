@@ -111,6 +111,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -178,11 +179,21 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
-    <Compile Include="Controllers\ModelFactory.cs" />
+    <None Include="Models\AspNetUser.cs.old" />
+    <Compile Include="Migrations\201808271318341_EmptyMigration.cs" />
+    <Compile Include="Migrations\201808271318341_EmptyMigration.Designer.cs">
+      <DependentUpon>201808271318341_EmptyMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201808271357408_NullableInDetailsPls.cs" />
+    <Compile Include="Migrations\201808271357408_NullableInDetailsPls.Designer.cs">
+      <DependentUpon>201808271357408_NullableInDetailsPls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetUserDetail.cs" />
+    <Compile Include="Models\ModelFactory.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="Database\ApplicationContext.cs" />
-    <Compile Include="Database\CreateRoleBindingModel.cs" />
-    <Compile Include="Database\CreateUserBindingModels.cs" />
+    <Compile Include="Database\ApplicationDbContext.cs" />
+    <Compile Include="Models\CreateRoleBindingModel.cs" />
+    <Compile Include="Models\CreateUserBindingModels.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -193,10 +204,10 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\SimpleAuthorizationServerProvider.cs" />
-    <Compile Include="UserManagement\ApplicationRoleManager.cs" />
-    <Compile Include="UserManagement\ApplicationUserManager.cs" />
-    <Compile Include="UserManagement\AuthorizeAdminAttribute.cs" />
+    <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
+    <Compile Include="Managers\ApplicationRoleManager.cs" />
+    <Compile Include="Managers\ApplicationUserManager.cs" />
+    <Compile Include="Other\AuthorizeAdminAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationInsights.config">
@@ -212,12 +223,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="AspNetIdentity\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201808230825093_InitialCreate.resx">
       <DependentUpon>201808230825093_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271318341_EmptyMigration.resx">
+      <DependentUpon>201808271318341_EmptyMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201808271357408_NullableInDetailsPls.resx">
+      <DependentUpon>201808271357408_NullableInDetailsPls.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

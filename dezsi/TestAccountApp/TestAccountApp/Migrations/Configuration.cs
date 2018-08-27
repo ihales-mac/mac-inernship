@@ -5,55 +5,69 @@ namespace TestAccountApp.Migrations
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Data.Entity.Validation;
+    using System.Diagnostics;
     using System.Linq;
     using System.Security.Claims;
     using TestAccountApp.Database;
     using TestAccountApp.Models;
-
+    using TestAccountApp.UserManagement;
     internal sealed class Configuration : DbMigrationsConfiguration<TestAccountApp.Database.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(TestAccountApp.Database.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
-
-            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+            var ctx = new ApplicationDbContext();
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
-
+ 
             var user = new ApplicationUser()
             {
                 UserName = "SuperPowerUser",
                 Email = "taiseer.joudeh@mymail.com",
-                EmailConfirmed = true,
+                EmailConfirmed = false,
                 FirstName = "Taiseer",
                 LastName = "Joudeh",
-                Level = 1,
-                JoinDate = DateTime.Now.AddYears(-3)
-            };
+                JoinDate = DateTime.Now.AddYears(-3),
+            
 
+            };
             manager.Create(user, "MySuperP@ssword!");
 
-            if (roleManager.Roles.Count() == 0)
+            var details = new AspNetUserDetail()
             {
+                DOB = DateTime.Now.AddYears(-32).AddMonths(+4),
+                UserId = user.Id
 
-                roleManager.Create(new IdentityRole { Name = "Physician" });
-                roleManager.Create(new IdentityRole { Name = "Patient" });
-                roleManager.Create(new IdentityRole { Name = "Pharmacist" });
-                roleManager.Create(new IdentityRole { Name = "Admin" });
+            };
 
+            ctx.AspNetUserDetails.Add(details);
+            ctx.SaveChanges();
+
+            if (roleManager.Roles.Count() == 0)
+                {
+
+                    roleManager.Create(new IdentityRole { Name = "Physician" });
+                    roleManager.Create(new IdentityRole { Name = "Patient" });
+                    roleManager.Create(new IdentityRole { Name = "Pharmacist" });
+                    roleManager.Create(new IdentityRole { Name = "Admin" });
+
+                }
+
+                var adminUser = manager.FindByName("SuperPowerUser");
+
+                manager.AddToRoles(adminUser.Id, new string[] { "Admin" });
+                manager.AddClaim(adminUser.Id, new Claim("role", "Admin"));
             }
-
-            var adminUser = manager.FindByName("SuperPowerUser");
-
-            manager.AddToRoles(adminUser.Id, new string[] { "Admin" });
-            manager.AddClaim(adminUser.Id, new Claim("role", "Admin"));
-
+            
            
-        }
+        
     }
 }

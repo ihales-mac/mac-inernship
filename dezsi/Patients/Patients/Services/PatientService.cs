@@ -20,14 +20,12 @@ namespace Patients.Services
 
         public IEnumerable<Patient> GetPatients()
         {
-
             using (PatientContext ctx = new PatientContext())
             {
                 return ctx.Patients.ToList<Patient>();
 
 
             }
-            
         }
 
         public Patient GetPatient(int id)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +10,7 @@ namespace TestAccountApp.Models
 {
     public class ApplicationUser : IdentityUser
     {
+    
         [Required]
         [MaxLength(100)]
         public string FirstName { get; set; }
@@ -22,6 +24,8 @@ namespace TestAccountApp.Models
 
         [Required]
         public DateTime JoinDate { get; set; }
+
+   
 
     }
 }

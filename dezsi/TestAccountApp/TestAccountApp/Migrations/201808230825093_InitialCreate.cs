@@ -29,31 +29,45 @@ namespace TestAccountApp.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
-            
+            CreateTable(
+              "dbo.AspNetUserDetails",
+              c => new
+              {
+                  Id = c.Int(nullable: false, identity: true),
+                  UserId = c.String(nullable: false, maxLength: 128),
+                  DOB = c.DateTime(nullable: true),
+              })
+              .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+              .PrimaryKey(t => t.Id);
+
             CreateTable(
                 "dbo.AspNetUsers",
                 c => new
-                    {
-                        Id = c.String(nullable: false, maxLength: 128),
-                        FirstName = c.String(nullable: false, maxLength: 100),
-                        LastName = c.String(nullable: false, maxLength: 100),
-                        Level = c.Byte(nullable: false),
-                        JoinDate = c.DateTime(nullable: false),
-                        Email = c.String(maxLength: 256),
-                        EmailConfirmed = c.Boolean(nullable: false),
-                        PasswordHash = c.String(),
-                        SecurityStamp = c.String(),
-                        PhoneNumber = c.String(),
-                        PhoneNumberConfirmed = c.Boolean(nullable: false),
-                        TwoFactorEnabled = c.Boolean(nullable: false),
-                        LockoutEndDateUtc = c.DateTime(),
-                        LockoutEnabled = c.Boolean(nullable: false),
-                        AccessFailedCount = c.Int(nullable: false),
-                        UserName = c.String(nullable: false, maxLength: 256),
-                    })
+                {
+                    Id = c.String(nullable: false, maxLength: 128),
+                    FirstName = c.String(nullable: false, maxLength: 100),
+                    LastName = c.String(nullable: false, maxLength: 100),
+                    Level = c.Byte(nullable: false),
+                    JoinDate = c.DateTime(nullable: false),
+                    Email = c.String(maxLength: 256),
+                    EmailConfirmed = c.Boolean(nullable: false),
+                    PasswordHash = c.String(),
+                    SecurityStamp = c.String(),
+
+                    PhoneNumber = c.String(),
+                    PhoneNumberConfirmed = c.Boolean(nullable: false),
+                    TwoFactorEnabled = c.Boolean(nullable: false),
+                    LockoutEndDateUtc = c.DateTime(),
+                    LockoutEnabled = c.Boolean(nullable: false),
+                    AccessFailedCount = c.Int(nullable: false),
+                    UserName = c.String(nullable: false, maxLength: 256),
+                })
                 .PrimaryKey(t => t.Id)
                 .Index(t => t.UserName, unique: true, name: "UserNameIndex");
-            
+
+           
+               
+
             CreateTable(
                 "dbo.AspNetUserClaims",
                 c => new
@@ -83,21 +97,31 @@ namespace TestAccountApp.Migrations
         
         public override void Down()
         {
+            DropIndex("dbo.AspNetUserDetails", "UserId");
+            DropForeignKey("dbo.AspNetUsers", "DetailsId", "dbo.AspUsetDetails");
             DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
+
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
+            DropIndex("dbo.AspNetUserDetails", "UserId");
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+
+
+
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
+            DropTable("dbo.AspNetUserDetails");
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+   
+
         }
     }
 }
