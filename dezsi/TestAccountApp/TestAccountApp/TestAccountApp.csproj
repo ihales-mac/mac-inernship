@@ -171,6 +171,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Post-Deployment.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.AspNetRoles.Table.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.AspNetUserClaims.Table.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.AspNetUserDetails.Table.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.AspNetUserLogins.Table.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.AspNetUserRoles.Table.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.AspNetUsers.Table.sql" />
+    <Content Include="Scripts\Post-Deployment\dbo.__MigrationHistory.Table.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
