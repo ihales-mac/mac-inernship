@@ -1,0 +1,12 @@
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\PatientApp.Logic.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\PatientApp.Logic.pdb
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\PatientApp.Data.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\EntityFramework.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\PatientApp.Data.pdb
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\PatientApp.Data.dll.config
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\bin\Debug\EntityFramework.xml
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\obj\Debug\PatientApp.Logic.csprojAssemblyReference.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\obj\Debug\PatientApp.Logic.csproj.CoreCompileInputs.cache
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\obj\Debug\PatientApp.Logic.csproj.CopyComplete
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\obj\Debug\PatientApp.Logic.dll
+C:\Users\Macadamian\Documents\GitHub\mac-inernship-2018\rmatei-birle\PacientApp\PatientApp.Logic\obj\Debug\PatientApp.Logic.pdb

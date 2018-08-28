@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            Date picker
+        </title>
+        <!-- Scripts -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+        <script src="scripts/dp.js"></script>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="styling/main.css">
+
+        <style>
+            body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+        </style>
+    </head>
+
+    <body>
+        <div align='left'>
+            <h1>Date Picker Example</h1> 
+
+            <h4>Pick a freaking date:</h4>
+
+            <label>dd-mm-yyyy</label> <br>
+            <input id = 'date' onclick='toggle_display(document.getElementById("date_picker"))'>
+            <div id='date_picker' class='date_picker'>
+                <div class='date_container'>
+                    <div class='date_row'>
+                        <input class='date_wide_cell date_button' type='button' onclick='prev_year()' value='Prev'>
+                        <label class='date_wide_cell' style='position: absolute; left: 90px' id='date_year' value=''></label>
+                        <input class='date_wide_cell date_button' style='position: absolute; left: 148px' type='button' onclick='next_year()' value='Next'>
+                    </div>
+                    <div class='date_row'>
+                        <input class='date_wide_cell date_button' type='button' onclick='prev_month()' value='Prev'>
+                        <label class='date_wide_cell' style='position: absolute; left: 90px' id='date_month' value=''></label>
+                        <input class='date_wide_cell date_button' style='position: absolute; left: 148px' type='button' onclick='next_month()' value='Next'>
+                    </div>
+                    <div class='date_row'>
+                        <label class='date_cell' style='display:inline-block'>Su</label>
+                        <label class='date_cell' style='display:inline-block'>Mo</label>
+                        <label class='date_cell' style='display:inline-block'>Tu</label>
+                        <label class='date_cell' style='display:inline-block'>We</label>
+                        <label class='date_cell' style='display:inline-block'>Th</label>
+                        <label class='date_cell' style='display:inline-block'>Fr</label>
+                        <label class='date_cell' style='display:inline-block'>Sa</label>
+                    </div>
+
+                    <div class='date_row'>
+                        <input class='date_cell date_button' type='button' id='c00' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c01' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c02' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c03' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c04' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c05' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c06' onclick='setDate(this)'>
+                    </div>
+
+                    <div class='date_row'>
+                        <input class='date_cell date_button' type='button' id='c10' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c11' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c12' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c13' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c14' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c15' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c16' onclick='setDate(this)'>
+                    </div>
+                    
+                    <div class='date_row'>
+                        <input class='date_cell date_button' type='button' id='c20' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c21' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c22' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c23' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c24' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c25' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c26' onclick='setDate(this)'>
+                    </div>
+                    
+                    <div class='date_row'>
+                        <input class='date_cell date_button' type='button' id='c30' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c31' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c32' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c33' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c34' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c35' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c36' onclick='setDate(this)'>
+                    </div>
+                    
+                    <div class='date_row'>
+                        <input class='date_cell date_button' type='button' id='c40' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c41' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c42' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c43' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c44' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c45' onclick='setDate(this)'>
+                        <input class='date_cell date_button' type='button' id='c46' onclick='setDate(this)'>
+                    </div>
+                </div>
+            </div>
+            <p>
+                niste text sa vad unde pune chestia vietii
+            </p>
+        </div>
+    </body>
+
+</html>

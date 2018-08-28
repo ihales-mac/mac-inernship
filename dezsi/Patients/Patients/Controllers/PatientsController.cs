@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 ﻿
 using Patients.BusinessLogic.Services;
 using Patients.DataAccessLayer.Models;
+=======
+﻿using Patients.Models;
+using Patients.Services;
+>>>>>>> 4e1ba54c757d4af9d344447da1a281360b5966c9
 using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
